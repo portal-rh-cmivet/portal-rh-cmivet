@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RH CMIVET</title>
   <meta name="theme-color" content="#0f6258">
-  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+  <link rel="icon" href="ativos/app-icon.svg" type="image/svg+xml">
   <style>
     :root {
       --bg: #f7f5ef;
@@ -123,7 +123,7 @@
       margin-bottom: 20px;
       background:
         linear-gradient(90deg, rgba(255, 255, 255, .97) 0%, rgba(255, 255, 255, .91) 38%, rgba(255, 255, 255, .08) 74%),
-        url("assets/cmivet-animais-hero.png") center right / cover no-repeat;
+        url("ativos/cmivet-animais-hero.png") center right / cover no-repeat;
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
     }
@@ -690,7 +690,7 @@
         min-height: 430px;
         background:
           linear-gradient(180deg, rgba(255, 255, 255, .98) 0%, rgba(255, 255, 255, .92) 48%, rgba(255, 255, 255, .18) 100%),
-          url("assets/cmivet-animais-hero.png") center bottom / cover no-repeat;
+          url("ativos/cmivet-animais-hero.png") center bottom / cover no-repeat;
       }
       .app-tools { grid-template-columns: 1fr; }
       .scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -814,7 +814,16 @@
     }
     .announcement-card h3 { margin: 0; color: var(--accent-dark); font-size: 1rem; }
     .announcement-card p { margin: 0; color: #343a33; line-height: 1.45; white-space: pre-wrap; }
-    .announcement-file { font-weight: 850; color: var(--gold-dark); text-decoration: none; }
+    .announcement-media {
+      width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fffaf0;
+      box-shadow: 0 10px 22px rgba(0,0,0,.06);
+    }
+    .announcement-file { font-weight: 850; color: var(--gold-dark); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
     .announcement-form { padding: 18px; display: grid; gap: 12px; }
     @media (max-width: 760px) {
       .portal-actions { grid-template-columns: 1fr; }
@@ -827,7 +836,7 @@
     <header>
       <div class="brand">
         <div class="mark" aria-hidden="true">
-          <img class="brand-logo" src="assets/cmivet-logo-oficial.jpeg" alt="">
+          <img class="brand-logo" src="ativos/cmivet-logo-oficial.jpeg" alt="">
         </div>
         <div>
           <span class="kicker">CMIVET</span>
@@ -845,7 +854,7 @@
     <section class="hero" aria-label="Termômetro Emocional RH CMIVET">
       <div class="hero-content">
         <div class="hero-logo">
-          <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET Centro Médico Intensivo Veterinário">
+          <img src="ativos/cmivet-logo-oficial.jpeg" alt="CMIVET Centro Médico Intensivo Veterinário">
         </div>
         <h2>PORTAL RH CMIVET</h2>
         <p class="hero-message"><strong>Bem-vindo(a)!</strong></p>
@@ -1200,9 +1209,9 @@
               <textarea id="comunicadoMessage" name="comunicadoMessage" maxlength="1200" placeholder="Escreva o conteúdo do comunicado."></textarea>
             </div>
             <div>
-              <label for="comunicadoFile">Anexo opcional</label>
-              <input class="input" id="comunicadoFile" name="comunicadoFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx">
-              <p class="hint">O arquivo ficará salvo no navegador em que o upload for feito.</p>
+              <label for="comunicadoFile">Imagem, PDF ou Word do comunicado</label>
+              <input class="input" id="comunicadoFile" name="comunicadoFile" type="file" accept="image/*,.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+              <p class="hint">O arquivo será publicado como anexo para abrir ou baixar. Aceita imagens, PDF, DOC e DOCX.</p>
             </div>
             <div class="actions">
               <button class="btn btn-primary" type="submit">Publicar comunicado</button>
@@ -1288,8 +1297,6 @@
     const COFFEE_KEY = "termometro-emocional-cafe-rh";
     const EXPERIENCE_KEY = "termometro-emocional-avaliacoes-experiencia";
     const COMUNICADOS_KEY = "portal-rh-cmivet-comunicados";
-    const API_URL = "https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
-    let comunicadosRemotos = [];
     const ADMIN_SESSION_KEY = "termometro-emocional-admin";
     const DEFAULT_FACTORS = ["Trabalho", "Estudos", "Saúde", "Família", "Sono", "Relacionamentos", "Outro"];
     const LEVELS = ["4", "3", "2", "1"];
@@ -1433,64 +1440,15 @@
     }
 
 
-    async function apiGet(action) {
-      const response = await fetch(`${API_URL}?action=${encodeURIComponent(action)}&t=${Date.now()}`);
-      if (!response.ok) throw new Error("Falha ao consultar a API");
-      return response.json();
-    }
-
-    async function apiPost(payload) {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error("Falha ao enviar dados para a API");
-      return response.json();
-    }
-
-    async function carregarComunicadosRemotos() {
-      try {
-        const data = await apiGet("comunicados");
-        comunicadosRemotos = Array.isArray(data) ? data.map(item => ({
-          id: item.id_comunicado || item.id || createId(),
-          title: item.titulo || item.title || "Comunicado RH",
-          message: item.descricao || item.message || "",
-          categoria: item.categoria || "RH",
-          fileName: item.tipo_arquivo || "Abrir documento",
-          fileType: item.tipo_arquivo || "",
-          fileData: item.link_drive || "",
-          fixado: item.fixado || "não",
-          ativo: item.ativo || "sim",
-          createdAt: item.data || item.createdAt || new Date().toISOString()
-        })) : [];
-        render();
-      } catch (error) {
-        console.warn("Não foi possível carregar comunicados da planilha.", error);
-        showToast("Não foi possível carregar comunicados da planilha.");
-      }
-    }
-
-    function inferFileType(link) {
-      const lower = String(link || "").toLowerCase();
-      if (lower.includes(".pdf")) return "PDF";
-      if (lower.includes(".doc") || lower.includes("document")) return "Word";
-      if (lower.includes(".xls") || lower.includes("spreadsheet")) return "Excel";
-      if (lower.match(/\.(png|jpg|jpeg|webp|gif|svg)/)) return "Imagem";
-      if (lower.includes("drive.google.com")) return "Google Drive";
-      return "Link";
-    }
-
     function getComunicados() {
-      if (comunicadosRemotos.length) return comunicadosRemotos;
       try {
         return (JSON.parse(localStorage.getItem(COMUNICADOS_KEY)) || []).map(item => ({
           id: item.id || createId(),
           title: item.title || "Comunicado RH",
           message: item.message || "",
-          fileName: item.fileName || item.tipo_arquivo || "Abrir documento",
-          fileType: item.fileType || item.tipo_arquivo || "",
-          fileData: item.fileData || item.link_drive || "",
+          fileName: item.fileName || "",
+          fileType: item.fileType || "",
+          fileData: item.fileData || "",
           createdAt: item.createdAt || new Date().toISOString()
         }));
       } catch {
@@ -1499,7 +1457,11 @@
     }
 
     function saveComunicados(items) {
-      localStorage.setItem(COMUNICADOS_KEY, JSON.stringify(items));
+      try {
+        localStorage.setItem(COMUNICADOS_KEY, JSON.stringify(items));
+      } catch (error) {
+        throw new Error("O arquivo excedeu o limite de armazenamento do navegador. Tente uma imagem menor ou um PDF/Word de até 3 MB.");
+      }
     }
 
     const EXPERIENCE_FORM_LINKS = {
@@ -1643,7 +1605,7 @@
           <div class="meta"><span class="badge">📢 Comunicado</span><time>${formatDate(item.createdAt)}</time></div>
           <h3>${escapeHtml(item.title)}</h3>
           ${item.message ? `<p>${escapeHtml(item.message)}</p>` : ""}
-          ${item.fileData ? `<a class="announcement-file" href="${item.fileData}" target="_blank" rel="noopener">📎 ${escapeHtml(item.fileName || "Abrir documento")}</a>` : ""}
+          ${item.fileData ? `<a class="announcement-file" href="${item.fileData}" download="${escapeHtml(item.fileName || 'anexo-comunicado')}" target="_blank" rel="noopener">📎 Abrir/Baixar anexo${item.fileName ? `: ${escapeHtml(item.fileName)}` : ''}</a>` : ""}
           ${isAdmin() ? `<div class="item-actions"><button class="btn btn-danger btn-small" type="button" data-delete-comunicado-id="${item.id}">Excluir</button></div>` : ""}
         </article>
       `).join("") : `<div class="empty">Nenhum comunicado publicado no momento.</div>`;
@@ -1715,31 +1677,89 @@
       });
     });
 
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        if (!file) return resolve({ fileName: "", fileType: "", fileData: "" });
+
+        const fileName = (file.name || "").toLowerCase();
+        const isImage = (file.type && file.type.startsWith("image/")) || /\.(png|jpe?g|webp|gif|bmp|svg)$/i.test(fileName);
+        const isPdfOrWord = /\.(pdf|doc|docx)$/i.test(fileName) || [
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ].includes(file.type);
+        const maxDocumentSize = 3 * 1024 * 1024;
+
+        if (!isImage && !isPdfOrWord) {
+          reject(new Error("Formato não permitido. Envie imagem, PDF ou Word."));
+          return;
+        }
+        if (!isImage && file.size > maxDocumentSize) {
+          reject(new Error("O anexo é muito grande. Envie PDF/Word com até 3 MB ou use imagem."));
+          return;
+        }
+
+        if (!isImage) {
+          const reader = new FileReader();
+          reader.onload = () => resolve({ fileName: file.name, fileType: file.type, fileData: reader.result });
+          reader.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
+          reader.readAsDataURL(file);
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const maxSide = 1400;
+            let width = img.width;
+            let height = img.height;
+            if (width > height && width > maxSide) {
+              height = Math.round((height * maxSide) / width);
+              width = maxSide;
+            } else if (height >= width && height > maxSide) {
+              width = Math.round((width * maxSide) / height);
+              height = maxSide;
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+            const fileData = canvas.toDataURL("image/jpeg", 0.82);
+            resolve({
+              fileName: file.name.replace(/\.[^.]+$/, ".jpg"),
+              fileType: "image/jpeg",
+              fileData
+            });
+          };
+          img.onerror = () => reject(new Error("Não foi possível processar a imagem."));
+          img.src = reader.result;
+        };
+        reader.onerror = () => reject(new Error("Não foi possível ler a imagem."));
+        reader.readAsDataURL(file);
+      });
+    }
+
     comunicadoForm?.addEventListener("submit", async event => {
       event.preventDefault();
       const data = new FormData(comunicadoForm);
       const title = (data.get("comunicadoTitle") || "").trim();
       const message = (data.get("comunicadoMessage") || "").trim();
-      const driveLink = (data.get("comunicadoDriveLink") || "").trim();
+      const file = document.querySelector("#comunicadoFile")?.files?.[0];
       if (!title) { showToast("Informe o título do comunicado."); return; }
-      if (!driveLink) { showToast("Cole o link do Google Drive do comunicado."); return; }
 
       try {
-        await apiPost({
-          action: "novoComunicado",
-          titulo: title,
-          categoria: "RH",
-          descricao: message,
-          link_drive: driveLink,
-          tipo_arquivo: inferFileType(driveLink),
-          fixado: "não"
-        });
+        const filePayload = await fileToDataUrl(file);
+        const items = getComunicados();
+        items.push({ id: createId(), title, message, ...filePayload, createdAt: new Date().toISOString() });
+        saveComunicados(items);
         comunicadoForm.reset();
-        await carregarComunicadosRemotos();
-        showToast("Comunicado publicado na planilha.");
+        render();
+        showToast("Comunicado publicado no portal.");
       } catch (error) {
-        console.warn(error);
-        showToast("Erro ao publicar. Verifique a API e a planilha.");
+        showToast(error.message || "Não foi possível publicar. Tente uma imagem menor.");
       }
     });
 
@@ -1774,14 +1794,6 @@
       const responses = getResponses();
       responses.push(response);
       saveResponses(responses);
-      apiPost({
-        action: "termometro",
-        nome: "Anônimo",
-        setor: "",
-        humor: labels[mood],
-        energia: mood,
-        observacao: response.comment
-      }).catch(error => console.warn("Erro ao sincronizar termômetro", error));
       form.reset();
       render();
       showToast("Resposta anônima registrada.");
@@ -1808,14 +1820,6 @@
       const requests = getCoffeeRequests();
       requests.push(request);
       saveCoffeeRequests(requests);
-      apiPost({
-        action: "cafeRH",
-        nome: request.name,
-        setor: request.sector,
-        motivo: request.reason,
-        contato: request.contact,
-        urgencia: request.urgency
-      }).catch(error => console.warn("Erro ao sincronizar Café RH", error));
       coffeeForm.reset();
       render();
       showToast("Solicitação enviada ao RH.");
@@ -2116,7 +2120,6 @@
     renderFactors();
     applyExperienceAccessFromUrl();
     render();
-    carregarComunicadosRemotos();
   </script>
 </body>
 </html>
