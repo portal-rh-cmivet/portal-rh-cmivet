@@ -1,0 +1,2122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RH CMIVET</title>
+  <meta name="theme-color" content="#0f6258">
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --bg: #f7f5ef;
+      --ink: #143b38;
+      --muted: #66726e;
+      --line: #e3d7b9;
+      --panel: #ffffff;
+      --panel-2: #f7f1e2;
+      --accent: #0f6258;
+      --accent-dark: #0a4841;
+      --gold: #c9ab5d;
+      --gold-dark: #a8863c;
+      --warn: #b95743;
+      --focus: #2b6cb0;
+      --navy: #0f6258;
+      --shadow: 0 18px 45px rgba(48, 56, 43, .13);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(201, 171, 93, .18), rgba(247, 245, 239, .96) 280px, #fbfaf6),
+        url("data:image/svg+xml,%3Csvg width='1200' height='700' viewBox='0 0 1200 700' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1200' height='700' fill='%23fbfaf6'/%3E%3Cpath d='M0 0h1200v205H0z' fill='%230f6258' opacity='.11'/%3E%3Cpath d='M0 174c170-55 340-28 520-74 220-56 412-92 680-44v155H0z' fill='%23c9ab5d' opacity='.16'/%3E%3Cpath d='M878 88h68v68h-68zM912 54v136M844 122h136' stroke='%230f6258' stroke-width='18' stroke-linecap='round' opacity='.10'/%3E%3Ccircle cx='180' cy='105' r='54' fill='%23c9ab5d' opacity='.13'/%3E%3Ccircle cx='1030' cy='245' r='82' fill='%230f6258' opacity='.05'/%3E%3C/svg%3E");
+      background-size: cover;
+      min-height: 100vh;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 3px solid rgba(43, 108, 176, .28);
+      outline-offset: 2px;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding: 18px 0 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 260px;
+      height: 86px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(201, 171, 93, .45);
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      border-radius: 8px;
+      flex: 0 0 auto;
+      padding: 8px;
+    }
+
+    .brand-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .kicker {
+      display: block;
+      color: var(--accent-dark);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 4vw, 3.15rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 720px;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 360px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .97) 0%, rgba(255, 255, 255, .91) 38%, rgba(255, 255, 255, .08) 74%),
+        url("assets/cmivet-animais-hero.png") center right / cover no-repeat;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 7px;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      width: min(620px, 100%);
+      padding: clamp(26px, 5vw, 48px);
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-logo {
+      width: min(520px, 100%);
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .94);
+      border: 1px solid rgba(201, 171, 93, .38);
+      box-shadow: 0 10px 24px rgba(44, 48, 37, .08);
+    }
+
+    .hero-logo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .hero h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: .98;
+      max-width: 560px;
+    }
+
+    .hero-message {
+      margin: 0;
+      color: #294a54;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.45;
+      max-width: 560px;
+    }
+
+    .hero-message strong {
+      color: var(--gold-dark);
+    }
+
+    .app-tools {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, .9fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .tool-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .94);
+      box-shadow: 0 10px 26px rgba(48, 56, 43, .08);
+    }
+
+    .tool-box strong {
+      color: var(--accent-dark);
+      margin-right: auto;
+    }
+
+    .time-input {
+      width: 116px;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .status-line {
+      width: 100%;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .tabs {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 4px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .82);
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(35, 45, 38, .08);
+    }
+
+    .tab {
+      min-height: 42px;
+      min-width: 126px;
+      padding: 0 16px;
+      border-radius: 6px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 700;
+    }
+
+    .tab[aria-selected="true"] {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(320px, .78fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, .95);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(238, 243, 234, .8);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.18rem;
+      line-height: 1.2;
+    }
+
+    .privacy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-dark);
+      font-size: .92rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .privacy svg, .icon { width: 18px; height: 18px; flex: 0 0 auto; }
+
+    form { padding: 20px; }
+
+    .field { margin-bottom: 20px; }
+
+    label, .label {
+      display: block;
+      color: #30362f;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: .92rem;
+      margin-top: -4px;
+      margin-bottom: 12px;
+    }
+
+    .scale {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(94px, 1fr));
+      gap: 10px;
+    }
+
+    .mood {
+      position: relative;
+      display: grid;
+      gap: 8px;
+      min-height: 118px;
+      padding: 12px 10px;
+      align-content: center;
+      justify-items: center;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+    }
+
+    .mood input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      cursor: pointer;
+    }
+
+    .mood .face {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #eef8f8;
+      font-size: 1.8rem;
+      border: 1px solid var(--line);
+      box-shadow: inset 0 0 0 4px #fff;
+    }
+
+    .mood span:last-child {
+      text-align: center;
+      font-weight: 800;
+      font-size: .92rem;
+      line-height: 1.15;
+    }
+
+    .mood:has(input:checked) {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(31, 122, 99, .16);
+      background: #f8fbf8;
+      transform: translateY(-1px);
+    }
+
+    .mood:nth-child(1):has(input:checked) { border-color: #0f6258; }
+    .mood:nth-child(2):has(input:checked) { border-color: #6d8a92; }
+    .mood:nth-child(3):has(input:checked) { border-color: #c9ab5d; }
+    .mood:nth-child(4):has(input:checked) { border-color: #b95743; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      position: relative;
+      min-height: 40px;
+      padding: 0 13px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: #343a33;
+      font-weight: 700;
+    }
+
+    .chip input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      cursor: pointer;
+    }
+
+    .chip:has(input:checked) {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 108px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 15px;
+      border-radius: 8px;
+      font-weight: 850;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--accent-dark); }
+
+    .btn-ghost {
+      background: #fff;
+      border-color: var(--line);
+      color: #30362f;
+    }
+
+    .btn-danger {
+      background: #fff;
+      border-color: rgba(185, 83, 63, .35);
+      color: var(--warn);
+    }
+
+    .note {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .stats {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 13px;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 1.6rem;
+      line-height: 1.05;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-weight: 700;
+      margin-top: 4px;
+      font-size: .84rem;
+    }
+
+    .thermo {
+      padding: 0 18px 18px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) 42px;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0;
+      font-size: .92rem;
+      font-weight: 750;
+    }
+
+    .track {
+      height: 13px;
+      background: #edf0ea;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid #e0e5dd;
+    }
+
+    .fill {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: inherit;
+      transition: width .25s ease;
+    }
+
+    .bar-row:nth-child(1) .fill { background: #0f6258; }
+    .bar-row:nth-child(2) .fill { background: #6d8a92; }
+    .bar-row:nth-child(3) .fill { background: #c9ab5d; }
+    .bar-row:nth-child(4) .fill { background: #b95743; }
+
+    .responses {
+      padding: 0 18px 18px;
+      max-height: 380px;
+      overflow: auto;
+    }
+
+    .empty {
+      border: 1px dashed #c7cec4;
+      background: #fbfcfb;
+      color: var(--muted);
+      padding: 18px;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .item {
+      border-top: 1px solid var(--line);
+      padding: 13px 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .item:first-child { border-top: 0; }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 750;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      color: #244d40;
+      font-weight: 850;
+    }
+
+    .comment {
+      margin: 0;
+      color: #343a33;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      background: #1f2a24;
+      color: #fff;
+      padding: 12px 15px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      font-weight: 800;
+      transition: opacity .18s ease, transform .18s ease;
+      max-width: calc(100% - 32px);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .admin-gate form,
+    .settings-form,
+    .edit-form {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 11px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .settings-grid,
+    .edit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .btn-small {
+      min-height: 34px;
+      padding: 0 10px;
+      font-size: .88rem;
+    }
+
+    .dialog {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      width: min(560px, calc(100% - 28px));
+      padding: 0;
+    }
+
+    .dialog::backdrop {
+      background: rgba(24, 30, 26, .38);
+    }
+
+    .dialog-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-2);
+    }
+
+    body[data-view="coleta"] main {
+      grid-template-columns: minmax(0, 760px);
+      justify-content: center;
+    }
+
+    body[data-view="coleta"] .side,
+    body[data-admin="false"] .admin-only,
+    body[data-admin="true"] .admin-gate {
+      display: none;
+    }
+
+    .dashboard-only { display: contents; }
+    body[data-view="coleta"] .dashboard-only { display: none; }
+    body[data-view="painel"] .form-panel { display: none; }
+    body[data-view="painel"] main { grid-template-columns: 1fr; }
+    body[data-view="painel"] .side { grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr); }
+
+    @media (max-width: 900px) {
+      header, main, body[data-view="painel"] .side {
+        grid-template-columns: 1fr;
+      }
+
+      header { align-items: start; }
+      .tabs { width: 100%; }
+      .tab { min-width: 0; }
+      .hero {
+        min-height: 430px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, .98) 0%, rgba(255, 255, 255, .92) 48%, rgba(255, 255, 255, .18) 100%),
+          url("assets/cmivet-animais-hero.png") center bottom / cover no-repeat;
+      }
+      .app-tools { grid-template-columns: 1fr; }
+      .scale { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stats { grid-template-columns: 1fr; }
+      .note { width: 100%; margin-left: 0; }
+      .settings-grid,
+      .edit-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 20px, 1180px); padding-top: 14px; }
+      .brand { align-items: flex-start; }
+      .brand { display: grid; }
+      .mark { width: 210px; height: 68px; }
+      .hero-content { padding: 22px; }
+      .hero h2 { font-size: 2.2rem; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      .privacy { white-space: normal; }
+      form, .stats, .thermo, .responses { padding-left: 14px; padding-right: 14px; }
+      .scale { grid-template-columns: 1fr; }
+      .mood { min-height: 92px; grid-template-columns: auto 1fr; justify-items: start; text-align: left; }
+      .mood:last-child { grid-column: auto; }
+      .bar-row { grid-template-columns: 78px minmax(0, 1fr) 34px; gap: 8px; }
+    }
+
+    .portal-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .portal-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 78px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(201, 171, 93, .48);
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 10px 24px rgba(44, 48, 37, .08);
+      color: var(--ink);
+      text-decoration: none;
+      transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+
+    .portal-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      box-shadow: 0 14px 28px rgba(44, 48, 37, .13);
+    }
+
+    .portal-card .emoji {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(15, 98, 88, .09);
+      font-size: 1.45rem;
+      flex: 0 0 auto;
+    }
+
+    .portal-card strong {
+      display: block;
+      color: var(--accent-dark);
+      font-size: 1rem;
+    }
+
+    .portal-card span:last-child {
+      display: block;
+      color: var(--muted);
+      font-size: .88rem;
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+
+
+    .portal-mini-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: -6px 0 18px;
+      justify-content: center;
+    }
+
+    .portal-nav-btn {
+      min-height: 38px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      color: var(--accent-dark);
+      font-weight: 850;
+    }
+
+    .portal-nav-btn.active,
+    .portal-card.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201, 171, 93, .18);
+      background: #fffaf0;
+    }
+
+    body[data-view="coleta"] .page-section { display: none; }
+    body[data-view="coleta"][data-page="termometro"] #termometroSection,
+    body[data-view="coleta"][data-page="cafe"] #coffeeSection,
+    body[data-view="coleta"][data-page="experiencia"] #experienceGate,
+    body[data-view="coleta"][data-page="comunicados"] #comunicadosSection { display: block; }
+    body[data-view="coleta"][data-page="home"] .page-section { display: none; }
+
+    .announcement-list { padding: 0 20px 20px; display: grid; gap: 12px; }
+    .announcement-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+    .announcement-card h3 { margin: 0; color: var(--accent-dark); font-size: 1rem; }
+    .announcement-card p { margin: 0; color: #343a33; line-height: 1.45; white-space: pre-wrap; }
+    .announcement-file { font-weight: 850; color: var(--gold-dark); text-decoration: none; }
+    .announcement-form { padding: 18px; display: grid; gap: 12px; }
+    @media (max-width: 760px) {
+      .portal-actions { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body data-view="coleta" data-admin="false" data-page="home">
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <img class="brand-logo" src="assets/cmivet-logo-oficial.jpeg" alt="">
+        </div>
+        <div>
+          <span class="kicker">CMIVET</span>
+          <h1>RH CMIVET</h1>
+          <p class="subtitle">Cuidado com pessoas para cuidar ainda melhor dos animais.</p>
+        </div>
+      </div>
+
+      <nav class="tabs" aria-label="Alternar visualização">
+        <button class="tab" type="button" data-view-button="coleta" aria-selected="true">Coleta</button>
+        <button class="tab" type="button" data-view-button="painel" aria-selected="false">Administração</button>
+      </nav>
+    </header>
+
+    <section class="hero" aria-label="Termômetro Emocional RH CMIVET">
+      <div class="hero-content">
+        <div class="hero-logo">
+          <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET Centro Médico Intensivo Veterinário">
+        </div>
+        <h2>PORTAL RH CMIVET</h2>
+        <p class="hero-message"><strong>Bem-vindo(a)!</strong></p>
+        <p class="hero-message">Escolha uma opção abaixo.</p>
+        <div class="portal-actions" aria-label="Opções do Portal RH CMIVET">
+          <a class="portal-card" href="#termometroSection" data-page-link="termometro">
+            <span class="emoji">😊</span>
+            <span><strong>Termômetro Emocional</strong><span>Registrar como você está se sentindo hoje.</span></span>
+          </a>
+          <a class="portal-card" href="#coffeeSection" data-page-link="cafe">
+            <span class="emoji">☕</span>
+            <span><strong>Solicitar Café com RH</strong><span>Agendar uma conversa 1:1 com o RH.</span></span>
+          </a>
+          <a class="portal-card" href="#experienceGate" data-page-link="experiencia">
+            <span class="emoji">📋</span>
+            <span><strong>Avaliação de Experiência</strong><span>Acesso liberado pelo RH para 45 ou 90 dias.</span></span>
+          </a>
+          <a class="portal-card" href="#comunicadosSection" data-page-link="comunicados">
+            <span class="emoji">📢</span>
+            <span><strong>Comunicados</strong><span>Avisos e informações importantes da CMIVET.</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="portal-mini-nav" aria-label="Menu do Portal RH">
+      <button class="portal-nav-btn active" type="button" data-page-link="home">🏠 Início</button>
+      <button class="portal-nav-btn" type="button" data-page-link="termometro">😊 Termômetro</button>
+      <button class="portal-nav-btn" type="button" data-page-link="cafe">☕ Café com RH</button>
+      <button class="portal-nav-btn" type="button" data-page-link="experiencia">📋 Experiência</button>
+      <button class="portal-nav-btn" type="button" data-page-link="comunicados">📢 Comunicados</button>
+    </nav>
+
+    <main>
+      <section class="panel form-panel page-section" id="termometroSection">
+        <div class="panel-head">
+          <h2>Termômetro Emocional</h2>
+          <span class="privacy">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3 5 6v5c0 4.4 2.8 8.1 7 10 4.2-1.9 7-5.6 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="m9.2 12 1.8 1.8 4-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Sem nome, e-mail ou identificação • respostas mantidas até exclusão pelo administrador
+          </span>
+        </div>
+
+        <form id="responseForm">
+          <div class="field">
+            <span class="label">Como está o seu nível de energia e humor hoje?</span>
+            <p class="hint">Escolha a opção que melhor representa o seu momento.</p>
+            <div class="scale" role="radiogroup" aria-label="Nível de energia e humor">
+              <label class="mood">
+                <input type="radio" name="mood" value="4" required>
+                <span class="face">😄</span>
+                <span>Ótimo</span>
+              </label>
+              <label class="mood">
+                <input type="radio" name="mood" value="3">
+                <span class="face">🙂</span>
+                <span>Neutro</span>
+              </label>
+              <label class="mood">
+                <input type="radio" name="mood" value="2">
+                <span class="face">😴</span>
+                <span>Cansado</span>
+              </label>
+              <label class="mood">
+                <input type="radio" name="mood" value="1">
+                <span class="face">😣</span>
+                <span>Estressado</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label">O que mais influenciou sua resposta?</span>
+            <div class="chips" id="factorsList" aria-label="Fatores"></div>
+          </div>
+
+          <div class="field">
+            <label for="comment">Comentário opcional</label>
+            <textarea id="comment" name="comment" maxlength="500" placeholder="Compartilhe algo que ajude a entender o clima do momento."></textarea>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Enviar resposta
+            </button>
+            <button class="btn btn-ghost" type="reset">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h10a6 6 0 1 1-4.2 10.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+                <path d="M4 7l4-4M4 7l4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Limpar
+            </button>
+            <span class="note">As respostas ficam salvas neste navegador.</span>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel form-panel page-section" id="coffeeSection" aria-label="Solicitação Café com o RH 1:1" style="margin-top:18px;">
+        <div class="panel-head">
+          <h2>Café com o RH 1:1</h2>
+          <span class="privacy">Solicitação confidencial ao RH</span>
+        </div>
+        <form id="coffeeForm">
+          <div class="field">
+            <label for="coffeeName">Nome</label>
+            <input class="input" id="coffeeName" name="coffeeName" type="text" maxlength="80" placeholder="Informe seu nome" required>
+          </div>
+          <div class="field">
+            <label for="coffeeSector">Setor / função</label>
+            <input class="input" id="coffeeSector" name="coffeeSector" type="text" maxlength="80" placeholder="Ex.: Internação, Recepção, Médico Veterinário">
+          </div>
+          <div class="field">
+            <label for="coffeeContact">Melhor contato</label>
+            <input class="input" id="coffeeContact" name="coffeeContact" type="text" maxlength="80" placeholder="Telefone, WhatsApp ou e-mail">
+          </div>
+          <div class="field">
+            <label for="coffeeReason">Motivo da solicitação</label>
+            <textarea id="coffeeReason" name="coffeeReason" maxlength="600" placeholder="Descreva brevemente o assunto que gostaria de conversar com o RH." required></textarea>
+          </div>
+          <div class="field">
+            <label for="coffeeUrgency">Prioridade</label>
+            <select class="select" id="coffeeUrgency" name="coffeeUrgency">
+              <option value="Normal">Normal</option>
+              <option value="Importante">Importante</option>
+              <option value="Urgente">Urgente</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Solicitar Café com o RH</button>
+            <button class="btn btn-ghost" type="reset">Limpar</button>
+          </div>
+          <p class="hint">O RH receberá a solicitação no painel administrativo e fará o retorno para agendamento.</p>
+        </form>
+      </section>
+
+      <section class="panel form-panel" id="experienceSection" aria-label="Avaliação de Experiência 45 e 90 dias" style="margin-top:18px; display:none;">
+        <div class="panel-head">
+          <h2 id="experienceTitle">Avaliação de Experiência</h2>
+          <span class="privacy">Acesso restrito por link liberado pelo RH</span>
+        </div>
+        <form id="experienceForm">
+          <input type="hidden" id="experienceType" name="experienceType" value="45 dias">
+          <div class="field">
+            <label for="employeeName">Nome do colaborador</label>
+            <input class="input" id="employeeName" name="employeeName" type="text" maxlength="100" placeholder="Informe seu nome completo" required>
+          </div>
+          <div class="field">
+            <label for="employeeRole">Cargo / função</label>
+            <input class="input" id="employeeRole" name="employeeRole" type="text" maxlength="100" placeholder="Ex.: Auxiliar veterinária, Recepção, Médico veterinário">
+          </div>
+          <div class="field">
+            <label for="employeeSector">Setor</label>
+            <input class="input" id="employeeSector" name="employeeSector" type="text" maxlength="100" placeholder="Ex.: Internação, Recepção, Clínica Médica">
+          </div>
+          <div class="field">
+            <label for="admissionDate">Data de admissão</label>
+            <input class="input" id="admissionDate" name="admissionDate" type="date">
+          </div>
+          <div class="field">
+            <label for="adaptationScore">Adaptação à rotina e à cultura da CMIVET</label>
+            <select class="select" id="adaptationScore" name="adaptationScore" required>
+              <option value="">Selecione</option>
+              <option>Excelente</option>
+              <option>Bom</option>
+              <option>Regular</option>
+              <option>Precisa melhorar</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="trainingScore">Treinamento, orientação e apoio recebidos</label>
+            <select class="select" id="trainingScore" name="trainingScore" required>
+              <option value="">Selecione</option>
+              <option>Excelente</option>
+              <option>Bom</option>
+              <option>Regular</option>
+              <option>Precisa melhorar</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="relationshipScore">Relacionamento com equipe e liderança</label>
+            <select class="select" id="relationshipScore" name="relationshipScore" required>
+              <option value="">Selecione</option>
+              <option>Excelente</option>
+              <option>Bom</option>
+              <option>Regular</option>
+              <option>Precisa melhorar</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="continueIntent">Você se sente preparado(a) e motivado(a) para continuar na função?</label>
+            <select class="select" id="continueIntent" name="continueIntent" required>
+              <option value="">Selecione</option>
+              <option>Sim</option>
+              <option>Parcialmente</option>
+              <option>Não</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="experienceComment">Comentários, dificuldades ou sugestões</label>
+            <textarea id="experienceComment" name="experienceComment" maxlength="1200" placeholder="Registre informações importantes para o acompanhamento do RH."></textarea>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Enviar avaliação</button>
+            <button class="btn btn-ghost" type="reset">Limpar</button>
+          </div>
+          <p class="hint">Esta avaliação é liberada somente por link ou código do RH e será respondida no formulário oficial do Google Forms.</p>
+        </form>
+      </section>
+
+      <section class="panel form-panel page-section" id="experienceGate" aria-label="Acesso restrito avaliação de experiência" style="margin-top:18px;">
+        <div class="panel-head">
+          <h2>Avaliação de Experiência 45 e 90 dias</h2>
+          <span class="privacy">Acesso restrito</span>
+        </div>
+        <p class="hint">Esta avaliação deve ser respondida somente quando o RH solicitar. Informe o código recebido ou acesse pelo link enviado pelo RH.</p>
+        <div class="field">
+          <label for="experienceAccessCode">Código de acesso</label>
+          <input class="input" id="experienceAccessCode" type="password" placeholder="Digite o código enviado pelo RH">
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" id="unlockExperience45">Liberar 45 dias</button>
+          <button class="btn btn-ghost" type="button" id="unlockExperience90">Liberar 90 dias</button>
+        </div>
+      </section>
+
+
+      <section class="panel form-panel page-section" id="comunicadosSection" aria-label="Comunicados RH CMIVET" style="margin-top:18px;">
+        <div class="panel-head">
+          <h2>Comunicados</h2>
+          <span class="privacy">Avisos e informações oficiais do RH</span>
+        </div>
+        <div class="announcement-list" id="publicComunicados"></div>
+      </section>
+
+      <aside class="side">
+        <section class="panel admin-gate">
+          <div class="panel-head">
+            <h2>Acesso do administrador</h2>
+            <span class="privacy">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M6 11h12v10H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+              PIN local
+            </span>
+          </div>
+          <form id="adminLogin">
+            <div>
+              <label for="adminPin">PIN de acesso</label>
+              <input class="input" id="adminPin" name="adminPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Digite o PIN">
+              <p class="hint">PIN inicial: 1234. Troque depois em configurações.</p>
+            </div>
+            <button class="btn btn-primary" type="submit">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 3h4v4M14 10l5-5M10 7H7a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Entrar
+            </button>
+          </form>
+        </section>
+
+        <section class="panel admin-only">
+          <div class="panel-head">
+            <h2>Resumo</h2>
+            <div class="actions">
+              <button class="btn btn-ghost" type="button" id="exportCsv">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3v12m0 0 4-4m-4 4-4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M5 19h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+                </svg>
+                CSV
+              </button>
+              <button class="btn btn-ghost" type="button" id="resetPasswordBtn">Redefinir senha</button>
+              <button class="btn btn-ghost" type="button" id="adminLogout">Sair</button>
+            </div>
+          </div>
+          <div class="stats" aria-live="polite">
+            <div class="stat">
+              <b id="total">0</b>
+              <span>respostas</span>
+            </div>
+            <div class="stat">
+              <b id="average">-</b>
+              <span>média</span>
+            </div>
+            <div class="stat">
+              <b id="today">0</b>
+              <span>hoje</span>
+            </div>
+          </div>
+          <div class="thermo" id="bars"></div>
+        </section>
+
+        <section class="panel dashboard-only admin-only">
+          <div class="panel-head">
+            <h2>Gerenciar respostas</h2>
+            <button class="btn btn-danger" type="button" id="clearData">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Apagar
+            </button>
+          </div>
+          <div class="responses" id="responses"></div>
+        </section>
+
+        <section class="panel dashboard-only admin-only">
+          <div class="panel-head">
+            <h2>Solicitações Café com o RH 1:1</h2>
+            <button class="btn btn-ghost" type="button" id="exportCoffeeCsv">CSV</button>
+          </div>
+          <div class="responses" id="coffeeRequests"></div>
+        </section>
+
+        <section class="panel dashboard-only admin-only">
+          <div class="panel-head">
+            <h2>Avaliações 45 e 90 dias</h2>
+            <button class="btn btn-ghost" type="button" id="exportExperienceCsv">CSV</button>
+          </div>
+          <div class="responses" style="margin-bottom:12px;">
+            <article class="item">
+              <div><b>Links restritos para envio pelo RH</b></div>
+              <p class="hint">Envie somente ao colaborador que deverá responder. O link restrito direciona para o formulário oficial do Google Forms. Também é possível liberar pelo código: <b>CMIVET45</b> ou <b>CMIVET90</b>.</p>
+              <div class="actions">
+                <button class="btn btn-ghost btn-small" type="button" id="copyLink45">Copiar link 45 dias</button>
+                <button class="btn btn-ghost btn-small" type="button" id="copyLink90">Copiar link 90 dias</button>
+              </div>
+            </article>
+          </div>
+          <div class="responses" id="experienceResponses"></div>
+        </section>
+
+
+        <section class="panel dashboard-only admin-only">
+          <div class="panel-head">
+            <h2>Upload de Comunicados</h2>
+            <span class="privacy">Publicação no portal</span>
+          </div>
+          <form class="announcement-form" id="comunicadoForm">
+            <div>
+              <label for="comunicadoTitle">Título do comunicado</label>
+              <input class="input" id="comunicadoTitle" name="comunicadoTitle" type="text" maxlength="120" placeholder="Ex.: Campanha interna, treinamento, aviso RH" required>
+            </div>
+            <div>
+              <label for="comunicadoMessage">Mensagem</label>
+              <textarea id="comunicadoMessage" name="comunicadoMessage" maxlength="1200" placeholder="Escreva o conteúdo do comunicado."></textarea>
+            </div>
+            <div>
+              <label for="comunicadoFile">Anexo opcional</label>
+              <input class="input" id="comunicadoFile" name="comunicadoFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx">
+              <p class="hint">O arquivo ficará salvo no navegador em que o upload for feito.</p>
+            </div>
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">Publicar comunicado</button>
+              <button class="btn btn-ghost" type="reset">Limpar</button>
+            </div>
+          </form>
+          <div class="responses" id="adminComunicados"></div>
+        </section>
+
+        <section class="panel dashboard-only admin-only">
+          <div class="panel-head">
+            <h2>Configurações do administrador</h2>
+          </div>
+          <form class="settings-form" id="settingsForm">
+            <div class="settings-grid">
+              <div>
+                <label for="newAdminPin">Nova senha/PIN</label>
+                <input class="input" id="newAdminPin" name="newAdminPin" type="password" inputmode="numeric" autocomplete="new-password" placeholder="Manter senha atual">
+              </div>
+              <div>
+                <label for="confirmAdminPin">Confirmar senha/PIN</label>
+                <input class="input" id="confirmAdminPin" name="confirmAdminPin" type="password" inputmode="numeric" autocomplete="new-password" placeholder="Repita a nova senha">
+              </div>
+            </div>
+            <p class="hint">Use o botão <b>Redefinir senha</b> no painel do administrador ou preencha os campos acima e clique em <b>Salvar nova senha</b>.</p>
+            <div>
+              <label for="factorSettings">Fatores da coleta</label>
+              <textarea id="factorSettings" name="factorSettings" maxlength="500"></textarea>
+              <p class="hint">Escreva um fator por linha. Eles aparecem para quem vai responder.</p>
+            </div>
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">Salvar nova senha</button>
+              <button class="btn btn-ghost" type="button" id="restoreFactors">Restaurar fatores</button>
+            </div>
+          </form>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <dialog class="dialog" id="editDialog">
+    <div class="dialog-head">
+      <h2>Editar resposta</h2>
+      <button class="btn btn-ghost btn-small" type="button" id="closeEdit">Fechar</button>
+    </div>
+    <form class="edit-form" id="editForm">
+      <input type="hidden" id="editId" name="editId">
+      <div class="edit-grid">
+        <div>
+          <label for="editMood">Energia e humor</label>
+          <select class="select" id="editMood" name="editMood">
+            <option value="4">😄 Ótimo</option>
+            <option value="3">🙂 Neutro</option>
+            <option value="2">😴 Cansado</option>
+            <option value="1">😣 Estressado</option>
+          </select>
+        </div>
+        <div>
+          <label for="editDate">Data e hora</label>
+          <input class="input" id="editDate" name="editDate" type="datetime-local">
+        </div>
+      </div>
+      <div>
+        <span class="label">Fatores</span>
+        <div class="chips" id="editFactorsList" aria-label="Fatores da resposta"></div>
+      </div>
+      <div>
+        <label for="editComment">Comentário</label>
+        <textarea id="editComment" name="editComment" maxlength="500"></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Salvar edição</button>
+        <button class="btn btn-danger" type="button" id="deleteFromEdit">Excluir resposta</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "termometro-emocional-respostas";
+    const SETTINGS_KEY = "termometro-emocional-config";
+    const COFFEE_KEY = "termometro-emocional-cafe-rh";
+    const EXPERIENCE_KEY = "termometro-emocional-avaliacoes-experiencia";
+    const COMUNICADOS_KEY = "portal-rh-cmivet-comunicados";
+    const API_URL = "https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
+    let comunicadosRemotos = [];
+    const ADMIN_SESSION_KEY = "termometro-emocional-admin";
+    const DEFAULT_FACTORS = ["Trabalho", "Estudos", "Saúde", "Família", "Sono", "Relacionamentos", "Outro"];
+    const LEVELS = ["4", "3", "2", "1"];
+    const labels = {
+      1: "Estressado",
+      2: "Cansado",
+      3: "Neutro",
+      4: "Ótimo"
+    };
+    const emojis = {
+      1: "😣",
+      2: "😴",
+      3: "🙂",
+      4: "😄"
+    };
+
+    const form = document.querySelector("#responseForm");
+    const coffeeForm = document.querySelector("#coffeeForm");
+    const toast = document.querySelector("#toast");
+    const bars = document.querySelector("#bars");
+    const responsesBox = document.querySelector("#responses");
+    const coffeeRequestsBox = document.querySelector("#coffeeRequests");
+    const experienceForm = document.querySelector("#experienceForm");
+    const experienceSection = document.querySelector("#experienceSection");
+    const experienceGate = document.querySelector("#experienceGate");
+    const experienceTitle = document.querySelector("#experienceTitle");
+    const experienceType = document.querySelector("#experienceType");
+    const experienceResponsesBox = document.querySelector("#experienceResponses");
+    const comunicadoForm = document.querySelector("#comunicadoForm");
+    const publicComunicadosBox = document.querySelector("#publicComunicados");
+    const adminComunicadosBox = document.querySelector("#adminComunicados");
+    const factorsList = document.querySelector("#factorsList");
+    const editFactorsList = document.querySelector("#editFactorsList");
+    const adminLogin = document.querySelector("#adminLogin");
+    const adminPin = document.querySelector("#adminPin");
+    const settingsForm = document.querySelector("#settingsForm");
+    const factorSettings = document.querySelector("#factorSettings");
+    const newAdminPin = document.querySelector("#newAdminPin");
+    const confirmAdminPin = document.querySelector("#confirmAdminPin");
+    const editDialog = document.querySelector("#editDialog");
+    const editForm = document.querySelector("#editForm");
+    const editId = document.querySelector("#editId");
+    const editMood = document.querySelector("#editMood");
+    const editDate = document.querySelector("#editDate");
+    const editComment = document.querySelector("#editComment");
+    const totalEl = document.querySelector("#total");
+    const averageEl = document.querySelector("#average");
+    const todayEl = document.querySelector("#today");
+
+    function createId() {
+      if (crypto.randomUUID) return crypto.randomUUID();
+      return `resposta-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function getSettings() {
+      try {
+        const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {};
+        return {
+          adminPin: settings.adminPin || "1234",
+          factors: Array.isArray(settings.factors) && settings.factors.length ? settings.factors : DEFAULT_FACTORS
+        };
+      } catch {
+        return { adminPin: "1234", factors: DEFAULT_FACTORS };
+      }
+    }
+
+    function saveSettings(settings) {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    function normalizeMood(value) {
+      const number = Number(value);
+      if (number >= 4) return "4";
+      if (number === 3) return "3";
+      if (number === 2) return "2";
+      return "1";
+    }
+
+    function getResponses() {
+      try {
+        return (JSON.parse(localStorage.getItem(STORAGE_KEY)) || []).map(item => ({
+          id: item.id || createId(),
+          mood: normalizeMood(item.mood),
+          label: labels[normalizeMood(item.mood)],
+          factors: Array.isArray(item.factors) ? item.factors : [],
+          comment: item.comment || "",
+          createdAt: item.createdAt || new Date().toISOString()
+        }));
+      } catch {
+        return [];
+      }
+    }
+
+    function saveResponses(items) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function getCoffeeRequests() {
+      try {
+        return (JSON.parse(localStorage.getItem(COFFEE_KEY)) || []).map(item => ({
+          id: item.id || createId(),
+          name: item.name || "",
+          sector: item.sector || "",
+          contact: item.contact || "",
+          reason: item.reason || "",
+          urgency: item.urgency || "Normal",
+          createdAt: item.createdAt || new Date().toISOString()
+        }));
+      } catch {
+        return [];
+      }
+    }
+
+    function saveCoffeeRequests(items) {
+      localStorage.setItem(COFFEE_KEY, JSON.stringify(items));
+    }
+
+    function getExperienceResponses() {
+      try {
+        return (JSON.parse(localStorage.getItem(EXPERIENCE_KEY)) || []).map(item => ({
+          id: item.id || createId(),
+          type: item.type || "45 dias",
+          employeeName: item.employeeName || "",
+          employeeRole: item.employeeRole || "",
+          employeeSector: item.employeeSector || "",
+          admissionDate: item.admissionDate || "",
+          adaptationScore: item.adaptationScore || "",
+          trainingScore: item.trainingScore || "",
+          relationshipScore: item.relationshipScore || "",
+          continueIntent: item.continueIntent || "",
+          comment: item.comment || "",
+          createdAt: item.createdAt || new Date().toISOString()
+        }));
+      } catch {
+        return [];
+      }
+    }
+
+    function saveExperienceResponses(items) {
+      localStorage.setItem(EXPERIENCE_KEY, JSON.stringify(items));
+    }
+
+
+    async function apiGet(action) {
+      const response = await fetch(`${API_URL}?action=${encodeURIComponent(action)}&t=${Date.now()}`);
+      if (!response.ok) throw new Error("Falha ao consultar a API");
+      return response.json();
+    }
+
+    async function apiPost(payload) {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error("Falha ao enviar dados para a API");
+      return response.json();
+    }
+
+    async function carregarComunicadosRemotos() {
+      try {
+        const data = await apiGet("comunicados");
+        comunicadosRemotos = Array.isArray(data) ? data.map(item => ({
+          id: item.id_comunicado || item.id || createId(),
+          title: item.titulo || item.title || "Comunicado RH",
+          message: item.descricao || item.message || "",
+          categoria: item.categoria || "RH",
+          fileName: item.tipo_arquivo || "Abrir documento",
+          fileType: item.tipo_arquivo || "",
+          fileData: item.link_drive || "",
+          fixado: item.fixado || "não",
+          ativo: item.ativo || "sim",
+          createdAt: item.data || item.createdAt || new Date().toISOString()
+        })) : [];
+        render();
+      } catch (error) {
+        console.warn("Não foi possível carregar comunicados da planilha.", error);
+        showToast("Não foi possível carregar comunicados da planilha.");
+      }
+    }
+
+    function inferFileType(link) {
+      const lower = String(link || "").toLowerCase();
+      if (lower.includes(".pdf")) return "PDF";
+      if (lower.includes(".doc") || lower.includes("document")) return "Word";
+      if (lower.includes(".xls") || lower.includes("spreadsheet")) return "Excel";
+      if (lower.match(/\.(png|jpg|jpeg|webp|gif|svg)/)) return "Imagem";
+      if (lower.includes("drive.google.com")) return "Google Drive";
+      return "Link";
+    }
+
+    function getComunicados() {
+      if (comunicadosRemotos.length) return comunicadosRemotos;
+      try {
+        return (JSON.parse(localStorage.getItem(COMUNICADOS_KEY)) || []).map(item => ({
+          id: item.id || createId(),
+          title: item.title || "Comunicado RH",
+          message: item.message || "",
+          fileName: item.fileName || item.tipo_arquivo || "Abrir documento",
+          fileType: item.fileType || item.tipo_arquivo || "",
+          fileData: item.fileData || item.link_drive || "",
+          createdAt: item.createdAt || new Date().toISOString()
+        }));
+      } catch {
+        return [];
+      }
+    }
+
+    function saveComunicados(items) {
+      localStorage.setItem(COMUNICADOS_KEY, JSON.stringify(items));
+    }
+
+    const EXPERIENCE_FORM_LINKS = {
+      "45": "https://docs.google.com/forms/d/1bXpZ3moQApWTS2aOCHDJ1xGskJC0GhhR_REivTCRbPc/viewform?usp=sharing",
+      "90": "https://docs.google.com/forms/d/1yNO89RVkj6zWHT_BuHmd6u1O8WlvSkpYAblDdmoCc5A/viewform?usp=sharing"
+    };
+
+    function makeRestrictedLink(type) {
+      const url = new URL(window.location.href.split("#")[0]);
+      url.searchParams.set("avaliacao", type);
+      url.searchParams.set("codigo", type === "45" ? "CMIVET45" : "CMIVET90");
+      return url.toString();
+    }
+
+    function unlockExperience(type) {
+      const safeType = type === "90" ? "90" : "45";
+      const target = EXPERIENCE_FORM_LINKS[safeType];
+      showToast(`Acesso liberado. Abrindo avaliação de ${safeType} dias...`);
+      window.setTimeout(() => {
+        window.location.href = target;
+      }, 650);
+    }
+
+    function applyExperienceAccessFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const type = params.get("avaliacao");
+      const code = (params.get("codigo") || "").toUpperCase();
+      if (type === "45" && code === "CMIVET45") unlockExperience("45");
+      if (type === "90" && code === "CMIVET90") unlockExperience("90");
+    }
+
+
+    function setPortalPage(page) {
+      const allowed = ["home", "termometro", "cafe", "experiencia", "comunicados"];
+      const current = allowed.includes(page) ? page : "home";
+      document.body.dataset.page = current;
+      document.querySelectorAll("[data-page-link]").forEach(el => {
+        el.classList.toggle("active", el.dataset.pageLink === current);
+      });
+      if (current !== "home") {
+        const target = document.querySelector(`#${current === "termometro" ? "termometroSection" : current === "cafe" ? "coffeeSection" : current === "experiencia" ? "experienceGate" : "comunicadosSection"}`);
+        target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+
+    function calendarDate(value) {
+      return value.replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    }
+
+    function formatDate(value) {
+      return new Intl.DateTimeFormat("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "short"
+      }).format(new Date(value));
+    }
+
+    function render() {
+      const responses = getResponses();
+      const total = responses.length;
+      const todayKey = new Date().toLocaleDateString("pt-BR");
+      const todayCount = responses.filter(item => new Date(item.createdAt).toLocaleDateString("pt-BR") === todayKey).length;
+      const average = total ? responses.reduce((sum, item) => sum + Number(item.mood), 0) / total : 0;
+
+      totalEl.textContent = total;
+      averageEl.textContent = total ? average.toFixed(1).replace(".", ",") : "-";
+      todayEl.textContent = todayCount;
+
+      bars.innerHTML = LEVELS.map(level => {
+        const count = responses.filter(item => String(item.mood) === level).length;
+        const pct = total ? Math.round((count / total) * 100) : 0;
+        return `
+          <div class="bar-row">
+            <span>${emojis[level]} ${labels[level]}</span>
+            <span class="track"><span class="fill" style="width:${pct}%"></span></span>
+            <span>${count}</span>
+          </div>
+        `;
+      }).join("");
+
+      const recent = responses.slice().reverse();
+      responsesBox.innerHTML = recent.length ? recent.map(item => `
+        <article class="item">
+          <div class="meta">
+            <span class="badge">${emojis[item.mood] || ""} ${labels[item.mood]}</span>
+            <time>${formatDate(item.createdAt)}</time>
+          </div>
+          ${item.factors.length ? `<div class="meta"><span>${item.factors.join(", ")}</span></div>` : ""}
+          ${item.comment ? `<p class="comment">${escapeHtml(item.comment)}</p>` : ""}
+          <div class="item-actions">
+            <button class="btn btn-ghost btn-small" type="button" data-edit-id="${item.id}">Editar</button>
+            <button class="btn btn-danger btn-small" type="button" data-delete-id="${item.id}">Excluir</button>
+          </div>
+        </article>
+      `).join("") : `<div class="empty">Nenhuma resposta registrada ainda.</div>`;
+
+      const coffeeRequests = getCoffeeRequests().slice().reverse();
+      if (coffeeRequestsBox) {
+        coffeeRequestsBox.innerHTML = coffeeRequests.length ? coffeeRequests.map(item => `
+          <article class="item">
+            <div class="meta">
+              <span class="badge">☕ ${escapeHtml(item.urgency)}</span>
+              <time>${formatDate(item.createdAt)}</time>
+            </div>
+            <div><b>${escapeHtml(item.name)}</b>${item.sector ? ` • ${escapeHtml(item.sector)}` : ""}</div>
+            ${item.contact ? `<div class="meta"><span>Contato: ${escapeHtml(item.contact)}</span></div>` : ""}
+            <p class="comment">${escapeHtml(item.reason)}</p>
+            <div class="item-actions">
+              <button class="btn btn-danger btn-small" type="button" data-delete-coffee-id="${item.id}">Excluir</button>
+            </div>
+          </article>
+        `).join("") : `<div class="empty">Nenhuma solicitação registrada ainda.</div>`;
+      }
+
+      const experienceResponses = getExperienceResponses().slice().reverse();
+      if (experienceResponsesBox) {
+        experienceResponsesBox.innerHTML = experienceResponses.length ? experienceResponses.map(item => `
+          <article class="item">
+            <div class="meta">
+              <span class="badge">${escapeHtml(item.type)}</span>
+              <time>${formatDate(item.createdAt)}</time>
+            </div>
+            <div><b>${escapeHtml(item.employeeName)}</b>${item.employeeRole ? ` • ${escapeHtml(item.employeeRole)}` : ""}</div>
+            ${item.employeeSector ? `<div class="meta"><span>Setor: ${escapeHtml(item.employeeSector)}</span></div>` : ""}
+            <p class="comment"><b>Adaptação:</b> ${escapeHtml(item.adaptationScore)} • <b>Treinamento:</b> ${escapeHtml(item.trainingScore)} • <b>Relacionamento:</b> ${escapeHtml(item.relationshipScore)} • <b>Continuidade:</b> ${escapeHtml(item.continueIntent)}</p>
+            ${item.comment ? `<p class="comment">${escapeHtml(item.comment)}</p>` : ""}
+            <div class="item-actions"><button class="btn btn-danger btn-small" type="button" data-delete-experience-id="${item.id}">Excluir</button></div>
+          </article>
+        `).join("") : `<div class="empty">Nenhuma avaliação de experiência registrada ainda.</div>`;
+      }
+
+      const comunicados = getComunicados().slice().reverse();
+      const comunicadoHtml = comunicados.length ? comunicados.map(item => `
+        <article class="announcement-card">
+          <div class="meta"><span class="badge">📢 Comunicado</span><time>${formatDate(item.createdAt)}</time></div>
+          <h3>${escapeHtml(item.title)}</h3>
+          ${item.message ? `<p>${escapeHtml(item.message)}</p>` : ""}
+          ${item.fileData ? `<a class="announcement-file" href="${item.fileData}" target="_blank" rel="noopener">📎 ${escapeHtml(item.fileName || "Abrir documento")}</a>` : ""}
+          ${isAdmin() ? `<div class="item-actions"><button class="btn btn-danger btn-small" type="button" data-delete-comunicado-id="${item.id}">Excluir</button></div>` : ""}
+        </article>
+      `).join("") : `<div class="empty">Nenhum comunicado publicado no momento.</div>`;
+      if (publicComunicadosBox) publicComunicadosBox.innerHTML = comunicadoHtml;
+      if (adminComunicadosBox) adminComunicadosBox.innerHTML = comunicadoHtml;
+
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function toCsvValue(value) {
+      return `"${String(value ?? "").replaceAll('"', '""')}"`;
+    }
+
+    function isAdmin() {
+      return sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+    }
+
+    function setAdmin(value) {
+      if (value) {
+        sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+      } else {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      }
+      document.body.dataset.admin = String(value);
+    }
+
+    function renderFactors() {
+      const factors = getSettings().factors;
+      factorsList.innerHTML = factors.map(factor => `
+        <label class="chip"><input type="checkbox" name="factor" value="${escapeHtml(factor)}">${escapeHtml(factor)}</label>
+      `).join("");
+      factorSettings.value = factors.join("\n");
+    }
+
+    function renderEditFactors(selected = []) {
+      editFactorsList.innerHTML = getSettings().factors.map(factor => `
+        <label class="chip">
+          <input type="checkbox" name="editFactor" value="${escapeHtml(factor)}" ${selected.includes(factor) ? "checked" : ""}>
+          ${escapeHtml(factor)}
+        </label>
+      `).join("");
+    }
+
+    function localDateInputValue(value) {
+      const date = new Date(value);
+      const offset = date.getTimezoneOffset();
+      const local = new Date(date.getTime() - offset * 60000);
+      return local.toISOString().slice(0, 16);
+    }
+
+    function dateInputToIso(value) {
+      return value ? new Date(value).toISOString() : new Date().toISOString();
+    }
+
+
+    document.querySelectorAll("[data-page-link]").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        setPortalPage(link.dataset.pageLink);
+      });
+    });
+
+    comunicadoForm?.addEventListener("submit", async event => {
+      event.preventDefault();
+      const data = new FormData(comunicadoForm);
+      const title = (data.get("comunicadoTitle") || "").trim();
+      const message = (data.get("comunicadoMessage") || "").trim();
+      const driveLink = (data.get("comunicadoDriveLink") || "").trim();
+      if (!title) { showToast("Informe o título do comunicado."); return; }
+      if (!driveLink) { showToast("Cole o link do Google Drive do comunicado."); return; }
+
+      try {
+        await apiPost({
+          action: "novoComunicado",
+          titulo: title,
+          categoria: "RH",
+          descricao: message,
+          link_drive: driveLink,
+          tipo_arquivo: inferFileType(driveLink),
+          fixado: "não"
+        });
+        comunicadoForm.reset();
+        await carregarComunicadosRemotos();
+        showToast("Comunicado publicado na planilha.");
+      } catch (error) {
+        console.warn(error);
+        showToast("Erro ao publicar. Verifique a API e a planilha.");
+      }
+    });
+
+    document.addEventListener("click", event => {
+      const btn = event.target.closest("[data-delete-comunicado-id]");
+      if (!btn) return;
+      if (confirm("Excluir este comunicado do portal?")) {
+        saveComunicados(getComunicados().filter(item => item.id !== btn.dataset.deleteComunicadoId));
+        render();
+        showToast("Comunicado excluído.");
+      }
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const mood = data.get("mood");
+      if (!mood) {
+        showToast("Escolha uma opção do termômetro.");
+        return;
+      }
+
+      const response = {
+        id: createId(),
+        mood,
+        label: labels[mood],
+        factors: data.getAll("factor"),
+        comment: data.get("comment").trim(),
+        createdAt: new Date().toISOString()
+      };
+
+      const responses = getResponses();
+      responses.push(response);
+      saveResponses(responses);
+      apiPost({
+        action: "termometro",
+        nome: "Anônimo",
+        setor: "",
+        humor: labels[mood],
+        energia: mood,
+        observacao: response.comment
+      }).catch(error => console.warn("Erro ao sincronizar termômetro", error));
+      form.reset();
+      render();
+      showToast("Resposta anônima registrada.");
+    });
+
+    coffeeForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const data = new FormData(coffeeForm);
+      const request = {
+        id: createId(),
+        name: data.get("coffeeName").trim(),
+        sector: data.get("coffeeSector").trim(),
+        contact: data.get("coffeeContact").trim(),
+        reason: data.get("coffeeReason").trim(),
+        urgency: data.get("coffeeUrgency") || "Normal",
+        createdAt: new Date().toISOString()
+      };
+
+      if (!request.name || !request.reason) {
+        showToast("Informe nome e motivo da solicitação.");
+        return;
+      }
+
+      const requests = getCoffeeRequests();
+      requests.push(request);
+      saveCoffeeRequests(requests);
+      apiPost({
+        action: "cafeRH",
+        nome: request.name,
+        setor: request.sector,
+        motivo: request.reason,
+        contato: request.contact,
+        urgencia: request.urgency
+      }).catch(error => console.warn("Erro ao sincronizar Café RH", error));
+      coffeeForm.reset();
+      render();
+      showToast("Solicitação enviada ao RH.");
+    });
+
+    if (experienceForm) {
+      experienceForm.addEventListener("submit", event => {
+        event.preventDefault();
+        const data = new FormData(experienceForm);
+        const item = {
+          id: createId(),
+          type: data.get("experienceType") || "45 dias",
+          employeeName: data.get("employeeName").trim(),
+          employeeRole: data.get("employeeRole").trim(),
+          employeeSector: data.get("employeeSector").trim(),
+          admissionDate: data.get("admissionDate") || "",
+          adaptationScore: data.get("adaptationScore") || "",
+          trainingScore: data.get("trainingScore") || "",
+          relationshipScore: data.get("relationshipScore") || "",
+          continueIntent: data.get("continueIntent") || "",
+          comment: data.get("experienceComment").trim(),
+          createdAt: new Date().toISOString()
+        };
+        if (!item.employeeName || !item.adaptationScore || !item.trainingScore || !item.relationshipScore || !item.continueIntent) {
+          showToast("Preencha os campos obrigatórios da avaliação.");
+          return;
+        }
+        const items = getExperienceResponses();
+        items.push(item);
+        saveExperienceResponses(items);
+        experienceForm.reset();
+        render();
+        showToast("Avaliação enviada ao RH.");
+      });
+    }
+
+    document.querySelector("#unlockExperience45")?.addEventListener("click", () => {
+      const code = document.querySelector("#experienceAccessCode").value.trim().toUpperCase();
+      if (code === "CMIVET45") unlockExperience("45"); else showToast("Código de acesso inválido para 45 dias.");
+    });
+
+    document.querySelector("#unlockExperience90")?.addEventListener("click", () => {
+      const code = document.querySelector("#experienceAccessCode").value.trim().toUpperCase();
+      if (code === "CMIVET90") unlockExperience("90"); else showToast("Código de acesso inválido para 90 dias.");
+    });
+
+    adminLogin.addEventListener("submit", event => {
+      event.preventDefault();
+      if (adminPin.value === getSettings().adminPin) {
+        setAdmin(true);
+        adminPin.value = "";
+        render();
+        showToast("Acesso de administrador liberado.");
+      } else {
+        showToast("PIN incorreto.");
+      }
+    });
+
+
+    document.querySelector("#resetPasswordBtn").addEventListener("click", () => {
+      const settingsPanel = document.querySelector("#settingsForm");
+      if (settingsPanel) {
+        settingsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        setTimeout(() => newAdminPin.focus(), 350);
+        showToast("Digite a nova senha e confirme para redefinir.");
+      }
+    });
+
+    document.querySelector("#adminLogout").addEventListener("click", () => {
+      setAdmin(false);
+      showToast("Administrador saiu.");
+    });
+    document.querySelector("#exportCsv").addEventListener("click", () => {
+      const responses = getResponses();
+      if (!responses.length) {
+        showToast("Ainda não há respostas para exportar.");
+        return;
+      }
+
+      const header = ["data_hora", "nivel", "sentimento", "fatores", "comentario"];
+      const lines = responses.map(item => [
+        formatDate(item.createdAt),
+        item.mood,
+        item.label,
+        item.factors.join("; "),
+        item.comment
+      ].map(toCsvValue).join(","));
+
+      const blob = new Blob([[header.join(","), ...lines].join("\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `termometro-emocional-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast("Arquivo CSV gerado.");
+    });
+
+    document.querySelector("#exportCoffeeCsv").addEventListener("click", () => {
+      const requests = getCoffeeRequests();
+      if (!requests.length) {
+        showToast("Ainda não há solicitações para exportar.");
+        return;
+      }
+      const header = ["data_hora", "nome", "setor", "contato", "prioridade", "motivo"];
+      const lines = requests.map(item => [
+        formatDate(item.createdAt),
+        item.name,
+        item.sector,
+        item.contact,
+        item.urgency,
+        item.reason
+      ].map(toCsvValue).join(","));
+      const blob = new Blob([[header.join(","), ...lines].join("\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `cafe-com-rh-1-1-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast("Arquivo CSV de solicitações gerado.");
+    });
+
+    document.querySelector("#exportExperienceCsv")?.addEventListener("click", () => {
+      const items = getExperienceResponses();
+      if (!items.length) { showToast("Ainda não há avaliações para exportar."); return; }
+      const header = ["data_hora", "tipo", "nome", "cargo", "setor", "admissao", "adaptacao", "treinamento", "relacionamento", "continuidade", "comentario"];
+      const lines = items.map(item => [
+        formatDate(item.createdAt), item.type, item.employeeName, item.employeeRole, item.employeeSector, item.admissionDate,
+        item.adaptationScore, item.trainingScore, item.relationshipScore, item.continueIntent, item.comment
+      ].map(toCsvValue).join(","));
+      const blob = new Blob([[header.join(","), ...lines].join("\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `avaliacoes-experiencia-cmivet-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+      showToast("Arquivo CSV de avaliações gerado.");
+    });
+
+    async function copyText(value) {
+      try { await navigator.clipboard.writeText(value); showToast("Link copiado."); }
+      catch { prompt("Copie o link:", value); }
+    }
+    document.querySelector("#copyLink45")?.addEventListener("click", () => copyText(makeRestrictedLink("45")));
+    document.querySelector("#copyLink90")?.addEventListener("click", () => copyText(makeRestrictedLink("90")));
+
+    if (experienceResponsesBox) {
+      experienceResponsesBox.addEventListener("click", event => {
+        const btn = event.target.closest("[data-delete-experience-id]");
+        if (!btn) return;
+        if (confirm("Excluir esta avaliação de experiência?")) {
+          saveExperienceResponses(getExperienceResponses().filter(item => item.id !== btn.dataset.deleteExperienceId));
+          render();
+          showToast("Avaliação excluída.");
+        }
+      });
+    }
+
+    document.querySelector("#clearData").addEventListener("click", () => {
+      if (!getResponses().length) {
+        showToast("Não há dados para apagar.");
+        return;
+      }
+
+      if (confirm("Excluir todos os registros armazenados? Esta ação deve ser feita somente pelo administrador e não poderá ser desfeita.")) {
+        saveResponses([]);
+        render();
+        showToast("Respostas apagadas.");
+      }
+    });
+
+    settingsForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const current = getSettings();
+      const factors = factorSettings.value
+        .split(/\r?\n/)
+        .map(item => item.trim())
+        .filter(Boolean);
+
+      if (!factors.length) {
+        showToast("Informe pelo menos um fator.");
+        return;
+      }
+
+      if (newAdminPin.value || confirmAdminPin.value) {
+        if (newAdminPin.value.length < 4) {
+          showToast("Use um PIN com pelo menos 4 caracteres.");
+          return;
+        }
+        if (newAdminPin.value !== confirmAdminPin.value) {
+          showToast("A confirmação do PIN não confere.");
+          return;
+        }
+        current.adminPin = newAdminPin.value;
+      }
+
+      current.factors = [...new Set(factors)];
+      saveSettings(current);
+      newAdminPin.value = "";
+      confirmAdminPin.value = "";
+      renderFactors();
+      render();
+      showToast("Configurações salvas.");
+    });
+
+    document.querySelector("#restoreFactors").addEventListener("click", () => {
+      factorSettings.value = DEFAULT_FACTORS.join("\n");
+    });
+
+    responsesBox.addEventListener("click", event => {
+      const editButton = event.target.closest("[data-edit-id]");
+      const deleteButton = event.target.closest("[data-delete-id]");
+
+      if (editButton) {
+        openEditDialog(editButton.dataset.editId);
+      }
+
+      if (deleteButton) {
+        deleteResponse(deleteButton.dataset.deleteId);
+      }
+    });
+
+    if (coffeeRequestsBox) {
+      coffeeRequestsBox.addEventListener("click", event => {
+        const deleteButton = event.target.closest("[data-delete-coffee-id]");
+        if (!deleteButton) return;
+        const id = deleteButton.dataset.deleteCoffeeId;
+        if (confirm("Excluir esta solicitação de Café com o RH?")) {
+          saveCoffeeRequests(getCoffeeRequests().filter(item => item.id !== id));
+          render();
+          showToast("Solicitação excluída.");
+        }
+      });
+    }
+
+    function openEditDialog(id) {
+      const response = getResponses().find(item => item.id === id);
+      if (!response) return;
+
+      editId.value = response.id;
+      editMood.value = response.mood;
+      editDate.value = localDateInputValue(response.createdAt);
+      editComment.value = response.comment;
+      renderEditFactors(response.factors);
+      editDialog.showModal();
+    }
+
+    function deleteResponse(id) {
+      const responses = getResponses();
+      const response = responses.find(item => item.id === id);
+      if (!response) return;
+
+      if (confirm("Excluir esta resposta?")) {
+        saveResponses(responses.filter(item => item.id !== id));
+        if (editDialog.open) editDialog.close();
+        render();
+        showToast("Resposta excluída.");
+      }
+    }
+
+    editForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const data = new FormData(editForm);
+      const responses = getResponses();
+      const index = responses.findIndex(item => item.id === editId.value);
+      if (index < 0) return;
+
+      responses[index] = {
+        ...responses[index],
+        mood: editMood.value,
+        label: labels[editMood.value],
+        factors: data.getAll("editFactor"),
+        comment: editComment.value.trim(),
+        createdAt: dateInputToIso(editDate.value)
+      };
+      saveResponses(responses);
+      editDialog.close();
+      render();
+      showToast("Resposta atualizada.");
+    });
+
+    document.querySelector("#closeEdit").addEventListener("click", () => editDialog.close());
+    document.querySelector("#deleteFromEdit").addEventListener("click", () => deleteResponse(editId.value));
+
+    document.querySelectorAll("[data-view-button]").forEach(button => {
+      button.addEventListener("click", () => {
+        const view = button.dataset.viewButton;
+        document.body.dataset.view = view;
+        document.querySelectorAll("[data-view-button]").forEach(item => {
+          item.setAttribute("aria-selected", String(item === button));
+        });
+      });
+    });
+
+    setAdmin(isAdmin());
+    renderFactors();
+    applyExperienceAccessFromUrl();
+    render();
+    carregarComunicadosRemotos();
+  </script>
+</body>
+</html>
