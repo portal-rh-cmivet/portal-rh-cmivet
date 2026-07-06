@@ -2,7 +2,7 @@
     const STORAGE_KEY = "termometro-emocional-respostas";
     const SETTINGS_KEY = "termometro-emocional-config";
     const COFFEE_KEY = "termometro-emocional-cafe-rh";
-    const API_URL = "https://script.google.com/macros/s/AKfycby9fKhZuxXRfqrV8CRX-pUkFCPGPhBilNe8nAqoM7rYcUthr0IWyMX3MU9aB2oCYILQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycby9fKhZuxXRfqrV8CRX-pUkFCPGPhBiINe8nAqoM7rYcUthr0IWyMX3MU9aB2oCYILQ/exec";
     const EXPERIENCE_KEY = "termometro-emocional-avaliacoes-experiencia";
     const ADMIN_SESSION_KEY = "termometro-emocional-admin";
     const DEFAULT_FACTORS = ["Trabalho", "Estudos", "Saúde", "Família", "Sono", "Relacionamentos", "Outro"];
