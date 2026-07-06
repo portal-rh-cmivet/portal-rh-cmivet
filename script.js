@@ -2,7 +2,6 @@
     const STORAGE_KEY = "termometro-emocional-respostas";
     const SETTINGS_KEY = "termometro-emocional-config";
     const COFFEE_KEY = "termometro-emocional-cafe-rh";
-    const API_URL = "https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
     const EXPERIENCE_KEY = "termometro-emocional-avaliacoes-experiencia";
     const ADMIN_SESSION_KEY = "termometro-emocional-admin";
     const DEFAULT_FACTORS = ["Trabalho", "Estudos", "Saúde", "Família", "Sono", "Relacionamentos", "Outro"];
@@ -341,7 +340,6 @@
       const responses = getResponses();
       responses.push(response);
       saveResponses(responses);
-      fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "termometro", nome: "Anônimo", setor: "", humor: labels[mood], energia: mood, observacao: response.comment }) }).catch(console.warn);
       form.reset();
       render();
       showToast("Resposta anônima registrada.");
@@ -368,7 +366,6 @@
       const requests = getCoffeeRequests();
       requests.push(request);
       saveCoffeeRequests(requests);
-      fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "cafeRH", nome: request.name, setor: request.sector, motivo: request.reason, contato: request.contact, urgencia: request.urgency }) }).catch(console.warn);
       coffeeForm.reset();
       render();
       showToast("Solicitação enviada ao RH.");
