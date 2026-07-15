@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Administração | RH CMIVET</title>
+  <title>Dashboard Premium | RH CMIVET</title>
   <meta name="theme-color" content="#0f6258">
   <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="admin.css">
@@ -40,52 +40,115 @@
           <p class="eyebrow">Portal RH CMIVET</p>
           <h1 id="pageTitle">Dashboard Administrativo</h1>
         </div>
-        <div class="api-status" id="apiStatus">Verificando API...</div>
+        <div class="top-actions">
+          <button class="btn ghost compact" id="refreshDashboard">↻ Atualizar</button>
+          <div class="api-status" id="apiStatus">Verificando API...</div>
+        </div>
       </header>
 
       <section class="page-section active" id="dashboard">
         <div class="hero">
           <div>
-            <span class="tag">Gestão de Pessoas</span>
-            <h2>Bem-vindo(a) ao Painel do RH</h2>
-            <p>Centralize comunicados e acompanhe os principais módulos do Portal RH CMIVET.</p>
+            <span class="tag">Dashboard Premium</span>
+            <h2>Visão rápida do Portal RH</h2>
+            <p>Acompanhe os indicadores de comunicação e a atividade dos principais módulos da CMIVET.</p>
+            <div class="hero-actions">
+              <button class="btn primary" data-go="comunicados">Novo comunicado</button>
+              <button class="btn secondary" data-go="biblioteca">Biblioteca RH</button>
+            </div>
           </div>
           <img src="assets/cmivet-animais-hero.png" alt="">
         </div>
 
         <div class="cards">
           <article class="metric">
-            <span>📢</span>
-            <strong id="metricComunicados">0</strong>
-            <small>Comunicados ativos</small>
+            <div class="metric-icon">📢</div>
+            <div>
+              <strong id="metricComunicados">0</strong>
+              <small>Comunicados ativos</small>
+              <span class="trend positive" id="metricComunicadosDetail">Carregando...</span>
+            </div>
           </article>
           <article class="metric">
-            <span>😊</span>
-            <strong>—</strong>
-            <small>Respostas do termômetro</small>
+            <div class="metric-icon">📌</div>
+            <div>
+              <strong id="metricFixados">0</strong>
+              <small>Fixados no topo</small>
+              <span class="trend" id="metricFixadosDetail">Prioridade editorial</span>
+            </div>
           </article>
           <article class="metric">
-            <span>☕</span>
-            <strong>—</strong>
-            <small>Solicitações Café RH</small>
+            <div class="metric-icon">🗂️</div>
+            <div>
+              <strong id="metricCategorias">0</strong>
+              <small>Categorias utilizadas</small>
+              <span class="trend" id="metricCategoriasDetail">Organização do conteúdo</span>
+            </div>
           </article>
           <article class="metric">
-            <span>📋</span>
-            <strong>—</strong>
-            <small>Avaliações pendentes</small>
+            <div class="metric-icon">📎</div>
+            <div>
+              <strong id="metricAnexos">0</strong>
+              <small>Com anexos</small>
+              <span class="trend" id="metricAnexosDetail">Imagens, PDFs e links</span>
+            </div>
           </article>
         </div>
 
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <h3>Comunicados recentes</h3>
-              <p>Últimas publicações cadastradas no banco de dados.</p>
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Comunicados por categoria</h3>
+                <p>Distribuição atual das publicações ativas.</p>
+              </div>
             </div>
-            <button class="btn secondary" data-go="comunicados">Gerenciar comunicados</button>
+            <div id="categoryChart" class="bar-chart">
+              <div class="empty">Carregando gráfico...</div>
+            </div>
           </div>
-          <div id="dashboardAnnouncements" class="announcement-grid">
-            <div class="empty">Carregando comunicados...</div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Tipos de conteúdo</h3>
+                <p>Formatos mais utilizados nos comunicados.</p>
+              </div>
+            </div>
+            <div id="fileTypeChart" class="donut-area">
+              <div class="empty">Carregando indicadores...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid lower">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Comunicados recentes</h3>
+                <p>Últimas publicações cadastradas no banco de dados.</p>
+              </div>
+              <button class="btn secondary" data-go="comunicados">Gerenciar</button>
+            </div>
+            <div id="dashboardAnnouncements" class="announcement-grid">
+              <div class="empty">Carregando comunicados...</div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Status dos módulos</h3>
+                <p>Progresso da implantação do Portal RH.</p>
+              </div>
+            </div>
+            <div class="module-status">
+              <div><span>📢 Comunicados</span><b class="status ok">Ativo</b></div>
+              <div><span>😊 Termômetro</span><b class="status building">Em integração</b></div>
+              <div><span>☕ Café com RH</span><b class="status building">Em integração</b></div>
+              <div><span>📋 Avaliações</span><b class="status planned">Planejado</b></div>
+              <div><span>📚 Biblioteca RH</span><b class="status planned">Próxima sprint</b></div>
+            </div>
           </div>
         </div>
       </section>
@@ -96,7 +159,7 @@
             <div class="panel-head">
               <div>
                 <h3>Novo comunicado</h3>
-                <p>O arquivo pode ficar no Google Drive; cole o link de visualização.</p>
+                <p>Cadastre uma nova publicação no Portal RH.</p>
               </div>
             </div>
 
@@ -171,45 +234,27 @@
       </section>
 
       <section class="page-section" id="colaboradores">
-        <div class="coming-soon">
-          <span>👥</span><h2>Gestão de Colaboradores</h2>
-          <p>Estrutura preparada para cadastro, cargo, setor, gestor e status.</p>
-        </div>
+        <div class="coming-soon"><span>👥</span><h2>Gestão de Colaboradores</h2><p>Estrutura preparada para cadastro, cargo, setor, gestor e status.</p></div>
       </section>
 
       <section class="page-section" id="biblioteca">
-        <div class="coming-soon">
-          <span>📚</span><h2>Biblioteca RH</h2>
-          <p>Estrutura preparada para POPs, treinamentos, regulamentos e documentos.</p>
-        </div>
+        <div class="coming-soon"><span>📚</span><h2>Biblioteca RH</h2><p>Estrutura preparada para POPs, treinamentos, regulamentos e documentos.</p></div>
       </section>
 
       <section class="page-section" id="termometro">
-        <div class="coming-soon">
-          <span>😊</span><h2>Termômetro Emocional</h2>
-          <p>Na próxima etapa, este painel receberá indicadores e histórico centralizado.</p>
-        </div>
+        <div class="coming-soon"><span>😊</span><h2>Termômetro Emocional</h2><p>Na próxima etapa, este painel receberá indicadores e histórico centralizado.</p></div>
       </section>
 
       <section class="page-section" id="cafe">
-        <div class="coming-soon">
-          <span>☕</span><h2>Café com o RH</h2>
-          <p>Na próxima etapa, este painel receberá solicitações e controle de status.</p>
-        </div>
+        <div class="coming-soon"><span>☕</span><h2>Café com o RH</h2><p>Na próxima etapa, este painel receberá solicitações e controle de status.</p></div>
       </section>
 
       <section class="page-section" id="avaliacoes">
-        <div class="coming-soon">
-          <span>📋</span><h2>Avaliações</h2>
-          <p>Área reservada para avaliações de 45 dias, 90 dias e desempenho.</p>
-        </div>
+        <div class="coming-soon"><span>📋</span><h2>Avaliações</h2><p>Área reservada para avaliações de 45 dias, 90 dias e desempenho.</p></div>
       </section>
 
       <section class="page-section" id="configuracoes">
-        <div class="coming-soon">
-          <span>⚙️</span><h2>Configurações</h2>
-          <p>Configurações gerais do Portal RH serão adicionadas nas próximas etapas.</p>
-        </div>
+        <div class="coming-soon"><span>⚙️</span><h2>Configurações</h2><p>Configurações gerais do Portal RH serão adicionadas nas próximas etapas.</p></div>
       </section>
     </main>
   </div>
