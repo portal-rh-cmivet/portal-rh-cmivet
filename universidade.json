@@ -1,0 +1,126 @@
+{
+  "trails": [
+    {
+      "id": "integracao",
+      "icon": "🐾",
+      "title": "Integração CMIVET",
+      "description": "História, cultura, políticas internas e jornada do colaborador."
+    },
+    {
+      "id": "atendimento",
+      "icon": "🩺",
+      "title": "Atendimento ao Cliente",
+      "description": "Comunicação, excelência, acolhimento e humanização."
+    },
+    {
+      "id": "clinica",
+      "icon": "🐶",
+      "title": "Procedimentos Clínicos",
+      "description": "POPs, protocolos, biossegurança e rotinas veterinárias."
+    },
+    {
+      "id": "bem-estar",
+      "icon": "❤️",
+      "title": "Bem-estar e Segurança",
+      "description": "LGPD, saúde mental, ergonomia e segurança do trabalho."
+    },
+    {
+      "id": "lideranca",
+      "icon": "👨‍💼",
+      "title": "Liderança",
+      "description": "Gestão de pessoas, feedback e avaliação de desempenho."
+    }
+  ],
+  "courses": [
+    {
+      "id": "curso-001",
+      "trailId": "integracao",
+      "trail": "Integração CMIVET",
+      "title": "Conhecendo a CMIVET",
+      "description": "História, missão, visão, valores e estrutura da clínica.",
+      "duration": "40 min",
+      "instructor": "Recursos Humanos",
+      "lessons": [
+        "História da CMIVET",
+        "Missão, visão e valores",
+        "Estrutura organizacional",
+        "Canais internos"
+      ]
+    },
+    {
+      "id": "curso-002",
+      "trailId": "integracao",
+      "trail": "Integração CMIVET",
+      "title": "Código de Conduta",
+      "description": "Diretrizes de comportamento, ética e relacionamento profissional.",
+      "duration": "35 min",
+      "instructor": "Recursos Humanos",
+      "lessons": [
+        "Conduta profissional",
+        "Respeito e convivência",
+        "Sigilo e responsabilidade",
+        "Canal de apoio"
+      ]
+    },
+    {
+      "id": "curso-003",
+      "trailId": "atendimento",
+      "trail": "Atendimento ao Cliente",
+      "title": "Atendimento Humanizado",
+      "description": "Como acolher tutores e conduzir uma comunicação clara e empática.",
+      "duration": "50 min",
+      "instructor": "Gestão CMIVET",
+      "lessons": [
+        "Acolhimento",
+        "Escuta ativa",
+        "Comunicação em situações delicadas",
+        "Pós-atendimento"
+      ]
+    },
+    {
+      "id": "curso-004",
+      "trailId": "clinica",
+      "trail": "Procedimentos Clínicos",
+      "title": "Biossegurança Veterinária",
+      "description": "Boas práticas, EPIs, higienização e prevenção de riscos.",
+      "duration": "1h",
+      "instructor": "Coordenação Técnica",
+      "lessons": [
+        "Riscos biológicos",
+        "Uso de EPIs",
+        "Higienização",
+        "Descarte de resíduos"
+      ]
+    },
+    {
+      "id": "curso-005",
+      "trailId": "bem-estar",
+      "trail": "Bem-estar e Segurança",
+      "title": "Saúde Mental no Trabalho",
+      "description": "Orientações sobre autocuidado, apoio e prevenção do esgotamento.",
+      "duration": "45 min",
+      "instructor": "Recursos Humanos",
+      "lessons": [
+        "Sinais de alerta",
+        "Autocuidado",
+        "Rede de apoio",
+        "Café com RH"
+      ]
+    },
+    {
+      "id": "curso-006",
+      "trailId": "lideranca",
+      "trail": "Liderança",
+      "title": "Feedback de Desenvolvimento",
+      "description": "Como preparar e conduzir feedbacks claros e construtivos.",
+      "duration": "55 min",
+      "instructor": "Recursos Humanos",
+      "lessons": [
+        "Preparação",
+        "Estrutura do feedback",
+        "Plano de ação",
+        "Acompanhamento"
+      ]
+    }
+  ]
+}
