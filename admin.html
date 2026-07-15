@@ -3,107 +3,218 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RH CMIVET | Administração</title>
+  <title>Administração | RH CMIVET</title>
   <meta name="theme-color" content="#0f6258">
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET" class="logo">
-      <div>
-        <span class="eyebrow">Portal RH CMIVET</span>
-        <h1>Administração de Comunicados</h1>
-      </div>
-    </div>
-    <a class="btn btn-ghost" href="index.html">Voltar ao portal</a>
-  </header>
-
-  <main class="layout">
-    <section class="panel">
-      <div class="panel-head">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET">
         <div>
-          <span class="eyebrow">Publicação</span>
-          <h2>Novo comunicado</h2>
+          <strong>RH CMIVET</strong>
+          <span>Administração</span>
         </div>
-        <span id="apiStatus" class="status">Verificando conexão...</span>
       </div>
 
-      <form id="announcementForm" novalidate>
-        <div class="grid two">
-          <label>
-            <span>Título *</span>
-            <input id="title" name="titulo" type="text" maxlength="120" required>
-          </label>
+      <nav class="menu" aria-label="Menu administrativo">
+        <button class="menu-item active" data-section="dashboard">🏠 Dashboard</button>
+        <button class="menu-item" data-section="comunicados">📢 Comunicados</button>
+        <button class="menu-item" data-section="colaboradores">👥 Colaboradores</button>
+        <button class="menu-item" data-section="biblioteca">📚 Biblioteca RH</button>
+        <button class="menu-item" data-section="termometro">😊 Termômetro</button>
+        <button class="menu-item" data-section="cafe">☕ Café com RH</button>
+        <button class="menu-item" data-section="avaliacoes">📋 Avaliações</button>
+        <button class="menu-item" data-section="configuracoes">⚙️ Configurações</button>
+      </nav>
 
-          <label>
-            <span>Categoria</span>
-            <select id="category" name="categoria">
-              <option>RH</option>
-              <option>Comunicado Geral</option>
-              <option>Treinamento</option>
-              <option>Evento</option>
-              <option>Benefício</option>
-              <option>POP</option>
-              <option>Aniversariantes</option>
-            </select>
-          </label>
-        </div>
+      <a class="portal-link" href="index.html">← Voltar ao Portal</a>
+    </aside>
 
-        <label>
-          <span>Descrição *</span>
-          <textarea id="description" name="descricao" rows="6" maxlength="2000" required></textarea>
-        </label>
-
-        <div class="grid two">
-          <label>
-            <span>Link do anexo</span>
-            <input id="driveLink" name="link_drive" type="url" placeholder="https://drive.google.com/...">
-            <small>Use um link público do Google Drive para PDF, Word ou imagem.</small>
-          </label>
-
-          <label>
-            <span>Tipo do arquivo</span>
-            <select id="fileType" name="tipo_arquivo">
-              <option value="">Sem anexo</option>
-              <option value="Imagem">Imagem</option>
-              <option value="PDF">PDF</option>
-              <option value="Word">Word</option>
-              <option value="Excel">Excel</option>
-              <option value="Vídeo">Vídeo</option>
-              <option value="Outro">Outro</option>
-            </select>
-          </label>
-        </div>
-
-        <label class="check-row">
-          <input id="pinned" name="fixado" type="checkbox">
-          <span>Fixar comunicado no topo</span>
-        </label>
-
-        <div class="actions">
-          <button id="publishButton" class="btn btn-primary" type="submit">Publicar comunicado</button>
-          <button class="btn btn-ghost" type="reset">Limpar</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">☰</button>
         <div>
-          <span class="eyebrow">Histórico</span>
-          <h2>Comunicados publicados</h2>
+          <p class="eyebrow">Portal RH CMIVET</p>
+          <h1 id="pageTitle">Dashboard Administrativo</h1>
         </div>
-        <button id="refreshButton" class="btn btn-ghost" type="button">Atualizar</button>
-      </div>
+        <div class="api-status" id="apiStatus">Verificando API...</div>
+      </header>
 
-      <div id="announcements" class="announcement-list" aria-live="polite">
-        <div class="empty">Carregando comunicados...</div>
-      </div>
-    </section>
-  </main>
+      <section class="page-section active" id="dashboard">
+        <div class="hero">
+          <div>
+            <span class="tag">Gestão de Pessoas</span>
+            <h2>Bem-vindo(a) ao Painel do RH</h2>
+            <p>Centralize comunicados e acompanhe os principais módulos do Portal RH CMIVET.</p>
+          </div>
+          <img src="assets/cmivet-animais-hero.png" alt="">
+        </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="admin.js" defer></script>
+        <div class="cards">
+          <article class="metric">
+            <span>📢</span>
+            <strong id="metricComunicados">0</strong>
+            <small>Comunicados ativos</small>
+          </article>
+          <article class="metric">
+            <span>😊</span>
+            <strong>—</strong>
+            <small>Respostas do termômetro</small>
+          </article>
+          <article class="metric">
+            <span>☕</span>
+            <strong>—</strong>
+            <small>Solicitações Café RH</small>
+          </article>
+          <article class="metric">
+            <span>📋</span>
+            <strong>—</strong>
+            <small>Avaliações pendentes</small>
+          </article>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Comunicados recentes</h3>
+              <p>Últimas publicações cadastradas no banco de dados.</p>
+            </div>
+            <button class="btn secondary" data-go="comunicados">Gerenciar comunicados</button>
+          </div>
+          <div id="dashboardAnnouncements" class="announcement-grid">
+            <div class="empty">Carregando comunicados...</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" id="comunicados">
+        <div class="section-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Novo comunicado</h3>
+                <p>O arquivo pode ficar no Google Drive; cole o link de visualização.</p>
+              </div>
+            </div>
+
+            <form id="announcementForm" class="form">
+              <label>
+                Título
+                <input name="titulo" required maxlength="120" placeholder="Ex.: Comunicado sobre o cartão de ponto">
+              </label>
+
+              <div class="form-row">
+                <label>
+                  Categoria
+                  <select name="categoria">
+                    <option>RH</option>
+                    <option>Treinamento</option>
+                    <option>Evento</option>
+                    <option>Campanha</option>
+                    <option>POP</option>
+                    <option>Aniversariantes</option>
+                    <option>Comunicado Geral</option>
+                  </select>
+                </label>
+
+                <label>
+                  Tipo de arquivo
+                  <select name="tipo_arquivo">
+                    <option value="imagem">Imagem</option>
+                    <option value="pdf">PDF</option>
+                    <option value="word">Word</option>
+                    <option value="planilha">Planilha</option>
+                    <option value="link">Link</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                Descrição
+                <textarea name="descricao" rows="5" required placeholder="Digite o texto do comunicado."></textarea>
+              </label>
+
+              <label>
+                Link do Google Drive ou documento
+                <input type="url" name="link_drive" placeholder="https://drive.google.com/...">
+              </label>
+
+              <label class="checkbox">
+                <input type="checkbox" name="fixado" value="sim">
+                Fixar comunicado no topo
+              </label>
+
+              <div class="form-actions">
+                <button class="btn primary" type="submit" id="publishButton">Publicar comunicado</button>
+                <button class="btn ghost" type="reset">Limpar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Comunicados publicados</h3>
+                <p>Dados carregados diretamente da planilha Google.</p>
+              </div>
+              <button class="btn secondary" id="refreshAnnouncements">Atualizar</button>
+            </div>
+
+            <div id="adminAnnouncements" class="announcement-list">
+              <div class="empty">Carregando comunicados...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" id="colaboradores">
+        <div class="coming-soon">
+          <span>👥</span><h2>Gestão de Colaboradores</h2>
+          <p>Estrutura preparada para cadastro, cargo, setor, gestor e status.</p>
+        </div>
+      </section>
+
+      <section class="page-section" id="biblioteca">
+        <div class="coming-soon">
+          <span>📚</span><h2>Biblioteca RH</h2>
+          <p>Estrutura preparada para POPs, treinamentos, regulamentos e documentos.</p>
+        </div>
+      </section>
+
+      <section class="page-section" id="termometro">
+        <div class="coming-soon">
+          <span>😊</span><h2>Termômetro Emocional</h2>
+          <p>Na próxima etapa, este painel receberá indicadores e histórico centralizado.</p>
+        </div>
+      </section>
+
+      <section class="page-section" id="cafe">
+        <div class="coming-soon">
+          <span>☕</span><h2>Café com o RH</h2>
+          <p>Na próxima etapa, este painel receberá solicitações e controle de status.</p>
+        </div>
+      </section>
+
+      <section class="page-section" id="avaliacoes">
+        <div class="coming-soon">
+          <span>📋</span><h2>Avaliações</h2>
+          <p>Área reservada para avaliações de 45 dias, 90 dias e desempenho.</p>
+        </div>
+      </section>
+
+      <section class="page-section" id="configuracoes">
+        <div class="coming-soon">
+          <span>⚙️</span><h2>Configurações</h2>
+          <p>Configurações gerais do Portal RH serão adicionadas nas próximas etapas.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="admin.js"></script>
 </body>
 </html>

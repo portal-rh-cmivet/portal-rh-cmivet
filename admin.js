@@ -1,13 +1,20 @@
-"use strict";
-
 const API_URL = "https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
 
-const form = document.querySelector("#announcementForm");
-const announcementsBox = document.querySelector("#announcements");
-const refreshButton = document.querySelector("#refreshButton");
-const publishButton = document.querySelector("#publishButton");
-const apiStatus = document.querySelector("#apiStatus");
+const sectionTitles = {
+  dashboard: "Dashboard Administrativo",
+  comunicados: "Gerenciar Comunicados",
+  colaboradores: "Gestão de Colaboradores",
+  biblioteca: "Biblioteca RH",
+  termometro: "Termômetro Emocional",
+  cafe: "Café com o RH",
+  avaliacoes: "Avaliações",
+  configuracoes: "Configurações"
+};
+
 const toast = document.querySelector("#toast");
+const apiStatus = document.querySelector("#apiStatus");
+const announcementForm = document.querySelector("#announcementForm");
+const publishButton = document.querySelector("#publishButton");
 
 function showToast(message) {
   toast.textContent = message;
@@ -22,123 +29,145 @@ function escapeHtml(value = "") {
   }[char]));
 }
 
-function normalizeAnnouncements(payload) {
-  if (Array.isArray(payload)) return payload;
-  if (payload && Array.isArray(payload.comunicados)) return payload.comunicados;
-  return [];
+function normalizeAnnouncement(item) {
+  return {
+    id: item.id || item.id_comunicado || "",
+    title: item.title || item.titulo || "Sem título",
+    category: item.category || item.categoria || "Comunicado",
+    description: item.description || item.descricao || "",
+    fileUrl: item.fileUrl || item.link_drive || "",
+    fileType: item.fileType || item.tipo_arquivo || "",
+    pinned: item.pinned === true || String(item.fixado || "").toLowerCase() === "sim",
+    active: item.active !== false && String(item.ativo || "sim").toLowerCase() !== "não"
+  };
 }
 
-async function requestJson(url, options = {}) {
-  const response = await fetch(url, { redirect: "follow", ...options });
-  const text = await response.text();
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch {
-    throw new Error("A API respondeu em formato inválido.");
-  }
-  if (!response.ok) throw new Error(data.erro || `Erro HTTP ${response.status}`);
-  return data;
+async function apiGet(action) {
+  const response = await fetch(`${API_URL}?action=${encodeURIComponent(action)}&t=${Date.now()}`, {
+    cache: "no-store"
+  });
+  if (!response.ok) throw new Error(`Erro HTTP ${response.status}`);
+  return response.json();
 }
 
-async function checkApi() {
-  try {
-    const data = await requestJson(API_URL);
-    if (data.status === "online") {
-      apiStatus.textContent = "API conectada";
-      apiStatus.className = "status online";
-      return true;
-    }
-    throw new Error("Resposta inesperada");
-  } catch (error) {
-    apiStatus.textContent = "API indisponível";
-    apiStatus.className = "status offline";
-    console.error(error);
-    return false;
-  }
+async function apiPost(payload) {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  if (!response.ok) throw new Error(`Erro HTTP ${response.status}`);
+  return response.json();
+}
+
+function announcementCard(item) {
+  const fixed = item.pinned ? `<span>📌 Fixado</span>` : "";
+  const file = item.fileUrl
+    ? `<a class="file-link" href="${escapeHtml(item.fileUrl)}" target="_blank" rel="noopener">📎 Abrir ${escapeHtml(item.fileType || "arquivo")}</a>`
+    : "";
+
+  return `
+    <article class="announcement-card ${item.pinned ? "pinned" : ""}">
+      <div class="announcement-meta">
+        <span>${escapeHtml(item.category)}</span>
+        ${fixed}
+      </div>
+      <h4>${escapeHtml(item.title)}</h4>
+      ${item.description ? `<p>${escapeHtml(item.description)}</p>` : ""}
+      ${file}
+    </article>
+  `;
 }
 
 async function loadAnnouncements() {
-  announcementsBox.innerHTML = '<div class="empty">Carregando comunicados...</div>';
+  const adminBox = document.querySelector("#adminAnnouncements");
+  const dashboardBox = document.querySelector("#dashboardAnnouncements");
+  adminBox.innerHTML = `<div class="empty">Carregando comunicados...</div>`;
+  dashboardBox.innerHTML = `<div class="empty">Carregando comunicados...</div>`;
+
   try {
-    const payload = await requestJson(`${API_URL}?action=comunicados&_=${Date.now()}`);
-    const items = normalizeAnnouncements(payload);
+    const raw = await apiGet("comunicados");
+    const list = (Array.isArray(raw) ? raw : raw.comunicados || [])
+      .map(normalizeAnnouncement)
+      .filter(item => item.active)
+      .sort((a, b) => Number(b.pinned) - Number(a.pinned));
 
-    if (!items.length) {
-      announcementsBox.innerHTML = '<div class="empty">Nenhum comunicado ativo encontrado.</div>';
-      return;
-    }
+    document.querySelector("#metricComunicados").textContent = list.length;
 
-    items.sort((a, b) => Number(Boolean(b.pinned ?? b.fixado === "sim")) - Number(Boolean(a.pinned ?? a.fixado === "sim")));
-    announcementsBox.innerHTML = items.map(item => {
-      const title = item.titulo ?? item.title ?? "Sem título";
-      const category = item.categoria ?? item.category ?? "Comunicado";
-      const description = item.descricao ?? item.description ?? "";
-      const fileUrl = item.link_drive ?? item.fileUrl ?? "";
-      const fileType = item.tipo_arquivo ?? item.fileType ?? "Anexo";
-      const pinned = item.pinned === true || String(item.fixado || "").toLowerCase() === "sim";
-      return `
-        <article class="announcement">
-          <div class="announcement-head">
-            <h3>${escapeHtml(title)}</h3>
-            <div class="badges">
-              ${pinned ? '<span class="badge">📌 Fixado</span>' : ""}
-              <span class="badge">${escapeHtml(category)}</span>
-            </div>
-          </div>
-          ${description ? `<p>${escapeHtml(description)}</p>` : ""}
-          ${fileUrl ? `<a class="file-link" href="${escapeHtml(fileUrl)}" target="_blank" rel="noopener noreferrer">📎 Abrir ${escapeHtml(fileType || "anexo")}</a>` : ""}
-        </article>`;
-    }).join("");
+    adminBox.innerHTML = list.length
+      ? list.map(announcementCard).join("")
+      : `<div class="empty">Nenhum comunicado ativo.</div>`;
+
+    dashboardBox.innerHTML = list.length
+      ? list.slice(0, 4).map(announcementCard).join("")
+      : `<div class="empty">Nenhum comunicado ativo.</div>`;
+
+    apiStatus.textContent = "API conectada";
+    apiStatus.className = "api-status online";
   } catch (error) {
     console.error(error);
-    announcementsBox.innerHTML = `<div class="empty">Não foi possível carregar os comunicados.<br><small>${escapeHtml(error.message)}</small></div>`;
+    adminBox.innerHTML = `<div class="empty">Não foi possível carregar os comunicados.</div>`;
+    dashboardBox.innerHTML = `<div class="empty">Não foi possível carregar os comunicados.</div>`;
+    apiStatus.textContent = "API indisponível";
+    apiStatus.className = "api-status offline";
   }
 }
 
-form.addEventListener("submit", async event => {
+announcementForm.addEventListener("submit", async event => {
   event.preventDefault();
+  const data = new FormData(announcementForm);
 
-  if (!form.reportValidity()) return;
-
-  const data = new FormData(form);
   const payload = {
     action: "novoComunicado",
-    titulo: String(data.get("titulo") || "").trim(),
-    categoria: String(data.get("categoria") || "Comunicado Geral"),
-    descricao: String(data.get("descricao") || "").trim(),
-    link_drive: String(data.get("link_drive") || "").trim(),
-    tipo_arquivo: String(data.get("tipo_arquivo") || ""),
-    fixado: data.get("fixado") ? "sim" : "não"
+    titulo: data.get("titulo").trim(),
+    categoria: data.get("categoria"),
+    descricao: data.get("descricao").trim(),
+    link_drive: data.get("link_drive").trim(),
+    tipo_arquivo: data.get("tipo_arquivo"),
+    fixado: data.get("fixado") === "sim" ? "sim" : "não"
   };
 
   publishButton.disabled = true;
   publishButton.textContent = "Publicando...";
 
   try {
-    const result = await requestJson(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload)
-    });
-
-    if (result.sucesso === false) throw new Error(result.erro || "Não foi possível publicar.");
-
-    form.reset();
+    const result = await apiPost(payload);
+    if (result.sucesso === false) throw new Error(result.erro || "Falha ao publicar.");
+    announcementForm.reset();
     showToast("Comunicado publicado com sucesso.");
     await loadAnnouncements();
   } catch (error) {
     console.error(error);
-    showToast(`Erro: ${error.message}`);
+    showToast(`Não foi possível publicar: ${error.message}`);
   } finally {
     publishButton.disabled = false;
     publishButton.textContent = "Publicar comunicado";
   }
 });
 
-refreshButton.addEventListener("click", loadAnnouncements);
+document.querySelector("#refreshAnnouncements").addEventListener("click", loadAnnouncements);
 
-(async function init() {
-  await checkApi();
-  await loadAnnouncements();
-})();
+function openSection(sectionId) {
+  document.querySelectorAll(".page-section").forEach(section => {
+    section.classList.toggle("active", section.id === sectionId);
+  });
+  document.querySelectorAll(".menu-item").forEach(button => {
+    button.classList.toggle("active", button.dataset.section === sectionId);
+  });
+  document.querySelector("#pageTitle").textContent = sectionTitles[sectionId] || "Administração";
+  document.querySelector("#sidebar").classList.remove("open");
+}
+
+document.querySelectorAll(".menu-item").forEach(button => {
+  button.addEventListener("click", () => openSection(button.dataset.section));
+});
+
+document.querySelectorAll("[data-go]").forEach(button => {
+  button.addEventListener("click", () => openSection(button.dataset.go));
+});
+
+document.querySelector("#mobileMenu").addEventListener("click", () => {
+  document.querySelector("#sidebar").classList.toggle("open");
+});
+
+loadAnnouncements();
