@@ -1191,37 +1191,21 @@
             <span class="privacy">Publicação no portal</span>
           </div>
           <form class="announcement-form" id="comunicadoForm">
-            <div class="settings-grid">
-              <div>
-                <label for="comunicadoTitle">Título do comunicado</label>
-                <input class="input" id="comunicadoTitle" name="comunicadoTitle" type="text" maxlength="120" placeholder="Ex.: Campanha interna, treinamento, aviso RH" required>
-              </div>
-              <div>
-                <label for="comunicadoCategoria">Categoria</label>
-                <select class="select" id="comunicadoCategoria" name="comunicadoCategoria">
-                  <option value="RH">RH</option>
-                  <option value="Treinamento">Treinamento</option>
-                  <option value="Evento">Evento</option>
-                  <option value="Campanha">Campanha</option>
-                  <option value="Aniversariantes">Aniversariantes</option>
-                  <option value="POP">POP</option>
-                  <option value="Comunicado Geral">Comunicado Geral</option>
-                </select>
-              </div>
+            <div>
+              <label for="comunicadoTitle">Título do comunicado</label>
+              <input class="input" id="comunicadoTitle" name="comunicadoTitle" type="text" maxlength="120" placeholder="Ex.: Campanha interna, treinamento, aviso RH" required>
             </div>
             <div>
               <label for="comunicadoMessage">Mensagem</label>
               <textarea id="comunicadoMessage" name="comunicadoMessage" maxlength="1200" placeholder="Escreva o conteúdo do comunicado."></textarea>
             </div>
             <div>
-              <label for="comunicadoDriveLink">Link do arquivo no Google Drive</label>
-              <input class="input" id="comunicadoDriveLink" name="comunicadoDriveLink" type="url" placeholder="Cole aqui o link do PDF, Word ou imagem no Drive" required>
-              <p class="hint">Deixe o arquivo no Drive como <b>Qualquer pessoa com o link pode visualizar</b>. Assim aparece no celular e no computador.</p>
+              <label for="comunicadoFile">Anexo opcional</label>
+              <input class="input" id="comunicadoFile" name="comunicadoFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx">
+              <p class="hint">O arquivo ficará salvo no navegador em que o upload for feito.</p>
             </div>
             <div class="actions">
-              <label class="chip"><input type="checkbox" id="comunicadoFixado" name="comunicadoFixado" value="sim"> Fixar no topo</label>
               <button class="btn btn-primary" type="submit">Publicar comunicado</button>
-              <button class="btn btn-ghost" type="button" id="refreshComunicados">Atualizar da planilha</button>
               <button class="btn btn-ghost" type="reset">Limpar</button>
             </div>
           </form>
@@ -1466,31 +1450,45 @@
     }
 
     async function carregarComunicadosRemotos() {
+      if (publicComunicadosBox) {
+        publicComunicadosBox.innerHTML = `<div class="empty">Carregando comunicados...</div>`;
+      }
       try {
-        const data = await apiGet("comunicados");
-        const lista = Array.isArray(data) ? data : (Array.isArray(data.comunicados) ? data.comunicados : []);
-        comunicadosRemotos = lista.map(item => {
-          const link = item.link_drive || item.fileUrl || item.fileData || "";
-          const tipo = item.tipo_arquivo || item.fileType || inferFileType(link);
-          return {
+        const payload = await apiGet("comunicados");
+        const lista = Array.isArray(payload)
+          ? payload
+          : (payload && Array.isArray(payload.comunicados) ? payload.comunicados : []);
+
+        comunicadosRemotos = lista
+          .filter(item => {
+            const ativo = item.ativo ?? item.active ?? "sim";
+            return String(ativo).trim().toLowerCase() !== "não";
+          })
+          .map(item => ({
             id: item.id_comunicado || item.id || createId(),
             title: item.titulo || item.title || "Comunicado RH",
             message: item.descricao || item.description || item.message || "",
             categoria: item.categoria || item.category || "RH",
-            fileName: tipo || "Abrir documento",
-            fileType: tipo,
-            fileData: link,
-            fixado: item.fixado || (item.pinned ? "sim" : "não"),
-            ativo: item.ativo || (item.active === false ? "não" : "sim"),
-            createdAt: item.data || item.createdAt || item.criado_em || new Date().toISOString()
-          };
-        });
+            fileName: item.tipo_arquivo || item.fileType || "Abrir documento",
+            fileType: item.tipo_arquivo || item.fileType || "",
+            fileData: item.link_drive || item.fileUrl || "",
+            fixado: item.fixado ?? item.pinned ?? "não",
+            ativo: item.ativo ?? item.active ?? "sim",
+            createdAt: item.data || item.createdAt || new Date().toISOString()
+          }))
+          .sort((a, b) => {
+            const pinA = a.fixado === true || String(a.fixado).toLowerCase() === "sim";
+            const pinB = b.fixado === true || String(b.fixado).toLowerCase() === "sim";
+            return Number(pinB) - Number(pinA);
+          });
+
         render();
       } catch (error) {
-        console.warn("Não foi possível carregar comunicados da planilha.", error);
+        console.error("Não foi possível carregar comunicados da planilha.", error);
         comunicadosRemotos = [];
-        render();
-        showToast("Não foi possível carregar comunicados da planilha.");
+        if (publicComunicadosBox) {
+          publicComunicadosBox.innerHTML = `<div class="empty">Não foi possível carregar os comunicados.<br><small>${escapeHtml(error.message || "Erro de conexão")}</small></div>`;
+        }
       }
     }
 
@@ -1505,32 +1503,7 @@
     }
 
     function getComunicados() {
-      const base = comunicadosRemotos.length ? comunicadosRemotos : (() => {
-        try {
-          return (JSON.parse(localStorage.getItem(COMUNICADOS_KEY)) || []).map(item => ({
-            id: item.id || createId(),
-            title: item.title || "Comunicado RH",
-            message: item.message || "",
-            categoria: item.categoria || "RH",
-            fileName: item.fileName || item.tipo_arquivo || "Abrir documento",
-            fileType: item.fileType || item.tipo_arquivo || "",
-            fileData: item.fileData || item.link_drive || "",
-            fixado: item.fixado || "não",
-            ativo: item.ativo || "sim",
-            createdAt: item.createdAt || new Date().toISOString()
-          }));
-        } catch {
-          return [];
-        }
-      })();
-      return base
-        .filter(item => String(item.ativo || "sim").trim().toLowerCase() !== "não")
-        .sort((a, b) => {
-          const af = String(a.fixado || "").trim().toLowerCase() === "sim" ? 1 : 0;
-          const bf = String(b.fixado || "").trim().toLowerCase() === "sim" ? 1 : 0;
-          if (af !== bf) return bf - af;
-          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-        });
+      return Array.isArray(comunicadosRemotos) ? comunicadosRemotos : [];
     }
 
     function saveComunicados(items) {
@@ -1672,20 +1645,16 @@
         `).join("") : `<div class="empty">Nenhuma avaliação de experiência registrada ainda.</div>`;
       }
 
-      const comunicados = getComunicados();
+      const comunicados = getComunicados().slice().reverse();
       const comunicadoHtml = comunicados.length ? comunicados.map(item => `
         <article class="announcement-card">
-          <div class="meta">
-            <span class="badge">${String(item.fixado || "").toLowerCase() === "sim" ? "📌 Fixado" : "📢 Comunicado"}</span>
-            <time>${formatDate(item.createdAt)}</time>
-          </div>
+          <div class="meta"><span class="badge">📢 Comunicado</span><time>${formatDate(item.createdAt)}</time></div>
           <h3>${escapeHtml(item.title)}</h3>
-          ${item.categoria ? `<div class="meta"><span>Categoria: ${escapeHtml(item.categoria)}</span></div>` : ""}
           ${item.message ? `<p>${escapeHtml(item.message)}</p>` : ""}
           ${item.fileData ? `<a class="announcement-file" href="${item.fileData}" target="_blank" rel="noopener">📎 ${escapeHtml(item.fileName || "Abrir documento")}</a>` : ""}
-          ${isAdmin() ? `<div class="item-actions"><button class="btn btn-ghost btn-small" type="button" data-copy-link="${escapeHtml(item.fileData || "")}">Copiar link</button></div>` : ""}
+          ${isAdmin() ? `<div class="item-actions"><button class="btn btn-danger btn-small" type="button" data-delete-comunicado-id="${item.id}">Excluir</button></div>` : ""}
         </article>
-      `).join("") : `<div class="empty">Nenhum comunicado publicado no momento. Confira se a aba <b>Comunicados</b> da planilha possui a coluna <b>ativo</b> como <b>sim</b>.</div>`;
+      `).join("") : `<div class="empty">Nenhum comunicado publicado no momento.</div>`;
       if (publicComunicadosBox) publicComunicadosBox.innerHTML = comunicadoHtml;
       if (adminComunicadosBox) adminComunicadosBox.innerHTML = comunicadoHtml;
 
@@ -1760,8 +1729,6 @@
       const title = (data.get("comunicadoTitle") || "").trim();
       const message = (data.get("comunicadoMessage") || "").trim();
       const driveLink = (data.get("comunicadoDriveLink") || "").trim();
-      const categoria = (data.get("comunicadoCategoria") || "RH").trim();
-      const fixado = data.get("comunicadoFixado") === "sim" ? "sim" : "não";
       if (!title) { showToast("Informe o título do comunicado."); return; }
       if (!driveLink) { showToast("Cole o link do Google Drive do comunicado."); return; }
 
@@ -1769,32 +1736,29 @@
         await apiPost({
           action: "novoComunicado",
           titulo: title,
-          categoria,
+          categoria: "RH",
           descricao: message,
           link_drive: driveLink,
           tipo_arquivo: inferFileType(driveLink),
-          fixado
+          fixado: "não"
         });
         comunicadoForm.reset();
         await carregarComunicadosRemotos();
-        showToast("Comunicado publicado na planilha e atualizado no portal.");
+        showToast("Comunicado publicado na planilha.");
       } catch (error) {
         console.warn(error);
         showToast("Erro ao publicar. Verifique a API e a planilha.");
       }
     });
 
-    document.querySelector("#refreshComunicados")?.addEventListener("click", async () => {
-      await carregarComunicadosRemotos();
-      showToast("Comunicados atualizados da planilha.");
-    });
-
     document.addEventListener("click", event => {
-      const btn = event.target.closest("[data-copy-link]");
+      const btn = event.target.closest("[data-delete-comunicado-id]");
       if (!btn) return;
-      const link = btn.dataset.copyLink || "";
-      if (!link) { showToast("Este comunicado não possui link."); return; }
-      navigator.clipboard?.writeText(link).then(() => showToast("Link copiado."));
+      if (confirm("Excluir este comunicado do portal?")) {
+        saveComunicados(getComunicados().filter(item => item.id !== btn.dataset.deleteComunicadoId));
+        render();
+        showToast("Comunicado excluído.");
+      }
     });
 
     form.addEventListener("submit", event => {
