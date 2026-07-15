@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Biblioteca RH | CMIVET</title>
+  <meta name="theme-color" content="#0f6258">
+  <meta name="description" content="Biblioteca RH CMIVET — POPs, manuais, treinamentos, formulários e benefícios.">
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="biblioteca.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET">
+        <div>
+          <strong>RH CMIVET</strong>
+          <span>Biblioteca RH</span>
+        </div>
+      </div>
+
+      <nav class="menu" aria-label="Menu da Biblioteca RH">
+        <button class="menu-item active" data-view="biblioteca">📚 Biblioteca</button>
+        <button class="menu-item" data-view="universidade">🎓 Universidade CMIVET</button>
+        <button class="menu-item" data-view="favoritos">⭐ Favoritos</button>
+      </nav>
+
+      <div class="sidebar-links">
+        <a href="index.html">← Voltar ao Portal</a>
+        <a href="admin.html">🔐 Administração</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">☰</button>
+        <div>
+          <p class="eyebrow">Portal RH CMIVET</p>
+          <h1 id="pageTitle">Biblioteca RH</h1>
+        </div>
+        <div class="library-status" id="libraryStatus">Carregando...</div>
+      </header>
+
+      <section class="page-section active" id="biblioteca">
+        <div class="hero">
+          <div>
+            <span class="tag">Central de Conhecimento</span>
+            <h2>Documentos e materiais em um só lugar</h2>
+            <p>Consulte POPs, manuais, formulários, treinamentos, benefícios e orientações da CMIVET.</p>
+          </div>
+          <img src="assets/cmivet-animais-hero.png" alt="">
+        </div>
+
+        <div class="search-panel">
+          <div class="search-box">
+            <span>🔎</span>
+            <input id="searchInput" type="search" placeholder="Pesquisar documento, categoria ou responsável...">
+          </div>
+
+          <select id="categoryFilter" aria-label="Filtrar por categoria">
+            <option value="">Todas as categorias</option>
+          </select>
+
+          <select id="typeFilter" aria-label="Filtrar por tipo">
+            <option value="">Todos os tipos</option>
+          </select>
+        </div>
+
+        <div class="category-cards" id="categoryCards"></div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Documentos disponíveis</h3>
+              <p id="resultCount">Carregando documentos...</p>
+            </div>
+            <button class="btn secondary" id="clearFilters">Limpar filtros</button>
+          </div>
+
+          <div class="document-grid" id="documentGrid">
+            <div class="empty">Carregando biblioteca...</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section" id="universidade">
+        <div class="hero compact">
+          <div>
+            <span class="tag">Desenvolvimento</span>
+            <h2>Universidade CMIVET</h2>
+            <p>Trilhas de aprendizagem para integração, desenvolvimento técnico e atendimento.</p>
+          </div>
+          <img src="assets/cmivet-animais-hero.png" alt="">
+        </div>
+
+        <div class="trail-grid" id="trailGrid"></div>
+      </section>
+
+      <section class="page-section" id="favoritos">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Meus favoritos</h3>
+              <p>Documentos marcados neste navegador.</p>
+            </div>
+          </div>
+          <div class="document-grid" id="favoriteGrid">
+            <div class="empty">Nenhum documento favorito.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="biblioteca.js"></script>
+</body>
+</html>
