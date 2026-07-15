@@ -1,0 +1,18 @@
+{
+  "experience": [
+    {"employee":"Ana Lara dos Santos Souza","role":"Auxiliar Veterinária","department":"Internação","period":"45","status":"pending","dueDate":"25/07/2026","manager":"Coordenação Técnica","type":"Avaliação de experiência"},
+    {"employee":"Maria Eduarda","role":"Médica Veterinária","department":"Clínica","period":"90","status":"progress","dueDate":"01/09/2026","manager":"Diretoria Clínica","type":"Avaliação de experiência"},
+    {"employee":"João Exemplo","role":"Recepcionista","department":"Recepção","period":"45","status":"completed","dueDate":"10/07/2026","manager":"Gestão Administrativa","type":"Avaliação de experiência"}
+  ],
+  "performance": [
+    {"employee":"Natalia","department":"Internação","cycle":"1º Semestre 2026","stage":"Avaliação do gestor","status":"progress","manager":"Coordenação Técnica","score":"-"},
+    {"employee":"Jonas","department":"Clínica","cycle":"1º Semestre 2026","stage":"Feedback final","status":"pending","manager":"Diretoria Clínica","score":"4,3"},
+    {"employee":"Isabela","department":"Compras","cycle":"1º Semestre 2026","stage":"Concluída","status":"completed","manager":"Diretoria Administrativa","score":"4,6"}
+  ],
+  "climate": {"participation":78,"responses":18,"totalEmployees":23,"score":4.2,"departments":[{"name":"Internação","participation":90},{"name":"Clínica","participation":75},{"name":"Recepção","participation":80},{"name":"Administrativo","participation":65}]},
+  "managers": [
+    {"name":"Coordenação Técnica","department":"Internação","teamSize":8,"pending":3,"feedbacks":2},
+    {"name":"Diretoria Clínica","department":"Clínica","teamSize":7,"pending":2,"feedbacks":1},
+    {"name":"Diretoria Administrativa","department":"Administrativo","teamSize":5,"pending":1,"feedbacks":1}
+  ]
+}
