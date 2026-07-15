@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RH CMIVET | Administração</title>
+  <meta name="theme-color" content="#0f6258">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET" class="logo">
+      <div>
+        <span class="eyebrow">Portal RH CMIVET</span>
+        <h1>Administração de Comunicados</h1>
+      </div>
+    </div>
+    <a class="btn btn-ghost" href="index.html">Voltar ao portal</a>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow">Publicação</span>
+          <h2>Novo comunicado</h2>
+        </div>
+        <span id="apiStatus" class="status">Verificando conexão...</span>
+      </div>
+
+      <form id="announcementForm" novalidate>
+        <div class="grid two">
+          <label>
+            <span>Título *</span>
+            <input id="title" name="titulo" type="text" maxlength="120" required>
+          </label>
+
+          <label>
+            <span>Categoria</span>
+            <select id="category" name="categoria">
+              <option>RH</option>
+              <option>Comunicado Geral</option>
+              <option>Treinamento</option>
+              <option>Evento</option>
+              <option>Benefício</option>
+              <option>POP</option>
+              <option>Aniversariantes</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span>Descrição *</span>
+          <textarea id="description" name="descricao" rows="6" maxlength="2000" required></textarea>
+        </label>
+
+        <div class="grid two">
+          <label>
+            <span>Link do anexo</span>
+            <input id="driveLink" name="link_drive" type="url" placeholder="https://drive.google.com/...">
+            <small>Use um link público do Google Drive para PDF, Word ou imagem.</small>
+          </label>
+
+          <label>
+            <span>Tipo do arquivo</span>
+            <select id="fileType" name="tipo_arquivo">
+              <option value="">Sem anexo</option>
+              <option value="Imagem">Imagem</option>
+              <option value="PDF">PDF</option>
+              <option value="Word">Word</option>
+              <option value="Excel">Excel</option>
+              <option value="Vídeo">Vídeo</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="check-row">
+          <input id="pinned" name="fixado" type="checkbox">
+          <span>Fixar comunicado no topo</span>
+        </label>
+
+        <div class="actions">
+          <button id="publishButton" class="btn btn-primary" type="submit">Publicar comunicado</button>
+          <button class="btn btn-ghost" type="reset">Limpar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow">Histórico</span>
+          <h2>Comunicados publicados</h2>
+        </div>
+        <button id="refreshButton" class="btn btn-ghost" type="button">Atualizar</button>
+      </div>
+
+      <div id="announcements" class="announcement-list" aria-live="polite">
+        <div class="empty">Carregando comunicados...</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="admin.js" defer></script>
+</body>
+</html>
