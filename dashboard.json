@@ -1,0 +1,101 @@
+{
+  "notifications": [
+    {
+      "title": "Avaliação de desempenho pendente",
+      "description": "Há uma avaliação aguardando feedback final.",
+      "type": "Avaliação"
+    },
+    {
+      "title": "Novo treinamento disponível",
+      "description": "Curso de Biossegurança liberado na Universidade CMIVET.",
+      "type": "Treinamento"
+    },
+    {
+      "title": "Cartão de ponto disponível",
+      "description": "Confira e assine o cartão de ponto do período.",
+      "type": "Documento"
+    }
+  ],
+  "birthdays": [
+    {
+      "name": "Natalia",
+      "role": "Auxiliar Veterinária",
+      "date": "28/07"
+    },
+    {
+      "name": "Jonas",
+      "role": "Médico Veterinário",
+      "date": "02/08"
+    },
+    {
+      "name": "Alfredo",
+      "role": "Médico Veterinário — Radiologia",
+      "date": "06/08"
+    },
+    {
+      "name": "Maria Eduarda",
+      "role": "Médica Veterinária",
+      "date": "10/08"
+    }
+  ],
+  "agenda": [
+    {
+      "title": "Treinamento de Biossegurança",
+      "date": "22/07",
+      "type": "Treinamento"
+    },
+    {
+      "title": "Reunião RH e Diretoria",
+      "date": "24/07",
+      "type": "Reunião"
+    },
+    {
+      "title": "Campanha de Saúde Ocupacional",
+      "date": "30/07",
+      "type": "Campanha"
+    }
+  ],
+  "benefits": [
+    {
+      "icon": "💊",
+      "title": "Convênio Farmácia"
+    },
+    {
+      "icon": "🍽️",
+      "title": "Vale Alimentação"
+    },
+    {
+      "icon": "🎓",
+      "title": "Treinamentos"
+    },
+    {
+      "icon": "☕",
+      "title": "Café com RH"
+    }
+  ],
+  "documents": [
+    {
+      "title": "Manual do Colaborador",
+      "type": "PDF",
+      "updatedAt": "Atualizado em 15/07/2026"
+    },
+    {
+      "title": "POP de Atendimento",
+      "type": "PDF",
+      "updatedAt": "Atualizado em 14/07/2026"
+    },
+    {
+      "title": "Calendário de Treinamentos",
+      "type": "Planilha",
+      "updatedAt": "Atualizado em 13/07/2026"
+    }
+  ],
+  "courses": {
+    "total": 6,
+    "completed": 2,
+    "certificates": 2
+  },
+  "evaluations": {
+    "pending": 3
+  }
+}

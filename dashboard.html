@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Corporativo | RH CMIVET</title>
+  <meta name="theme-color" content="#0f6258">
+  <meta name="description" content="Dashboard Corporativo do Portal RH CMIVET.">
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET">
+        <div>
+          <strong>RH CMIVET</strong>
+          <span>Dashboard Corporativo</span>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <a class="menu-item active" href="dashboard.html">🏠 Dashboard</a>
+        <a class="menu-item" href="index.html">📢 Portal do Colaborador</a>
+        <a class="menu-item" href="biblioteca.html">📚 Biblioteca RH</a>
+        <a class="menu-item" href="universidade.html">🎓 Universidade CMIVET</a>
+        <a class="menu-item" href="avaliacoes.html">📋 Avaliações</a>
+        <a class="menu-item" href="perfil.html">👤 Meu Perfil</a>
+        <a class="menu-item" href="admin.html">🔐 Administração</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Portal RH CMIVET</span>
+        <small>Enterprise 2026</small>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">☰</button>
+        <div>
+          <p class="eyebrow">Portal RH CMIVET</p>
+          <h1 id="greetingTitle">Olá!</h1>
+          <p class="date-text" id="currentDate"></p>
+        </div>
+        <div class="profile-chip">
+          <div class="avatar">MC</div>
+          <div><strong>Mariah</strong><span>Recursos Humanos</span></div>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <span class="tag">Dashboard Corporativo</span>
+          <h2>Bem-vinda ao centro de gestão do Portal RH</h2>
+          <p>Acompanhe comunicados, cursos, avaliações, documentos, agenda e benefícios em uma única tela.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="index.html">Acessar Portal</a>
+            <a class="btn secondary" href="admin.html">Abrir Administração</a>
+          </div>
+        </div>
+        <img src="assets/cmivet-animais-hero.png" alt="">
+      </section>
+
+      <section class="metrics">
+        <article class="metric"><span>📢</span><strong id="metricAnnouncements">0</strong><small>Comunicados ativos</small></article>
+        <article class="metric"><span>📚</span><strong id="metricDocuments">0</strong><small>Documentos na biblioteca</small></article>
+        <article class="metric"><span>🎓</span><strong id="metricCourses">0</strong><small>Cursos disponíveis</small></article>
+        <article class="metric"><span>📋</span><strong id="metricEvaluations">0</strong><small>Avaliações pendentes</small></article>
+        <article class="metric"><span>🎂</span><strong id="metricBirthdays">0</strong><small>Aniversariantes do mês</small></article>
+        <article class="metric"><span>🎁</span><strong id="metricBenefits">0</strong><small>Benefícios disponíveis</small></article>
+      </section>
+
+      <section class="quick-actions">
+        <a href="index.html#comunicados">📢<span>Comunicados</span></a>
+        <a href="biblioteca.html">📚<span>Biblioteca</span></a>
+        <a href="universidade.html">🎓<span>Universidade</span></a>
+        <a href="avaliacoes.html">📋<span>Avaliações</span></a>
+        <a href="perfil.html">👤<span>Meu Perfil</span></a>
+        <a href="index.html#cafe">☕<span>Café com RH</span></a>
+      </section>
+
+      <section class="dashboard-grid two">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3>Comunicados recentes</h3><p>Últimas publicações do RH.</p></div>
+            <a class="btn ghost" href="index.html#comunicados">Ver todos</a>
+          </div>
+          <div class="card-grid" id="announcementGrid"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3>Notificações</h3><p>Itens que precisam de atenção.</p></div>
+          </div>
+          <div class="list" id="notificationList"></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid three">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Aniversariantes</h3><p>Comemorações do mês.</p></div></div>
+          <div class="list" id="birthdayList"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div><h3>Agenda Corporativa</h3><p>Próximos eventos e treinamentos.</p></div></div>
+          <div class="list" id="agendaList"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div><h3>Benefícios</h3><p>Acessos rápidos.</p></div></div>
+          <div class="benefit-grid" id="benefitGrid"></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid two">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Universidade CMIVET</h3><p>Resumo de desenvolvimento.</p></div><a class="btn ghost" href="universidade.html">Abrir</a></div>
+          <div class="progress-box">
+            <div class="progress-circle" id="courseProgress"><div><strong id="coursePercent">0%</strong><span>concluído</span></div></div>
+            <div class="progress-info">
+              <div><span>Cursos concluídos</span><strong id="courseCompleted">0</strong></div>
+              <div><span>Cursos pendentes</span><strong id="coursePending">0</strong></div>
+              <div><span>Certificados</span><strong id="certificateCount">0</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div><h3>Últimos documentos</h3><p>Novidades da Biblioteca RH.</p></div><a class="btn ghost" href="biblioteca.html">Abrir</a></div>
+          <div class="list" id="documentList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
