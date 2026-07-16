@@ -1,0 +1,13 @@
+{
+  "apiUrl": "https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec",
+  "sources": {
+    "comunicados": "api",
+    "biblioteca": "biblioteca.json",
+    "cursos": "universidade.json",
+    "avaliacoes": "avaliacoes.json",
+    "agenda": "enterprise-data.json",
+    "beneficios": "enterprise-data.json",
+    "notificacoes": "enterprise-data.json",
+    "perfil": "enterprise-data.json"
+  }
+}

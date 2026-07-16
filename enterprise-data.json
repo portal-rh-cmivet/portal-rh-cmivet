@@ -1,0 +1,21 @@
+{
+  "agenda": [
+    {"title":"Treinamento de Biossegurança","description":"22/07/2026 • Sala de Treinamentos"},
+    {"title":"Reunião RH e Diretoria","description":"24/07/2026 • Diretoria"}
+  ],
+  "beneficios": [
+    {"title":"Convênio Farmácia","description":"Natusfarma","category":"Saúde"},
+    {"title":"Vale Alimentação","description":"Benefício por dia trabalhado","category":"Alimentação"},
+    {"title":"Universidade CMIVET","description":"Treinamentos internos","category":"Desenvolvimento"}
+  ],
+  "notificacoes": [
+    {"title":"Avaliação pendente","description":"Confira a área de avaliações."},
+    {"title":"Novo curso disponível","description":"Biossegurança Veterinária."},
+    {"title":"Comunicado atualizado","description":"Consulte os avisos recentes."}
+  ],
+  "perfil": {
+    "firstName":"Mariah","name":"Mariah Cambraia","initials":"MC","role":"Recursos Humanos","department":"Administrativo",
+    "documents":[{"title":"Manual do Colaborador","description":"Disponível na Biblioteca RH"},{"title":"Holerite","description":"Integração futura"}],
+    "development":[{"title":"Integração CMIVET","description":"Concluído"},{"title":"Feedback de Desenvolvimento","description":"Em andamento"}]
+  }
+}
