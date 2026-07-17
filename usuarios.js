@@ -1,0 +1,7 @@
+const API_URL="https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
+const token=sessionStorage.getItem("cmivet_admin_token");if(!token)location.href="admin-login.html";
+async function call(payload){const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...payload,token})});return r.json()}
+async function loadUsers(){const result=await call({action:"listarUsuarios"});if(!result.sucesso){if(result.codigo==="SESSAO_INVALIDA")location.href="admin-login.html";document.querySelector("#usersList").innerHTML=`<div class="empty">${result.erro||"Erro"}</div>`;return}
+ document.querySelector("#usersList").innerHTML=result.usuarios.length?result.usuarios.map(u=>`<article class="user-card"><h4>${u.nome}</h4><p>${u.email} • ${u.cargo||""} • ${u.setor||""}</p><span class="badge">${u.perfil} • ${u.ativo}</span></article>`).join(""):`<div class="empty">Nenhum usuário.</div>`}
+document.querySelector("#userForm").addEventListener("submit",async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.currentTarget).entries());const result=await call({action:"criarUsuario",...d});document.querySelector("#userMessage").textContent=result.sucesso?"Usuário cadastrado.":result.erro||"Erro";if(result.sucesso){e.currentTarget.reset();loadUsers()}});
+document.querySelector("#logout").addEventListener("click",()=>{sessionStorage.clear();location.href="admin-login.html"});loadUsers();

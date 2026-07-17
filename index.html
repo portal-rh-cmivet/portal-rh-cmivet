@@ -1,11 +1,102 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Portal RH CMIVET</title><meta name="theme-color" content="#0f6258"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/app-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="enterprise.css"></head><body><div class="app-shell"><aside class="sidebar" id="sidebar"><div class="brand"><img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET"><div><strong>RH CMIVET</strong><span>Enterprise 2026</span></div></div><nav class="menu"><button class="menu-item active" data-view="dashboard">🏠 Dashboard</button><button class="menu-item" data-view="comunicados">📢 Comunicados</button><button class="menu-item" data-view="biblioteca">📚 Biblioteca RH</button><button class="menu-item" data-view="universidade">🎓 Universidade</button><button class="menu-item" data-view="avaliacoes">📋 Avaliações</button><button class="menu-item" data-view="agenda">📅 Agenda</button><button class="menu-item" data-view="beneficios">🎁 Benefícios</button><button class="menu-item" data-view="perfil">👤 Meu Perfil</button><button class="menu-item" data-view="administracao">🔐 Administração</button></nav><div class="sidebar-footer"><button class="theme-toggle" id="themeToggle">🌙 Alternar tema</button><span id="connectionState">Verificando conexão...</span></div></aside><main class="main"><header class="topbar"><button class="mobile-menu" id="mobileMenu">☰</button><div><p class="eyebrow">Portal RH CMIVET</p><h1 id="pageTitle">Dashboard</h1></div><div class="profile-chip"><div class="avatar" id="avatar">MC</div><div><strong id="profileName">Mariah</strong><span id="profileRole">Recursos Humanos</span></div></div></header>
-<section class="page-section active" id="dashboard"><div class="hero"><div><span class="tag">Integração Enterprise</span><h2>Bem-vinda ao Portal do RH</h2><p>Acompanhe comunicados, cursos, avaliações, documentos, agenda e benefícios em uma única plataforma.</p></div><img src="assets/cmivet-animais-hero.png" alt=""></div><div class="metrics" id="metrics"></div><div class="dashboard-grid"><div class="panel"><div class="panel-head"><div><h3>Comunicados recentes</h3><p>Atualizados pela API central.</p></div></div><div class="card-grid" id="dashboardAnnouncements"></div></div><div class="panel"><div class="panel-head"><div><h3>Notificações</h3><p>Pendências e novidades.</p></div></div><div class="list" id="dashboardNotifications"></div></div></div></section>
-<section class="page-section" id="comunicados"><div class="panel"><div class="panel-head"><div><h3>Comunicados</h3><p>Publicações oficiais da CMIVET.</p></div></div><div class="filters"><input id="announcementSearch" type="search" placeholder="Pesquisar comunicado..."><select id="announcementCategory"><option value="">Todas as categorias</option></select></div><div class="card-grid full" id="announcementGrid"></div></div></section>
-<section class="page-section" id="biblioteca"><div class="panel"><div class="panel-head"><div><h3>Biblioteca RH</h3><p>Documentos, POPs, manuais e formulários.</p></div></div><div class="filters"><input id="librarySearch" type="search" placeholder="Pesquisar documento..."><select id="libraryCategory"><option value="">Todas as categorias</option></select></div><div class="card-grid full" id="libraryGrid"></div></div></section>
-<section class="page-section" id="universidade"><div class="panel"><div class="panel-head"><div><h3>Universidade CMIVET</h3><p>Trilhas e cursos internos.</p></div></div><div class="card-grid full" id="courseGrid"></div></div></section>
-<section class="page-section" id="avaliacoes"><div class="panel"><div class="panel-head"><div><h3>Avaliações</h3><p>Experiência, desempenho e clima.</p></div></div><div class="card-grid full" id="evaluationGrid"></div></div></section>
-<section class="page-section" id="agenda"><div class="panel"><div class="panel-head"><div><h3>Agenda Corporativa</h3><p>Eventos, treinamentos e reuniões.</p></div></div><div class="list" id="agendaList"></div></div></section>
-<section class="page-section" id="beneficios"><div class="panel"><div class="panel-head"><div><h3>Benefícios</h3><p>Benefícios disponíveis para a equipe.</p></div></div><div class="card-grid full" id="benefitGrid"></div></div></section>
-<section class="page-section" id="perfil"><div class="profile-hero"><div class="avatar big" id="profileAvatar">MC</div><div><span class="tag">Meu Perfil</span><h2 id="profileFullName">Mariah Cambraia</h2><p id="profileDetails">Recursos Humanos • Administrativo</p></div></div><div class="dashboard-grid"><div class="panel"><div class="panel-head"><div><h3>Meus documentos</h3></div></div><div class="list" id="profileDocuments"></div></div><div class="panel"><div class="panel-head"><div><h3>Meu desenvolvimento</h3></div></div><div class="list" id="profileDevelopment"></div></div></div></section>
-<section class="page-section" id="administracao"><div class="admin-grid"><div class="panel"><div class="panel-head"><div><h3>Publicar comunicado</h3><p>Grava pela API central.</p></div></div><form id="announcementForm" class="form"><label>Título<input name="titulo" required></label><div class="form-row"><label>Categoria<input name="categoria" value="RH"></label><label>Tipo de arquivo<input name="tipo_arquivo" value="link"></label></div><label>Descrição<textarea name="descricao" rows="4" required></textarea></label><label>Link<input type="url" name="link_drive"></label><label class="check"><input type="checkbox" name="fixado" value="sim"> Fixar no topo</label><button class="btn primary" type="submit">Publicar</button></form></div><div class="panel"><div class="panel-head"><div><h3>Status da integração</h3><p>Fontes de dados conectadas.</p></div></div><div class="list" id="integrationStatus"></div></div></div></section>
-</main></div><div class="toast" id="toast"></div><script src="enterprise.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portal RH CMIVET</title>
+  <meta name="theme-color" content="#0f6258">
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="sprint11.css">
+</head>
+<body>
+  <div class="portal-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET">
+        <div><strong>RH CMIVET</strong><span>Portal do Colaborador</span></div>
+      </div>
+      <nav>
+        <button data-view="dashboard" class="active">🏠 Dashboard</button>
+        <button data-view="comunicados">📢 Comunicados</button>
+        <button data-view="termometro">😊 Termômetro</button>
+        <a href="biblioteca.html">📚 Biblioteca RH</a>
+        <a href="universidade.html">🎓 Universidade</a>
+        <a href="avaliacoes.html">📋 Avaliações</a>
+        <a href="perfil.html">👤 Meu Perfil</a>
+      </nav>
+      <a class="admin-link" href="admin-login.html">🔐 Administração</a>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div><small>PORTAL RH CMIVET</small><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="profile"><b>Colaborador</b><span>CMIVET</span></div>
+      </header>
+
+      <section id="dashboard" class="view active">
+        <div class="hero">
+          <div><span>Portal Corporativo</span><h2>Bem-vinda ao Portal do RH</h2>
+          <p>Acompanhe comunicados, cursos, avaliações, documentos, agenda e benefícios em uma única tela.</p></div>
+          <img src="assets/cmivet-animais-hero.png" alt="">
+        </div>
+        <div class="quick-grid">
+          <button data-go="comunicados">📢<b>Comunicados</b></button>
+          <button data-go="termometro">😊<b>Termômetro</b></button>
+          <a href="biblioteca.html">📚<b>Biblioteca</b></a>
+          <a href="universidade.html">🎓<b>Universidade</b></a>
+          <a href="avaliacoes.html">📋<b>Avaliações</b></a>
+          <a href="perfil.html">👤<b>Meu Perfil</b></a>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Comunicados recentes</h3><p>Últimas publicações do RH.</p></div></div>
+          <div id="homeAnnouncements" class="cards"><div class="empty">Carregando...</div></div>
+        </div>
+      </section>
+
+      <section id="comunicados" class="view">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Comunicados</h3><p>Informações oficiais.</p></div></div>
+          <div id="announcementList" class="cards"><div class="empty">Carregando...</div></div>
+        </div>
+      </section>
+
+      <section id="termometro" class="view">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Termômetro Emocional</h3><p>Uma resposta por dia.</p></div></div>
+          <div id="thermometerStatus" class="status-box"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="mandatory-overlay" id="mandatoryOverlay" hidden>
+    <div class="mandatory-modal" role="dialog" aria-modal="true" aria-labelledby="thermometerTitle">
+      <div class="modal-logo"><img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET"></div>
+      <span class="daily-tag">Resposta diária obrigatória</span>
+      <h2 id="thermometerTitle">Como você está se sentindo hoje?</h2>
+      <p>Responda ao Termômetro Emocional para acessar o Portal RH.</p>
+
+      <form id="dailyThermometerForm">
+        <div class="moods">
+          <label><input type="radio" name="humor" value="1" required><span>😣<b>Estressado</b></span></label>
+          <label><input type="radio" name="humor" value="2"><span>😴<b>Cansado</b></span></label>
+          <label><input type="radio" name="humor" value="3"><span>🙂<b>Neutro</b></span></label>
+          <label><input type="radio" name="humor" value="4"><span>😄<b>Ótimo</b></span></label>
+        </div>
+        <div class="form-row">
+          <label>Nome (opcional)<input name="nome"></label>
+          <label>Setor (opcional)<input name="setor"></label>
+        </div>
+        <label>Nível de energia
+          <select name="energia" required><option value="">Selecione</option><option>Baixa</option><option>Moderada</option><option>Alta</option></select>
+        </label>
+        <label>Observação (opcional)<textarea name="observacao" rows="3"></textarea></label>
+        <button type="submit" id="submitThermometer">Enviar e acessar o Portal</button>
+        <div id="thermometerError" class="error"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="sprint11.js"></script>
+</body>
+</html>
