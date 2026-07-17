@@ -1,0 +1,7 @@
+const API_URL="https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
+const DKEY="cmivet_public_thermometer_day",BKEY="cmivet_browser_id",overlay=document.querySelector("#thermometerOverlay");
+function today(){return new Intl.DateTimeFormat("sv-SE",{timeZone:"America/Sao_Paulo"}).format(new Date())}
+function browserId(){let id=localStorage.getItem(BKEY);if(!id){id=(crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random());localStorage.setItem(BKEY,id)}return id}
+if(localStorage.getItem(DKEY)!==today()){overlay.hidden=false;document.body.style.overflow="hidden"}
+document.querySelector("#thermometerForm").addEventListener("submit",async e=>{e.preventDefault();const f=new FormData(e.currentTarget),m=document.querySelector("#thermometerMessage");m.textContent="";try{const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"termometroPublico",browser_id:browserId(),data_chave:today(),humor:f.get("humor"),energia:f.get("energia"),observacao:f.get("observacao")})});const j=await r.json();if(!j.sucesso)throw new Error(j.erro);localStorage.setItem(DKEY,today());overlay.hidden=true;document.body.style.overflow=""}catch(err){m.textContent=err.message||"Erro ao registrar."}});
+document.querySelectorAll("[data-login]").forEach(b=>b.addEventListener("click",()=>location.href="login.html"));

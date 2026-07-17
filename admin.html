@@ -1,1 +1,26 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Usuários e Acessos | CMIVET</title><link rel="stylesheet" href="sprint11-2.css"></head><body><div class="admin-page"><header class="admin-header"><div><small>ADMINISTRAÇÃO RH CMIVET</small><h1>Usuários e Acessos</h1></div><div><a href="portal.html">← Portal</a> <button id="logoutAdmin">Sair</button></div></header><div class="admin-grid"><section class="panel"><div class="panel-head"><h3>Novo usuário</h3></div><form id="userForm" class="form"><label>Nome<input name="nome" required></label><label>E-mail<input type="email" name="email" required></label><div class="form-row"><label>Cargo<input name="cargo"></label><label>Setor<input name="setor"></label></div><div class="form-row"><label>Gestor<input name="gestor"></label><label>Perfil<select name="perfil"><option value="colaborador">Colaborador</option><option value="gestor">Gestor</option><option value="diretoria">Diretoria</option><option value="admin">Administrador RH</option></select></label></div><label>Senha inicial<input type="password" name="senha" minlength="8" required></label><button>Cadastrar usuário</button><div id="userMessage" class="message"></div></form></section><section class="panel"><div class="panel-head"><h3>Usuários cadastrados</h3><button id="refreshUsers">Atualizar</button></div><div id="usersList" class="users-list"><div class="empty">Carregando...</div></div></section></div></div><script src="admin.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administração RH</title><link rel="stylesheet" href="app.css"></head>
+<body>
+<div class="app-shell">
+<aside class="sidebar">
+<div class="brand"><img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET"><div><strong>RH CMIVET</strong><span>Administração</span></div></div>
+<nav><button data-tab="users" class="active">👥 Usuários</button><button data-tab="thermo">😊 Termômetro</button><a href="portal.html">← Voltar ao Portal</a></nav>
+<button id="logoutAdmin">↪ Sair</button>
+</aside>
+<main class="main">
+<header class="topbar"><div><small>ADMINISTRAÇÃO RH CMIVET</small><h1 id="adminTitle">Usuários e Acessos</h1></div></header>
+<section id="users" class="tab active">
+<div class="admin-grid">
+<section class="panel"><div class="panel-head"><h2>Novo usuário</h2></div>
+<form id="userForm" class="form"><label>Nome<input name="nome" required></label><label>E-mail<input type="email" name="email" required></label><div class="row"><label>Cargo<input name="cargo"></label><label>Setor<input name="setor"></label></div><div class="row"><label>Gestor<input name="gestor"></label><label>Perfil<select name="perfil"><option value="colaborador">Colaborador</option><option value="gestor">Gestor</option><option value="diretoria">Diretoria</option><option value="admin">Administrador RH</option></select></label></div><label>Senha inicial<input type="password" name="senha" minlength="8" required></label><button class="btn primary" type="submit">Cadastrar usuário</button><div id="userMessage"></div></form></section>
+<section class="panel"><div class="panel-head"><h2>Usuários cadastrados</h2></div><div id="usersList" class="list"></div></section>
+</div>
+</section>
+<section id="thermo" class="tab">
+<div class="metrics"><article><strong id="todayResponses">0</strong><small>Respostas hoje</small></article><article><strong id="todayAverage">0,0</strong><small>Média emocional hoje</small></article><article><strong id="total90">0</strong><small>Respostas em 90 dias</small></article><article><strong id="days90">0</strong><small>Dias com dados</small></article></div>
+<div class="admin-grid"><section class="panel"><div class="panel-head"><h2>Humor de hoje</h2></div><div id="moodChart" class="chart"></div></section><section class="panel"><div class="panel-head"><h2>Energia de hoje</h2></div><div id="energyChart" class="chart"></div></section></div>
+<section class="panel"><div class="panel-head"><h2>Histórico dos últimos 90 dias</h2></div><div class="table-wrap"><table><thead><tr><th>Data</th><th>Respostas</th><th>Média</th><th>Estressado</th><th>Cansado</th><th>Neutro</th><th>Ótimo</th></tr></thead><tbody id="historyBody"></tbody></table></div></section>
+</section>
+</main></div>
+<script src="admin.js"></script>
+</body></html>
