@@ -1,26 +1,190 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administração RH</title><link rel="stylesheet" href="app.css"></head>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Usuários e Acessos | RH CMIVET</title>
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="admin-12-2.css">
+</head>
 <body>
 <div class="app-shell">
-<aside class="sidebar">
-<div class="brand"><img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET"><div><strong>RH CMIVET</strong><span>Administração</span></div></div>
-<nav><button data-tab="users" class="active">👥 Usuários</button><button data-tab="thermo">😊 Termômetro</button><a href="portal.html">← Voltar ao Portal</a></nav>
-<button id="logoutAdmin">↪ Sair</button>
-</aside>
-<main class="main">
-<header class="topbar"><div><small>ADMINISTRAÇÃO RH CMIVET</small><h1 id="adminTitle">Usuários e Acessos</h1></div></header>
-<section id="users" class="tab active">
-<div class="admin-grid">
-<section class="panel"><div class="panel-head"><h2>Novo usuário</h2></div>
-<form id="userForm" class="form"><label>Nome<input name="nome" required></label><label>E-mail<input type="email" name="email" required></label><div class="row"><label>Cargo<input name="cargo"></label><label>Setor<input name="setor"></label></div><div class="row"><label>Gestor<input name="gestor"></label><label>Perfil<select name="perfil"><option value="colaborador">Colaborador</option><option value="gestor">Gestor</option><option value="diretoria">Diretoria</option><option value="admin">Administrador RH</option></select></label></div><label>Senha inicial<input type="password" name="senha" minlength="8" required></label><button class="btn primary" type="submit">Cadastrar usuário</button><div id="userMessage"></div></form></section>
-<section class="panel"><div class="panel-head"><h2>Usuários cadastrados</h2></div><div id="usersList" class="list"></div></section>
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET">
+      <div><strong>RH CMIVET</strong><span>Administração</span></div>
+    </div>
+
+    <nav>
+      <button class="active" data-tab="users">👥 Usuários</button>
+      <button data-tab="thermo">😊 Termômetro</button>
+      <a href="portal.html">← Voltar ao Portal</a>
+    </nav>
+
+    <button id="logoutAdmin">↪ Sair</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar admin-topbar">
+      <div>
+        <small>ADMINISTRAÇÃO RH CMIVET</small>
+        <h1 id="adminTitle">Usuários e Acessos</h1>
+      </div>
+      <div class="admin-top-actions">
+        <span class="admin-session">🔐 Sessão protegida</span>
+        <button class="btn ghost" id="refreshUsersTop">↻ Atualizar</button>
+      </div>
+    </header>
+
+    <section id="users" class="tab active">
+      <div class="admin-metrics">
+        <article><span>👥</span><strong id="metricTotalUsers">0</strong><small>Usuários cadastrados</small></article>
+        <article><span>✅</span><strong id="metricActiveUsers">0</strong><small>Usuários ativos</small></article>
+        <article><span>⛔</span><strong id="metricBlockedUsers">0</strong><small>Usuários bloqueados</small></article>
+        <article><span>🔐</span><strong id="metricAdmins">0</strong><small>Administradores</small></article>
+      </div>
+
+      <div class="users-layout">
+        <section class="panel register-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Novo usuário</h2>
+              <p>Cadastro dividido em etapas para facilitar o preenchimento.</p>
+            </div>
+          </div>
+
+          <form id="userForm" class="wizard-form">
+            <div class="wizard-progress">
+              <button type="button" class="step-button active" data-step="1"><span>1</span>Dados pessoais</button>
+              <button type="button" class="step-button" data-step="2"><span>2</span>Dados profissionais</button>
+              <button type="button" class="step-button" data-step="3"><span>3</span>Acesso</button>
+            </div>
+
+            <div class="wizard-step active" data-step-panel="1">
+              <div class="section-title">
+                <span>👤</span>
+                <div><h3>Dados pessoais</h3><p>Informações básicas do colaborador.</p></div>
+              </div>
+              <label>Nome completo<input name="nome" required></label>
+              <label>E-mail de acesso<input type="email" name="email" required></label>
+              <label>Telefone<input name="telefone" placeholder="(35) 99999-9999"></label>
+            </div>
+
+            <div class="wizard-step" data-step-panel="2">
+              <div class="section-title">
+                <span>💼</span>
+                <div><h3>Dados profissionais</h3><p>Vínculo e estrutura organizacional.</p></div>
+              </div>
+              <div class="row">
+                <label>Cargo<input name="cargo"></label>
+                <label>Setor<input name="setor"></label>
+              </div>
+              <label>Gestor<input name="gestor"></label>
+              <div class="row">
+                <label>Data de admissão<input type="date" name="admissao"></label>
+                <label>Tipo de vínculo
+                  <select name="vinculo">
+                    <option value="">Selecione</option>
+                    <option>CLT</option>
+                    <option>PJ</option>
+                    <option>Estágio</option>
+                    <option>Aprendiz</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="wizard-step" data-step-panel="3">
+              <div class="section-title">
+                <span>🔐</span>
+                <div><h3>Acesso e permissões</h3><p>Defina o nível de acesso ao Portal.</p></div>
+              </div>
+              <label>Perfil
+                <select name="perfil">
+                  <option value="colaborador">Colaborador</option>
+                  <option value="gestor">Gestor</option>
+                  <option value="diretoria">Diretoria</option>
+                  <option value="admin">Administrador RH</option>
+                </select>
+              </label>
+              <label>Senha inicial<input type="password" name="senha" minlength="8" required></label>
+              <label>Confirmar senha<input type="password" name="confirmar_senha" minlength="8" required></label>
+              <div class="security-note">A senha deve possuir pelo menos 8 caracteres.</div>
+            </div>
+
+            <div class="wizard-actions">
+              <button type="button" class="btn ghost" id="prevStep" hidden>Voltar</button>
+              <button type="button" class="btn secondary" id="nextStep">Próximo</button>
+              <button type="submit" class="btn primary" id="saveUser" hidden>Cadastrar usuário</button>
+            </div>
+            <div id="userMessage" class="form-message"></div>
+          </form>
+        </section>
+
+        <section class="panel users-panel">
+          <div class="panel-head users-head">
+            <div>
+              <h2>Usuários cadastrados</h2>
+              <p>Consulte, filtre e gerencie acessos.</p>
+            </div>
+            <button class="btn ghost" id="refreshUsers">↻ Atualizar</button>
+          </div>
+
+          <div class="users-filters">
+            <input id="userSearch" type="search" placeholder="Pesquisar por nome, e-mail, cargo ou setor">
+            <select id="profileFilter">
+              <option value="">Todos os perfis</option>
+              <option value="colaborador">Colaborador</option>
+              <option value="gestor">Gestor</option>
+              <option value="diretoria">Diretoria</option>
+              <option value="admin">Administrador RH</option>
+            </select>
+            <select id="statusFilter">
+              <option value="">Todos os status</option>
+              <option value="sim">Ativos</option>
+              <option value="não">Bloqueados</option>
+            </select>
+          </div>
+
+          <div id="usersList" class="user-card-grid">
+            <div class="empty">Carregando usuários...</div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="thermo" class="tab">
+      <div class="admin-metrics">
+        <article><span>📊</span><strong id="todayResponses">0</strong><small>Respostas hoje</small></article>
+        <article><span>😊</span><strong id="todayAverage">0,0</strong><small>Média emocional hoje</small></article>
+        <article><span>🧾</span><strong id="total90">0</strong><small>Respostas em 90 dias</small></article>
+        <article><span>📅</span><strong id="days90">0</strong><small>Dias com dados</small></article>
+      </div>
+
+      <div class="thermo-grid">
+        <section class="panel">
+          <div class="panel-head"><div><h2>Humor de hoje</h2><p>Distribuição das respostas.</p></div></div>
+          <div id="moodChart" class="chart"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div><h2>Energia de hoje</h2><p>Níveis registrados pela equipe.</p></div></div>
+          <div id="energyChart" class="chart"></div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Histórico dos últimos 90 dias</h2><p>Acompanhamento acumulado do clima emocional.</p></div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Data</th><th>Respostas</th><th>Média</th><th>Estressado</th><th>Cansado</th><th>Neutro</th><th>Ótimo</th></tr></thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
 </div>
-</section>
-<section id="thermo" class="tab">
-<div class="metrics"><article><strong id="todayResponses">0</strong><small>Respostas hoje</small></article><article><strong id="todayAverage">0,0</strong><small>Média emocional hoje</small></article><article><strong id="total90">0</strong><small>Respostas em 90 dias</small></article><article><strong id="days90">0</strong><small>Dias com dados</small></article></div>
-<div class="admin-grid"><section class="panel"><div class="panel-head"><h2>Humor de hoje</h2></div><div id="moodChart" class="chart"></div></section><section class="panel"><div class="panel-head"><h2>Energia de hoje</h2></div><div id="energyChart" class="chart"></div></section></div>
-<section class="panel"><div class="panel-head"><h2>Histórico dos últimos 90 dias</h2></div><div class="table-wrap"><table><thead><tr><th>Data</th><th>Respostas</th><th>Média</th><th>Estressado</th><th>Cansado</th><th>Neutro</th><th>Ótimo</th></tr></thead><tbody id="historyBody"></tbody></table></div></section>
-</section>
-</main></div>
-<script src="admin.js"></script>
-</body></html>
+
+<script src="admin-12-2.js"></script>
+</body>
+</html>
