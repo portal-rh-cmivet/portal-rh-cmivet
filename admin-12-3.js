@@ -1,0 +1,1 @@
+console.log('Admin 12.3 ativo');
