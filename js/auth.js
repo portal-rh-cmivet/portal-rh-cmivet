@@ -2,29 +2,38 @@
  * =====================================================
  * PORTAL RH CMIVET
  * auth.js
+ * Camada de autenticação do Frontend
+ * Compatível com Auth.gs
  * =====================================================
  */
 
 const Auth = {
 
+    /**
+     * Efetua login
+     */
     async login(email, senha) {
+
+        if (!email || !senha) {
+            throw new Error("Informe e-mail e senha.");
+        }
 
         try {
 
-            const resposta = await API.login(email, senha);
-
-            if (!resposta || !resposta.sucesso) {
-                throw new Error(resposta?.erro || "Usuário ou senha inválidos.");
-            }
-
-            localStorage.setItem(
-                CONFIG.STORAGE.TOKEN,
-                resposta.token
+            const resposta = await API.login(
+                email.trim().toLowerCase(),
+                senha
             );
 
-            localStorage.setItem(
-                CONFIG.STORAGE.USER,
-                JSON.stringify(resposta.usuario || resposta)
+            if (!resposta.sucesso) {
+                throw new Error(
+                    resposta.erro || "Falha na autenticação."
+                );
+            }
+
+            Session.save(
+                resposta.usuario,
+                resposta.token
             );
 
             return resposta;
@@ -39,52 +48,51 @@ const Auth = {
 
     },
 
+    /**
+     * Logout
+     */
     logout() {
 
-        localStorage.removeItem(CONFIG.STORAGE.TOKEN);
-        localStorage.removeItem(CONFIG.STORAGE.USER);
-
-        window.location.href = "login.html";
+        Session.logout();
 
     },
 
+    /**
+     * Token atual
+     */
     getToken() {
 
-        return localStorage.getItem(CONFIG.STORAGE.TOKEN);
+        return Session.getToken();
 
     },
 
+    /**
+     * Usuário atual
+     */
     getUser() {
 
-        const dados = localStorage.getItem(CONFIG.STORAGE.USER);
-
-        if (!dados) return null;
-
-        try {
-
-            return JSON.parse(dados);
-
-        } catch {
-
-            return null;
-
-        }
+        return Session.getUser();
 
     },
 
+    /**
+     * Verifica se existe login
+     */
     isAuthenticated() {
 
-        return !!this.getToken();
+        return Session.isLogged();
 
     },
 
+    /**
+     * Valida sessão no Apps Script
+     */
     async validarSessao() {
 
         const token = this.getToken();
 
         if (!token) {
 
-            this.logout();
             return false;
 
         }
@@ -95,18 +103,21 @@ const Auth = {
 
             if (!resposta.sucesso) {
 
-                this.logout();
+                Session.clear();
+
                 return false;
 
             }
 
             return true;
 
-        } catch (erro) {
+        }
+
+        catch (erro) {
 
             console.error(erro);
 
-            this.logout();
+            Session.clear();
 
             return false;
 
@@ -114,9 +125,14 @@ const Auth = {
 
     },
 
-    protegerPagina() {
+    /**
+     * Protege páginas internas
+     */
+    async protegerPagina() {
 
-        if (!this.isAuthenticated()) {
+        const ok = await this.validarSessao();
+
+        if (!ok) {
 
             window.location.href = "login.html";
 
