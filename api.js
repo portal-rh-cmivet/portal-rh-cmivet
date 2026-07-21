@@ -1,0 +1,1 @@
+async function api(action,data={}){const r=await fetch(CONFIG.API_URL,{method:'POST',body:JSON.stringify({action,...data})});return r.json();}
