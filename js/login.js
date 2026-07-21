@@ -1,2 +1,107 @@
-const API_URL="https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
-document.querySelector("#loginForm").addEventListener("submit",async e=>{e.preventDefault();const f=new FormData(e.currentTarget),m=document.querySelector("#loginMessage");m.textContent="";try{const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"login",email:f.get("email").trim().toLowerCase(),senha:f.get("senha")})});const j=await r.json();if(!j.sucesso)throw new Error(j.erro);sessionStorage.setItem("cmivet_token",j.token);sessionStorage.setItem("cmivet_user",JSON.stringify(j));location.href="portal.html"}catch(err){m.textContent=err.message||"Erro no login."}});
+/**
+ * =====================================================
+ * PORTAL RH CMIVET
+ * login.js
+ * Controle da tela de Login
+ * =====================================================
+ */
+
+document.addEventListener("DOMContentLoaded", iniciarLogin);
+
+async function iniciarLogin() {
+
+    // Se já existe sessão válida, entra direto
+    try {
+
+        if (Session.isLogged()) {
+
+            const ok = await Auth.validarSessao();
+
+            if (ok) {
+
+                window.location.href = "portal.html";
+                return;
+
+            }
+
+        }
+
+    } catch (e) {
+
+        console.error(e);
+
+    }
+
+    const form = document.getElementById("loginForm");
+
+    if (!form) {
+
+        console.error("Formulário de login não encontrado.");
+
+        return;
+
+    }
+
+    form.addEventListener("submit", efetuarLogin);
+
+}
+
+/*************************************************
+ * LOGIN
+ *************************************************/
+
+async function efetuarLogin(event) {
+
+    event.preventDefault();
+
+    const form = event.target;
+
+    const email = form.email.value.trim();
+
+    const senha = form.senha.value;
+
+    const botao = form.querySelector("button");
+
+    const mensagem = document.getElementById("loginMessage");
+
+    mensagem.textContent = "";
+    mensagem.className = "message";
+
+    botao.disabled = true;
+    botao.textContent = "Entrando...";
+
+    try {
+
+        const resposta = await Auth.login(email, senha);
+
+        mensagem.textContent = "Login realizado com sucesso.";
+
+        mensagem.classList.add("success");
+
+        setTimeout(() => {
+
+            window.location.href = "portal.html";
+
+        }, 500);
+
+    }
+
+    catch (erro) {
+
+        console.error(erro);
+
+        mensagem.textContent = erro.message || "Falha no login.";
+
+        mensagem.classList.add("error");
+
+    }
+
+    finally {
+
+        botao.disabled = false;
+
+        botao.textContent = "Entrar";
+
+    }
+
+}
