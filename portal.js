@@ -1,4 +1,171 @@
-const API_URL="https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
-const token=sessionStorage.getItem("cmivet_token");let user={};try{user=JSON.parse(sessionStorage.getItem("cmivet_user")||"{}")}catch{}if(!token)location.href="login.html";
-document.querySelector("#userName").textContent=user.nome||"Colaborador";document.querySelector("#userRole").textContent=user.cargo||user.perfil||"";document.querySelector("#avatar").textContent=(user.nome||"--").split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();document.querySelector("#welcome").textContent=`Bem-vinda ao Portal RH, ${(user.nome||"").split(" ")[0]||""}!`;if(user.perfil==="admin")document.querySelector("#adminLink").hidden=false;document.querySelector("#logout").addEventListener("click",()=>{sessionStorage.clear();location.href="index.html"});
-fetch(`${API_URL}?action=comunicados&t=${Date.now()}`).then(r=>r.json()).then(list=>{document.querySelector("#announcements").innerHTML=(Array.isArray(list)?list:[]).slice(0,6).map(i=>`<article class="card"><h3>${i.titulo||""}</h3><p>${i.descricao||""}</p></article>`).join("")||"<div>Nenhum comunicado.</div>"});
+/*************************************************
+ * PORTAL RH CMIVET
+ * portal.js v2.0
+ *************************************************/
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
+
+const token =
+sessionStorage.getItem("cmivet_token");
+
+let user = {};
+
+try {
+
+    user = JSON.parse(
+        sessionStorage.getItem("cmivet_user") || "{}"
+    );
+
+} catch {
+
+    user = {};
+
+}
+
+if (!token) {
+
+    window.location.href = "index.html";
+
+}
+
+/*************************************************
+ * INICIALIZAÇÃO
+ *************************************************/
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    initPortal
+
+);
+
+async function initPortal() {
+
+    try {
+
+        await validateSession();
+
+        loadUser();
+
+        configureMenu();
+
+        configureLogout();
+
+        await loadAnnouncements();
+
+        await verifyDailyThermometer();
+
+    } catch (error) {
+
+        console.error(error);
+
+        logout();
+
+    }
+
+}
+/*************************************************
+ * LOGOUT
+ *************************************************/
+
+function logout() {
+
+    sessionStorage.removeItem("cmivet_token");
+    sessionStorage.removeItem("cmivet_user");
+
+    window.location.href = "index.html";
+
+}
+
+function configureLogout() {
+
+    const btn = document.getElementById("logout");
+
+    if (!btn) return;
+
+    btn.addEventListener("click", logout);
+
+}
+/*************************************************
+ * USUÁRIO
+ *************************************************/
+
+function loadUser() {
+
+    if (!user || !user.nome) return;
+
+    const firstName = user.nome.split(" ")[0];
+
+    const avatar = firstName.substring(0,2).toUpperCase();
+
+    document.getElementById("welcome").textContent =
+        "Olá, " + firstName;
+
+    document.getElementById("userName").textContent =
+        user.nome;
+
+    document.getElementById("userRole").textContent =
+        `${user.cargo} • ${user.setor}`;
+
+    document.getElementById("avatar").textContent =
+        avatar;
+
+}
+/*************************************************
+ * MENU
+ *************************************************/
+
+function configureMenu() {
+
+    const admin = document.getElementById("adminLink");
+
+    if (!admin) return;
+
+    admin.hidden =
+        String(user.perfil).toLowerCase() !== "admin";
+
+}
+/*************************************************
+ * SESSÃO
+ *************************************************/
+
+async function validateSession() {
+
+    const response = await post({
+
+        action: "validarSessao",
+
+        token: token
+
+    });
+
+    if (!response.sucesso) {
+
+        logout();
+
+        return;
+
+    }
+
+}
+/*************************************************
+ * POST
+ *************************************************/
+
+async function post(data) {
+
+    const response = await fetch(API_URL, {
+
+        method: "POST",
+
+        headers: {
+
+            "Content-Type":"application/json"
+
+        },
+
+        body: JSON.stringify(data)
+
+    });
