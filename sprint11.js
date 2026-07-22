@@ -25,12 +25,20 @@ async function loadAnnouncements(){
 }
 form.addEventListener("submit",async e=>{
   e.preventDefault();const f=new FormData(form);const button=document.querySelector("#submitThermometer");const error=document.querySelector("#thermometerError");
-  const payload={action:"termometro",nome:f.get("nome").trim(),setor:f.get("setor").trim(),humor:f.get("humor"),energia:f.get("energia"),observacao:f.get("observacao").trim(),data_chave:todayKey()};
+  const payload = {
+  action: "termometro",
+  token: sessionStorage.getItem("cmivet_token"),
+  nota: Number(f.get("humor")),
+  observacao: f.get("observacao").trim()
+};
   button.disabled=true;button.textContent="Enviando...";error.textContent="";
   try{
     const result=await post(payload);if(result.sucesso===false)throw new Error(result.erro||"Falha ao registrar");
     releasePortal();document.querySelector("#thermometerStatus").innerHTML=`<span class="status-ok">✅ Resposta de hoje registrada.</span>`;
-  }catch(err){error.textContent="Não foi possível registrar. Verifique sua conexão e tente novamente."}
+  catch(err){
+  console.error(err);
+  error.textContent = err.message || "Não foi possível registrar.";
+}
   finally{button.disabled=false;button.textContent="Enviar e acessar o Portal"}
 });
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{
