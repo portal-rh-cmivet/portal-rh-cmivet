@@ -1,3 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Portal RH CMIVET</title>
+
+    <link rel="stylesheet" href="app.css">
+
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <img src="ativos/cmivet-logo-oficial.jpeg" alt="CMIVET">
+
+            <div>
+
+                <strong>RH CMIVET</strong>
+
+                <span id="sideRole">
+
+                    Portal Corporativo
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a class="active" href="portal.html">
+
+                🏠 Dashboard
+
+            </a>
+
+            <a href="termometro.html">
+
+                😊 Termômetro
+
+            </a>
+
+            <a href="comunicados.html">
+
+                📢 Comunicados
+
+            </a>
+
+            <a href="cafe-rh.html">
+
+                ☕ Café RH
+
+            </a>
+
+            <a href="biblioteca.html">
+
+                📚 Biblioteca RH
+
+            </a>
+
+            <a href="universidade.html">
+
+                🎓 Universidade
+
+            </a>
+
+            <a href="avaliacoes.html">
+
+                📋 Avaliações
+
+            </a>
+
+            <a href="perfil.html">
+
+                👤 Meu Perfil
+
+            </a>
+
+            <a id="adminLink" hidden href="admin.html">
+
+                🔐 Administração
+
+            </a>
+
+        </nav>
+
+        <button id="logout" class="btn danger">
+
+            ↩ Sair
+
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="main">
+
+        <!-- TOPO -->
+
+        <header class="topbar">
+
+            <div>
+
+                <small>
+
+                    PORTAL RH CMIVET
+
+                </small>
+
+                <h1 id="welcome">
+
+                    Carregando...
+
+                </h1>
+
+            </div>
+
+            <div class="profile-chip">
+
+                <div id="avatar" class="avatar">
+
+                    --
+
+                </div>
+
+                <div>
+
+                    <strong id="userName">
+
+                        Carregando...
+
+                    </strong>
+
+                    <span id="userRole">
+
+                        ...
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div>
+
+                <span class="pill">
+
+                    Portal Corporativo
+
+                </span>
+
+                <h2>
+
+                    Bem-vindo ao Portal RH CMIVET
+
+                </h2>
+
+                <p>
+
+                    Centralize comunicados, avaliações,
+
+                    treinamentos, documentos e solicitações
+
+                    em um único ambiente.
+
+                </p>
+
+            </div>
+
+            <img
+
+                src="ativos/cmivet-animais-hero.png"
+
+                alt="CMIVET"
+
+            >
+
+        </section>
+
+        <!-- CARDS -->
+
+        <section class="dashboard-grid">
+
+            <article class="card">
+
+                <span>😊</span>
+
+                <h3>Termômetro</h3>
+
+                <p id="statusTermometro">
+
+                    Verificando...
+
+                </p>
+
+            </article>
+
+            <article class="card">
+
+                <span>📢</span>
+
+                <h3>Comunicados</h3>
+
+                <p id="statusComunicados">
+
+                    Carregando...
+
+                </p>
+
+            </article>
+
+            <article class="card">
+
+                <span>☕</span>
+
+                <h3>Café RH</h3>
+
+                <p>
+
+                    Solicitações
+
+                </p>
+
+            </article>
+
+            <article class="card">
+
+                <span>🎓</span>
+
+                <h3>Universidade</h3>
+
+                <p>
+
+                    Cursos internos
+
+                </p>
+
+            </article>
+
+            <article class="card">
+
+                <span>📚</span>
+
+                <h3>Biblioteca</h3>
+
+                <p>
+
+                    Documentos
+
+                </p>
+
+            </article>
+
+            <article class="card">
+
+                <span>📋</span>
+
+                <h3>Avaliações</h3>
+
+                <p>
+
+                    Desempenho
+
+                </p>
+
+            </article>
+
+        </section>
+
+        <!-- COMUNICADOS -->
+
+        <section class="panel">
+
+            <div class="panel-head">
+
+                <h2>
+
+                    Comunicados recentes
+
+                </h2>
+
+            </div>
+
+            <div
+
+                id="announcements"
+
+                class="cards"
+
+            >
+
+                Carregando...
+
+            </div>
+
+        </section>
+
+        <!-- AVISOS -->
+
+        <section class="panel">
+
+            <div class="panel-head">
+
+                <h2>
+
+                    Avisos
+
+                </h2>
+
+            </div>
+
+            <div id="avisos">
+
+                Nenhum aviso.
+
+            </div>
+
+        </section>
+
+        <!-- RODAPÉ -->
+
+        <footer class="footer">
+
+            Portal RH CMIVET
+
+            •
+
+            Enterprise
+
+            •
+
+            Apps Script
+
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/session.js"></script>
+<script src="portal.js"></script>
+
+</body>
+
+</html>
 /*************************************************
  * PORTAL RH CMIVET
  * portal.js v2.0
