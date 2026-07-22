@@ -1,52 +1,686 @@
-const API_URL="https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
-const DAILY_KEY="cmivet-termometro-dia";
-const overlay=document.querySelector("#mandatoryOverlay");
-const form=document.querySelector("#dailyThermometerForm");
+/*************************************************
+ * SPRINT11.JS v2.0
+ * Portal RH CMIVET
+ *************************************************/
 
-function todayKey(){return new Intl.DateTimeFormat("sv-SE",{timeZone:"America/Sao_Paulo"}).format(new Date())}
-function alreadyAnswered(){return localStorage.getItem(DAILY_KEY)===todayKey()}
-function showMandatory(){overlay.hidden=false;document.body.style.overflow="hidden"}
-function releasePortal(){localStorage.setItem(DAILY_KEY,todayKey());overlay.hidden=true;document.body.style.overflow=""}
-function escapeHtml(v=""){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
 
-async function post(payload){
-  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
-  if(!r.ok)throw new Error(`Erro HTTP ${r.status}`);
-  return r.json();
+const TOKEN =
+sessionStorage.getItem("cmivet_token");
+
+const DAILY_KEY =
+"cmivet-termometro-dia";
+
+const overlay =
+document.querySelector("#mandatoryOverlay");
+
+const form =
+document.querySelector("#responseForm");
+function todayKey(){
+
+    return new Intl.DateTimeFormat(
+
+        "sv-SE",
+
+        {
+
+            timeZone:"America/Sao_Paulo"
+
+        }
+
+    ).format(new Date());
+
 }
-async function loadAnnouncements(){
-  try{
-    const r=await fetch(`${API_URL}?action=comunicados&t=${Date.now()}`,{cache:"no-store"});
-    const raw=await r.json();const list=(Array.isArray(raw)?raw:raw.comunicados||[]).filter(i=>String(i.ativo||"sim").toLowerCase()!=="não");
-    const html=list.length?list.map(i=>`<article class="card"><span class="badge">${escapeHtml(i.categoria||"Comunicado")}</span><h4>${escapeHtml(i.titulo||"Sem título")}</h4><p>${escapeHtml(i.descricao||"")}</p></article>`).join(""):`<div class="empty">Nenhum comunicado.</div>`;
-    document.querySelector("#announcementList").innerHTML=html;
-    document.querySelector("#homeAnnouncements").innerHTML=list.length?list.slice(0,3).map(i=>`<article class="card"><span class="badge">${escapeHtml(i.categoria||"Comunicado")}</span><h4>${escapeHtml(i.titulo||"Sem título")}</h4><p>${escapeHtml(i.descricao||"")}</p></article>`).join(""):`<div class="empty">Nenhum comunicado.</div>`;
-  }catch(e){document.querySelector("#announcementList").innerHTML=`<div class="empty">Não foi possível carregar.</div>`}
+
+function alreadyAnswered(){
+
+    return localStorage.getItem(
+
+        DAILY_KEY
+
+    )===todayKey();
+
 }
-form.addEventListener("submit",async e=>{
-  e.preventDefault();const f=new FormData(form);const button=document.querySelector("#submitThermometer");const error=document.querySelector("#thermometerError");
-  const payload = {
-  action: "termometro",
-  token: sessionStorage.getItem("cmivet_token"),
-  nota: Number(f.get("humor")),
-  observacao: f.get("observacao").trim()
-};
-  button.disabled=true;button.textContent="Enviando...";error.textContent="";
-  try{
-    const result=await post(payload);if(result.sucesso===false)throw new Error(result.erro||"Falha ao registrar");
-    releasePortal();document.querySelector("#thermometerStatus").innerHTML=`<span class="status-ok">✅ Resposta de hoje registrada.</span>`;
-  catch(err){
-  console.error(err);
-  error.textContent = err.message || "Não foi possível registrar.";
+
+function showMandatory(){
+
+    overlay.hidden=false;
+
+    document.body.style.overflow="hidden";
+
 }
-  finally{button.disabled=false;button.textContent="Enviar e acessar o Portal"}
-});
-document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===b.dataset.view));
-  document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x===b));
-  document.querySelector("#pageTitle").textContent=b.textContent.trim().replace(/^[^ ]+ /,"");
-}));
-document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>document.querySelector(`[data-view="${b.dataset.go}"]`).click()));
-document.querySelector("#thermometerStatus").innerHTML=alreadyAnswered()?`<span class="status-ok">✅ Resposta de hoje registrada.</span>`:`<span>Resposta de hoje pendente.</span>`;
-if(!alreadyAnswered())showMandatory();
-loadAnnouncements();
+
+function releasePortal(){
+
+    localStorage.setItem(
+
+        DAILY_KEY,
+
+        todayKey()
+
+    );
+
+    overlay.hidden=true;
+
+    document.body.style.overflow="";
+
+}
+
+function escapeHtml(value=""){
+
+    return String(value)
+
+    .replace(/[&<>"']/g,function(char){
+
+        return{
+
+            "&":"&amp;",
+
+            "<":"&lt;",
+
+            ">":"&gt;",
+
+            '"':"&quot;",
+
+            "'":"&#039;"
+
+        }[char];
+
+    });
+
+}
+async function post(data){
+
+    const response=
+
+    await fetch(
+
+        API_URL,
+
+        {
+
+            method:"POST",
+
+            headers:{
+
+                "Content-Type":
+
+                "application/json"
+
+            },
+
+            body:JSON.stringify(data)
+
+        }
+
+    );
+
+    return await response.json();
+
+}
+/*************************************************
+ * ENVIO DO TERMÔMETRO
+ *************************************************/
+
+if (form) {
+
+    form.addEventListener(
+
+        "submit",
+
+        async function (event) {
+
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            const button = form.querySelector(
+
+                'button[type="submit"]'
+
+            );
+
+            const comment =
+
+                formData.get("comment") || "";
+
+            const mood =
+
+                Number(formData.get("mood"));
+
+            if (!mood) {
+
+                alert(
+
+                    "Selecione como você está se sentindo."
+
+                );
+
+                return;
+
+            }
+
+            button.disabled = true;
+
+            const originalText =
+
+                button.textContent;
+
+            button.textContent =
+
+                "Enviando...";
+
+            try {
+
+                const response = await post({
+
+                    action: "termometro",
+
+                    token: TOKEN,
+
+                    nota: mood,
+
+                    observacao: comment.trim()
+
+                });
+
+                if (!response.sucesso) {
+
+                    throw new Error(
+
+                        response.erro ||
+
+                        "Não foi possível registrar a resposta."
+
+                    );
+
+                }
+
+                releasePortal();
+
+                form.reset();
+
+                alert(
+
+                    "Resposta registrada com sucesso!"
+
+                );
+
+                await verifyDailyThermometer();
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+
+                    error.message ||
+
+                    "Erro ao enviar resposta."
+
+                );
+
+            }
+
+            finally {
+
+                button.disabled = false;
+
+                button.textContent = originalText;
+
+            }
+
+        }
+
+    );
+
+}
+/*************************************************
+ * VERIFICAÇÃO DO TERMÔMETRO
+ *************************************************/
+
+async function verifyDailyThermometer() {
+
+    if (!TOKEN) {
+
+        showMandatory();
+
+        return;
+
+    }
+
+    try {
+
+        const response = await post({
+
+            action: "verificarTermometroHoje",
+
+            token: TOKEN
+
+        });
+
+        if (
+
+            response.sucesso &&
+
+            response.respondeu
+
+        ) {
+
+            releasePortal();
+
+            return;
+
+        }
+
+        showMandatory();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMandatory();
+
+    }
+
+}
+
+/*************************************************
+ * INICIALIZAÇÃO GERAL
+ *************************************************/
+
+async function initializePortal() {
+
+    try {
+
+        await verifyDailyThermometer();
+
+        await loadAnnouncements();
+
+        if (typeof loadCoffeeRH === "function") {
+
+            await loadCoffeeRH();
+
+        }
+
+        if (typeof loadDashboard === "function") {
+
+            await loadDashboard();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+
+            "Erro na inicialização:",
+
+            error
+
+        );
+
+    }
+
+}
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    initializePortal
+
+);
+/*************************************************
+ * COMUNICADOS
+ *************************************************/
+
+async function loadAnnouncements() {
+
+    const container =
+
+        document.querySelector(
+
+            "#announcementList"
+
+        );
+
+    const home =
+
+        document.querySelector(
+
+            "#homeAnnouncements"
+
+        );
+
+    if (!container && !home) {
+
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch(
+
+            `${API_URL}?action=comunicados&t=${Date.now()}`,
+
+            {
+
+                cache: "no-store"
+
+            }
+
+        );
+
+        const data =
+
+            await response.json();
+
+        const lista =
+
+            (
+
+                Array.isArray(data)
+
+                ? data
+
+                : data.comunicados || []
+
+            )
+
+            .filter(function(item){
+
+                return String(
+
+                    item.ativo || "sim"
+
+                ).toLowerCase() !== "não";
+
+            });
+
+        const html =
+
+            lista.length
+
+            ? lista.map(function(item){
+
+                return `
+
+                <article class="card">
+
+                    <span class="badge">
+
+                        ${escapeHtml(
+
+                            item.categoria ||
+
+                            "Comunicado"
+
+                        )}
+
+                    </span>
+
+                    <h4>
+
+                        ${escapeHtml(
+
+                            item.titulo ||
+
+                            "Sem título"
+
+                        )}
+
+                    </h4>
+
+                    <p>
+
+                        ${escapeHtml(
+
+                            item.descricao ||
+
+                            ""
+
+                        )}
+
+                    </p>
+
+                </article>
+
+                `;
+
+            }).join("")
+
+            :
+
+            `<div class="empty">
+
+                Nenhum comunicado disponível.
+
+            </div>`;
+
+        if (container) {
+
+            container.innerHTML =
+
+                html;
+
+        }
+
+        if (home) {
+
+            home.innerHTML =
+
+                lista
+
+                .slice(0,3)
+
+                .map(function(item){
+
+                    return `
+
+                    <article class="card">
+
+                        <span class="badge">
+
+                            ${escapeHtml(
+
+                                item.categoria ||
+
+                                "Comunicado"
+
+                            )}
+
+                        </span>
+
+                        <h4>
+
+                            ${escapeHtml(
+
+                                item.titulo ||
+
+                                "Sem título"
+
+                            )}
+
+                        </h4>
+
+                        <p>
+
+                            ${escapeHtml(
+
+                                item.descricao ||
+
+                                ""
+
+                            )}
+
+                        </p>
+
+                    </article>
+
+                    `;
+
+                })
+
+                .join("");
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        if(container){
+
+            container.innerHTML =
+
+            `<div class="empty">
+
+                Não foi possível carregar os comunicados.
+
+            </div>`;
+
+        }
+
+    }
+
+}
+/*************************************************
+ * CAFÉ RH
+ *************************************************/
+
+async function loadCoffeeRH() {
+
+    const form =
+
+        document.querySelector(
+
+            "#coffeeForm"
+
+        );
+
+    if (!form) {
+
+        return;
+
+    }
+
+    if (form.dataset.loaded) {
+
+        return;
+
+    }
+
+    form.dataset.loaded = "true";
+
+    form.addEventListener(
+
+        "submit",
+
+        async function(event){
+
+            event.preventDefault();
+
+            const button =
+
+                form.querySelector(
+
+                    'button[type="submit"]'
+
+                );
+
+            const originalText =
+
+                button.textContent;
+
+            button.disabled = true;
+
+            button.textContent =
+
+                "Enviando...";
+
+            try {
+
+                const response =
+
+                    await post({
+
+                        action:"cafeRH",
+
+                        token:TOKEN,
+
+                        assunto:
+
+                            form.coffeeSubject.value,
+
+                        mensagem:
+
+                            form.coffeeMessage.value,
+
+                        prioridade:
+
+                            form.coffeePriority.value
+
+                    });
+
+                if(!response.sucesso){
+
+                    throw new Error(
+
+                        response.erro ||
+
+                        "Não foi possível enviar."
+
+                    );
+
+                }
+
+                alert(
+
+                    "Solicitação enviada com sucesso."
+
+                );
+
+                form.reset();
+
+            }
+
+            catch(error){
+
+                console.error(error);
+
+                alert(
+
+                    error.message ||
+
+                    "Erro ao enviar solicitação."
+
+                );
+
+            }
+
+            finally{
+
+                button.disabled = false;
+
+                button.textContent =
+
+                    originalText;
+
+            }
+
+        }
+
+    );
+
+}
+
