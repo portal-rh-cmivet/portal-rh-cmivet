@@ -1,368 +1,175 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+/*************************************************
+ * PORTAL RH CMIVET
+ * portal.js v2.0
+ *************************************************/
 
-<head>
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec";
 
-    <meta charset="UTF-8">
+const token =
+sessionStorage.getItem("cmivet_token");
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+let user = {};
 
-    <title>Portal RH CMIVET</title>
+try {
 
-    <link rel="stylesheet" href="app.css">
+    user = JSON.parse(
+        sessionStorage.getItem("cmivet_user") || "{}"
+    );
 
-</head>
+} catch {
 
-<body>
+    user = {};
 
-<div class="app-shell">
+}
 
-    <!-- SIDEBAR -->
+if (!token) {
 
-    <aside class="sidebar">
+    window.location.href = "index.html";
 
-        <div class="brand">
+}
 
-            <img src="ativos/cmivet-logo-oficial.jpeg" alt="CMIVET">
+/*************************************************
+ * INICIALIZAÇÃO
+ *************************************************/
 
-            <div>
+document.addEventListener(
 
-                <strong>RH CMIVET</strong>
+    "DOMContentLoaded",
 
-                <span id="sideRole">
+    initPortal
 
-                    Portal Corporativo
+);
 
-                </span>
+async function initPortal() {
 
-            </div>
+    try {
 
-        </div>
+        await validateSession();
 
-        <nav>
+        loadUser();
 
-            <a class="active" href="portal.html">
+        configureMenu();
 
-                🏠 Dashboard
+        configureLogout();
 
-            </a>
+        await loadAnnouncements();
 
-            <a href="termometro.html">
+        await verifyDailyThermometer();
 
-                😊 Termômetro
+    } catch (error) {
 
-            </a>
+        console.error(error);
 
-            <a href="comunicados.html">
+        logout();
 
-                📢 Comunicados
+    }
 
-            </a>
+}
+/*************************************************
+ * LOGOUT
+ *************************************************/
 
-            <a href="cafe-rh.html">
+function logout() {
 
-                ☕ Café RH
+    sessionStorage.removeItem("cmivet_token");
+    sessionStorage.removeItem("cmivet_user");
 
-            </a>
+    window.location.href = "index.html";
 
-            <a href="biblioteca.html">
+}
 
-                📚 Biblioteca RH
+function configureLogout() {
 
-            </a>
+    const btn = document.getElementById("logout");
 
-            <a href="universidade.html">
+    if (!btn) return;
 
-                🎓 Universidade
+    btn.addEventListener("click", logout);
 
-            </a>
+}
+/*************************************************
+ * USUÁRIO
+ *************************************************/
 
-            <a href="avaliacoes.html">
+function loadUser() {
 
-                📋 Avaliações
+    if (!user || !user.nome) return;
 
-            </a>
+    const firstName = user.nome.split(" ")[0];
 
-            <a href="perfil.html">
+    const avatar = firstName.substring(0,2).toUpperCase();
 
-                👤 Meu Perfil
+    document.getElementById("welcome").textContent =
+        "Olá, " + firstName;
 
-            </a>
+    document.getElementById("userName").textContent =
+        user.nome;
 
-            <a id="adminLink" hidden href="admin.html">
+    document.getElementById("userRole").textContent =
+        `${user.cargo} • ${user.setor}`;
 
-                🔐 Administração
+    document.getElementById("avatar").textContent =
+        avatar;
 
-            </a>
+}
+/*************************************************
+ * MENU
+ *************************************************/
 
-        </nav>
+function configureMenu() {
 
-        <button id="logout" class="btn danger">
+    const admin = document.getElementById("adminLink");
 
-            ↩ Sair
+    if (!admin) return;
 
-        </button>
+    admin.hidden =
+        String(user.perfil).toLowerCase() !== "admin";
 
-    </aside>
+}
+/*************************************************
+ * SESSÃO
+ *************************************************/
 
-    <!-- CONTEÚDO -->
+async function validateSession() {
 
-    <main class="main">
+    const response = await post({
 
-        <!-- TOPO -->
+        action: "validarSessao",
 
-        <header class="topbar">
+        token: token
 
-            <div>
+    });
 
-                <small>
+    if (!response.sucesso) {
 
-                    PORTAL RH CMIVET
+        logout();
 
-                </small>
+        return;
 
-                <h1 id="welcome">
+    }
 
-                    Carregando...
+}
+/*************************************************
+ * POST
+ *************************************************/
 
-                </h1>
+async function post(data) {
 
-            </div>
+    const response = await fetch(API_URL, {
 
-            <div class="profile-chip">
+        method: "POST",
 
-                <div id="avatar" class="avatar">
+        headers: {
 
-                    --
+            "Content-Type":"application/json"
 
-                </div>
+        },
 
-                <div>
+        body: JSON.stringify(data)
 
-                    <strong id="userName">
+    });
 
-                        Carregando...
+    return await response.json();
 
-                    </strong>
-
-                    <span id="userRole">
-
-                        ...
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        </header>
-
-        <!-- HERO -->
-
-        <section class="hero">
-
-            <div>
-
-                <span class="pill">
-
-                    Portal Corporativo
-
-                </span>
-
-                <h2>
-
-                    Bem-vindo ao Portal RH CMIVET
-
-                </h2>
-
-                <p>
-
-                    Centralize comunicados, avaliações,
-
-                    treinamentos, documentos e solicitações
-
-                    em um único ambiente.
-
-                </p>
-
-            </div>
-
-            <img
-
-                src="ativos/cmivet-animais-hero.png"
-
-                alt="CMIVET"
-
-            >
-
-        </section>
-
-        <!-- CARDS -->
-
-        <section class="dashboard-grid">
-
-            <article class="card">
-
-                <span>😊</span>
-
-                <h3>Termômetro</h3>
-
-                <p id="statusTermometro">
-
-                    Verificando...
-
-                </p>
-
-            </article>
-
-            <article class="card">
-
-                <span>📢</span>
-
-                <h3>Comunicados</h3>
-
-                <p id="statusComunicados">
-
-                    Carregando...
-
-                </p>
-
-            </article>
-
-            <article class="card">
-
-                <span>☕</span>
-
-                <h3>Café RH</h3>
-
-                <p>
-
-                    Solicitações
-
-                </p>
-
-            </article>
-
-            <article class="card">
-
-                <span>🎓</span>
-
-                <h3>Universidade</h3>
-
-                <p>
-
-                    Cursos internos
-
-                </p>
-
-            </article>
-
-            <article class="card">
-
-                <span>📚</span>
-
-                <h3>Biblioteca</h3>
-
-                <p>
-
-                    Documentos
-
-                </p>
-
-            </article>
-
-            <article class="card">
-
-                <span>📋</span>
-
-                <h3>Avaliações</h3>
-
-                <p>
-
-                    Desempenho
-
-                </p>
-
-            </article>
-
-        </section>
-
-        <!-- COMUNICADOS -->
-
-        <section class="panel">
-
-            <div class="panel-head">
-
-                <h2>
-
-                    Comunicados recentes
-
-                </h2>
-
-            </div>
-
-            <div
-
-                id="announcements"
-
-                class="cards"
-
-            >
-
-                Carregando...
-
-            </div>
-
-        </section>
-
-        <!-- AVISOS -->
-
-        <section class="panel">
-
-            <div class="panel-head">
-
-                <h2>
-
-                    Avisos
-
-                </h2>
-
-            </div>
-
-            <div id="avisos">
-
-                Nenhum aviso.
-
-            </div>
-
-        </section>
-
-        <!-- RODAPÉ -->
-
-        <footer class="footer">
-
-            Portal RH CMIVET
-
-            •
-
-            Enterprise
-
-            •
-
-            Apps Script
-
-        </footer>
-
-    </main>
-
-</div>
-
-<script src="js/config.js"></script>
-<script src="js/api.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/session.js"></script>
-<script src="portal.js"></script>
-
-</body>
-
-</html>
+}
