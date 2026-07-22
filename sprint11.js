@@ -586,7 +586,7 @@ async function loadCoffeeRH() {
 
         "submit",
 
-        async function(event){
+        async function (event) {
 
             event.preventDefault();
 
@@ -614,31 +614,39 @@ async function loadCoffeeRH() {
 
                     await post({
 
-                        action:"cafeRH",
+                        action: "cafeRH",
 
-                        token:TOKEN,
+                        token: TOKEN,
 
-                        assunto:
+                        nome:
 
-                            form.coffeeSubject.value,
+                            form.coffeeName.value.trim(),
 
-                        mensagem:
+                        setor:
 
-                            form.coffeeMessage.value,
+                            form.coffeeSector.value.trim(),
+
+                        contato:
+
+                            form.coffeeContact.value.trim(),
+
+                        motivo:
+
+                            form.coffeeReason.value.trim(),
 
                         prioridade:
 
-                            form.coffeePriority.value
+                            form.coffeeUrgency.value
 
                     });
 
-                if(!response.sucesso){
+                if (!response.sucesso) {
 
                     throw new Error(
 
                         response.erro ||
 
-                        "Não foi possível enviar."
+                        "Não foi possível enviar a solicitação."
 
                     );
 
@@ -654,7 +662,7 @@ async function loadCoffeeRH() {
 
             }
 
-            catch(error){
+            catch (error) {
 
                 console.error(error);
 
@@ -668,7 +676,7 @@ async function loadCoffeeRH() {
 
             }
 
-            finally{
+            finally {
 
                 button.disabled = false;
 
@@ -683,4 +691,3 @@ async function loadCoffeeRH() {
     );
 
 }
-
