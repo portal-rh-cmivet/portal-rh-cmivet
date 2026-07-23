@@ -3,7 +3,7 @@ const CONFIG = {
     VERSION: "6.0",
 
     API_URL:
-        "https://script.google.com/macros/s/AKfycbwDhEHF1V-pXeV6KLH-3EoYDx1IEyHS-MtFsmgp1IbkFeoRr2hdTzbe-r4oStxdnNhK/exec",
+"https://script.google.com/macros/s/AKfycbz7dmmQpgyCucCbCFlsXmzp3gf_A_eBUdlkrgx5Ysik5729_U9vsswW3gSfQtGDaFuj/exec",
 
     STORAGE: {
         TOKEN: "cmivet_token",
