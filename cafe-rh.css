@@ -1,0 +1,200 @@
+/*************************************************
+ * CAFÉ RH
+ * cafe-rh.css
+ *************************************************/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:Arial,Helvetica,sans-serif;
+
+    background:#f4f6f8;
+
+    color:#2d3436;
+
+}
+
+.container{
+
+    width:100%;
+
+    max-width:760px;
+
+    margin:40px auto;
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+
+    overflow:hidden;
+
+}
+
+.header{
+
+    background:#1f6f54;
+
+    color:#ffffff;
+
+    padding:30px;
+
+}
+
+.header h1{
+
+    font-size:28px;
+
+    margin-bottom:8px;
+
+}
+
+.header p{
+
+    opacity:.9;
+
+    line-height:1.5;
+
+}
+
+main{
+
+    padding:30px;
+
+}
+
+.field{
+
+    margin-bottom:22px;
+
+}
+
+.field label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+}
+
+input,
+textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #dcdcdc;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    transition:.2s;
+
+    outline:none;
+
+}
+
+input:focus,
+textarea:focus{
+
+    border-color:#1f6f54;
+
+    box-shadow:0 0 0 3px rgba(31,111,84,.15);
+
+}
+
+textarea{
+
+    resize:vertical;
+
+    min-height:180px;
+
+}
+
+.actions{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:30px;
+
+}
+
+button{
+
+    cursor:pointer;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:14px 22px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+#btnEnviar{
+
+    background:#1f6f54;
+
+    color:#ffffff;
+
+    flex:1;
+
+}
+
+#btnEnviar:hover{
+
+    background:#185842;
+
+}
+
+#btnVoltar{
+
+    background:#ececec;
+
+    color:#333;
+
+}
+
+#btnVoltar:hover{
+
+    background:#dcdcdc;
+
+}
+
+@media(max-width:700px){
+
+    .container{
+
+        margin:0;
+
+        border-radius:0;
+
+        min-height:100vh;
+
+    }
+
+    .actions{
+
+        flex-direction:column;
+
+    }
+
+}
