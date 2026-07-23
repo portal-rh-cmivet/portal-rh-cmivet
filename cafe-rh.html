@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Café com o RH | CMIVET</title>
+
+<link rel="stylesheet" href="cafe-rh.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="header">
+
+        <h1>☕ Café com o RH</h1>
+
+        <p>
+
+            Espaço reservado para conversar com o RH de forma
+            confidencial.
+
+        </p>
+
+    </header>
+
+    <main>
+
+        <form id="coffeeForm">
+
+            <div class="field">
+
+                <label for="coffeeSubject">
+
+                    Assunto
+
+                </label>
+
+                <input
+                    id="coffeeSubject"
+                    name="coffeeSubject"
+                    type="text"
+                    maxlength="120"
+                    placeholder="Ex.: Desenvolvimento profissional"
+                    required>
+
+            </div>
+
+            <div class="field">
+
+                <label for="coffeeMessage">
+
+                    Mensagem
+
+                </label>
+
+                <textarea
+                    id="coffeeMessage"
+                    name="coffeeMessage"
+                    rows="8"
+                    maxlength="1000"
+                    placeholder="Escreva aqui sua solicitação..."
+                    required></textarea>
+
+            </div>
+
+            <div class="actions">
+
+                <button
+                    id="btnEnviar"
+                    type="submit">
+
+                    Solicitar Café com o RH
+
+                </button>
+
+                <button
+                    type="button"
+                    id="btnVoltar">
+
+                    Voltar ao Portal
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </main>
+
+</div>
+
+<script src="cafe-rh.js"></script>
+
+<script>
+
+document
+.getElementById("btnVoltar")
+.addEventListener("click",function(){
+
+    window.location.href="portal.html";
+
+});
+
+</script>
+
+</body>
+
+</html>
