@@ -175,25 +175,106 @@ function openView(view) {
   if (view === "favoritos") renderFavorites();
 }
 
+/*************************************************
+ * CARREGAR BIBLIOTECA DA API
+ *************************************************/
+
 async function loadLibrary() {
-  try {
-    const response = await fetch(`biblioteca.json?t=${Date.now()}`, { cache: "no-store" });
-    if (!response.ok) throw new Error(`Erro HTTP ${response.status}`);
-    const data = await response.json();
-    documents = Array.isArray(data.documents) ? data.documents : [];
-    trails = Array.isArray(data.trails) ? data.trails : [];
-    renderCategories();
-    renderDocuments();
-    renderFavorites();
-    renderTrails();
-    document.querySelector("#libraryStatus").textContent = `${documents.length} documentos`;
-    document.querySelector("#libraryStatus").className = "library-status online";
-  } catch (error) {
-    console.error(error);
-    document.querySelector("#documentGrid").innerHTML = `<div class="empty">Não foi possível carregar a biblioteca.</div>`;
-    document.querySelector("#libraryStatus").textContent = "Biblioteca indisponível";
-    document.querySelector("#libraryStatus").className = "library-status offline";
-  }
+
+    try {
+
+        const response = await fetch(
+
+            `${API_URL}?action=biblioteca&t=${Date.now()}`,
+
+            {
+
+                cache:"no-store"
+
+            }
+
+        );
+
+        const data = await response.json();
+
+        if(!data.sucesso){
+
+            throw new Error(
+
+                data.erro ||
+
+                "Erro ao carregar biblioteca."
+
+            );
+
+        }
+
+        documents = data.documents || [];
+
+        trails = data.trails || [];
+
+        renderCategories();
+
+        renderDocuments();
+
+        renderFavorites();
+
+        renderTrails();
+
+        document.querySelector(
+
+            "#libraryStatus"
+
+        ).textContent =
+
+            documents.length +
+
+            " documentos";
+
+        document.querySelector(
+
+            "#libraryStatus"
+
+        ).className =
+
+            "library-status online";
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        document.querySelector(
+
+            "#documentGrid"
+
+        ).innerHTML =
+
+        `<div class="empty">
+
+            Não foi possível carregar a Biblioteca RH.
+
+        </div>`;
+
+        document.querySelector(
+
+            "#libraryStatus"
+
+        ).textContent =
+
+            "Biblioteca indisponível";
+
+        document.querySelector(
+
+            "#libraryStatus"
+
+        ).className =
+
+            "library-status offline";
+
+    }
+
 }
 
 document.querySelector("#searchInput").addEventListener("input", renderDocuments);
