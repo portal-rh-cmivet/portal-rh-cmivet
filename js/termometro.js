@@ -254,16 +254,18 @@ async function verificarTermometroHoje() {
 
     }
 
-    catch (erro) {
+   catch (erro) {
 
-        console.error("Erro ao verificar termômetro:", erro);
+    console.error("Erro ao verificar termômetro:", erro);
 
-        status.textContent = "⚠ Erro ao consultar";
-        status.className = "badge error";
+    status.textContent = "⚠ Erro ao consultar";
+    status.className = "badge error";
 
-    }
+}
 
-  /*************************************************
+} 
+
+/*************************************************
  * ENVIO DO TERMÔMETRO
  *************************************************/
 
