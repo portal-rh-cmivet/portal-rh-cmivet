@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Portal RH CMIVET</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="enterprise.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <img src="ativos/cmivet-logo-oficial.jpeg">
+
+            <h2>Portal RH</h2>
+
+            <small>CMIVET Enterprise</small>
+
+        </div>
+
+        <nav>
+
+            <a href="portal.html">
+
+                <span class="material-symbols-rounded">
+
+                    dashboard
+
+                </span>
+
+                Dashboard
+
+            </a>
+
+            <a class="active"
+               href="termometro.html">
+
+                <span class="material-symbols-rounded">
+
+                    mood
+
+                </span>
+
+                Termômetro
+
+            </a>
+
+            <a href="comunicados.html">
+
+                <span class="material-symbols-rounded">
+
+                    campaign
+
+                </span>
+
+                Comunicados
+
+            </a>
+
+            <a href="cafe-rh.html">
+
+                <span class="material-symbols-rounded">
+
+                    coffee
+
+                </span>
+
+                Café RH
+
+            </a>
+
+            <a href="biblioteca.html">
+
+                <span class="material-symbols-rounded">
+
+                    menu_book
+
+                </span>
+
+                Biblioteca
+
+            </a>
+
+            <a href="universidade.html">
+
+                <span class="material-symbols-rounded">
+
+                    school
+
+                </span>
+
+                Universidade
+
+            </a>
+
+            <a href="avaliacoes.html">
+
+                <span class="material-symbols-rounded">
+
+                    assignment
+
+                </span>
+
+                Avaliações
+
+            </a>
+
+            <a href="perfil.html">
+
+                <span class="material-symbols-rounded">
+
+                    person
+
+                </span>
+
+                Meu Perfil
+
+            </a>
+
+            <a id="adminLink"
+               hidden
+               href="admin.html">
+
+                <span class="material-symbols-rounded">
+
+                    admin_panel_settings
+
+                </span>
+
+                Administração
+
+            </a>
+
+        </nav>
+
+        <div class="sidebar-user">
+
+            <div
+                id="avatar"
+                class="avatar">
+
+                MA
+
+            </div>
+
+            <div>
+
+                <strong id="userName">
+
+                    Mariah
+
+                </strong>
+
+                <small id="userRole">
+
+                    Auxiliar Veterinário
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <button
+            id="logout"
+            class="logout">
+
+            <span class="material-symbols-rounded">
+
+                logout
+
+            </span>
+
+            Sair
+
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+
+                    Portal RH CMIVET
+
+                </h1>
+
+                <span>
+
+                    Bem-vindo ao ambiente corporativo
+
+                </span>
+
+            </div>
+
+            <div class="header-right">
+
+                <input
+                    type="text"
+                    placeholder="Pesquisar...">
+
+                <button class="icon">
+
+                    <span class="material-symbols-rounded">
+
+                        notifications
+
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-text">
+
+                <span class="tag">
+
+                    Saúde Organizacional
+
+                </span>
+
+                <h2 id="welcome">
+
+                    Olá!
+
+                </h2>
+
+                <p>
+
+                    Acompanhe comunicados,
+                    avaliações,
+                    treinamentos
+                    e seu desenvolvimento
+                    dentro da CMIVET.
+
+                </p>
+
+            </div>
+
+            <div class="hero-image">
+
+                <!-- depois colocaremos a imagem institucional -->
+
+            </div>
+
+        </section>
+
+        <!-- CARDS -->
+
+        <section class="quick-cards">
+
+            <div class="quick-card">
+
+                <span class="material-symbols-rounded">
+
+                    campaign
+
+                </span>
+
+                <strong>
+
+                    Comunicados
+
+                </strong>
+
+                <small>
+
+                    Ver novidades
+
+                </small>
+
+            </div>
+
+            <div class="quick-card">
+
+                <span class="material-symbols-rounded">
+
+                    menu_book
+
+                </span>
+
+                <strong>
+
+                    Biblioteca
+
+                </strong>
+
+                <small>
+
+                    Documentos
+
+                </small>
+
+            </div>
+
+            <div class="quick-card">
+
+                <span class="material-symbols-rounded">
+
+                    school
+
+                </span>
+
+                <strong>
+
+                    Universidade
+
+                </strong>
+
+                <small>
+
+                    Cursos
+
+                </small>
+
+            </div>
+
+            <div class="quick-card">
+
+                <span class="material-symbols-rounded">
+
+                    coffee
+
+                </span>
+
+                <strong>
+
+                    Café RH
+
+                </strong>
+
+                <small>
+
+                    Solicitar
+
+                </small>
+
+            </div>
+
+            <div class="quick-card">
+
+                <span class="material-symbols-rounded">
+
+                    assignment
+
+                </span>
+
+                <strong>
+
+                    Avaliações
+
+                </strong>
+
+                <small>
+
+                    Acessar
+
+                </small>
+
+            </div>
+
+        </section>
+
+        <!-- GRID PRINCIPAL -->
+
+        <section class="dashboard-grid">
+
+            <!-- ESQUERDA -->
+
+            <div class="main-panel">
+              <!-- CARD TERMÔMETRO -->
+
+<div class="card">
+
+    <div class="card-header">
+
+        <div>
+
+            <small>Bem-estar</small>
+
+            <h2>😊 Termômetro Emocional</h2>
+
+        </div>
+
+        <span
+            id="statusTermometro"
+            class="status-badge">
+
+            Verificando...
+
+        </span>
+
+    </div>
+
+    <form id="thermometerForm">
+
+        <div class="question">
+
+            <label>
+
+                Como você está hoje?
+
+            </label>
+
+            <div class="mood-grid">
+
+                <label class="mood">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="5"
+                        required>
+
+                    😁
+
+                    <span>Muito Feliz</span>
+
+                </label>
+
+                <label class="mood">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="4">
+
+                    🙂
+
+                    <span>Bem</span>
+
+                </label>
+
+                <label class="mood">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="3">
+
+                    😐
+
+                    <span>Normal</span>
+
+                </label>
+
+                <label class="mood">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="2">
+
+                    😕
+
+                    <span>Cansado</span>
+
+                </label>
+
+                <label class="mood">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="1">
+
+                    😢
+
+                    <span>Muito Mal</span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+        <div class="question">
+
+            <label>
+
+                Nível de energia
+
+            </label>
+
+            <select
+                id="energia"
+                name="energia">
+
+                <option value="">Selecione</option>
+
+                <option>Muito Alta</option>
+
+                <option>Alta</option>
+
+                <option>Normal</option>
+
+                <option>Baixa</option>
+
+                <option>Muito Baixa</option>
+
+            </select>
+
+        </div>
+
+        <div class="question">
+
+            <label>
+
+                Comentário
+
+            </label>
+
+            <textarea
+
+                id="observacao"
+
+                name="observacao"
+
+                rows="5"
+
+                placeholder="Opcional...">
+
+            </textarea>
+
+        </div>
+
+        <div class="actions">
+
+            <button
+
+                id="sendThermometer"
+
+                type="submit"
+
+                class="primary-btn">
+
+                Enviar Resposta
+
+            </button>
+
+            <span
+                id="thermometerMessage">
+
+            </span>
+
+        </div>
+
+    </form>
+
+</div>
+
+</div>
+
+<!-- LATERAL DIREITA -->
+
+<aside class="right-panel">
+
+    <div class="card">
+
+        <h3>
+
+            📢 Comunicados
+
+        </h3>
+
+        <ul class="news">
+
+            <li>
+
+                POP Atendimento atualizado
+
+            </li>
+
+            <li>
+
+                Reunião geral sexta-feira
+
+            </li>
+
+            <li>
+
+                Campanha vacinação
+
+            </li>
+
+            <li>
+
+                Novo treinamento disponível
+
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="card">
+
+        <h3>
+
+            🎂 Aniversariantes
+
+        </h3>
+
+        <p>
+
+            Nenhum aniversariante hoje.
+
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>
+
+            📅 Agenda RH
+
+        </h3>
+
+        <p>
+
+            Nenhum evento programado.
+
+        </p>
+
+    </div>
+
+</aside>
+
+</section>
+
+<footer class="footer">
+
+    <strong>
+
+        Portal RH CMIVET
+
+    </strong>
+
+    <span>
+
+        Enterprise 8.0
+
+    </span>
+
+</footer>
+
+</main>
+
+</div>
+
+<script src="js/config.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/session.js"></script>
+
+<script src="js/termometro.js"></script>
+
+</body>
+
+</html>
