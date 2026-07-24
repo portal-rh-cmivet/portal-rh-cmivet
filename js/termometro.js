@@ -219,14 +219,10 @@ async function verificarTermometroHoje() {
 
     try {
 
-        const resposta =
-            await API.post({
-
-                action: "verificarTermometroHoje",
-
-                token: TOKEN
-
-            });
+       const resposta =
+    await API.verificarTermometroHoje(
+        TOKEN
+    );
 
         if (!resposta.sucesso) {
 
@@ -348,20 +344,18 @@ async function enviarTermometro(event) {
 
     try {
 
-        const resposta =
-            await API.post({
+       const resposta =
+    await API.salvarTermometro({
 
-                action: "termometro",
+        token: TOKEN,
 
-                token: TOKEN,
+        humor: humor,
 
-                humor: humor,
+        energia: energia,
 
-                energia: energia,
+        observacao: observacao
 
-                observacao: observacao
-
-            });
+    });
 
         if (!resposta.sucesso) {
 
