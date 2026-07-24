@@ -1,111 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Login | Portal RH CMIVET</title>
-
-    <link rel="stylesheet" href="app.css">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login - Portal RH CMIVET</title>
+<link rel="stylesheet" href="enterprise.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+<body style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0E4D47">
 
-<body class="login-body">
+<div class="card" style="width:420px;padding:40px">
 
-    <main class="login-layout">
+<h1 style="text-align:center;margin-bottom:10px;color:#0E4D47">Portal RH CMIVET</h1>
+<p style="text-align:center;margin-bottom:30px">Acesse sua conta</p>
 
-        <section class="login-visual">
+<form id="loginForm">
 
-            <div>
+<div class="question">
+<label>E-mail</label>
+<input id="email" type="email" placeholder="seu@email.com">
+</div>
 
-                <span class="pill">
-                    Portal RH CMIVET
-                </span>
+<div class="question">
+<label>Senha</label>
+<input id="senha" type="password" placeholder="********">
+</div>
 
-                <h1>
-                    Cuidamos de vidas.<br>
-                    Valorizamos pessoas.
-                </h1>
+<div class="actions">
+<button id="loginButton" class="primary-btn" type="submit" style="width:100%">Entrar</button>
+</div>
 
-            </div>
+<p id="loginMessage" style="margin-top:20px;text-align:center"></p>
 
-        </section>
+</form>
 
-        <section class="login-panel">
+</div>
 
-            <form id="loginForm" class="login-card">
-
-                <img
-                    src="ativos/cmivet-logo-oficial.jpeg"
-                    alt="CMIVET">
-
-                <h2>Entrar no Portal RH</h2>
-
-                <label>
-
-                    E-mail
-
-                    <input
-                        type="email"
-                        name="email"
-                        required>
-
-                </label>
-
-                <label>
-
-                    Senha
-
-                    <input
-                        type="password"
-                        name="senha"
-                        required>
-
-                </label>
-
-                <button
-                    class="btn primary"
-                    type="submit">
-
-                    Entrar
-
-                </button>
-
-                <div
-                    id="loginMessage"
-                    class="message">
-                </div>
-
-                <a href="index.html">
-
-                    ← Voltar à página principal
-
-                </a>
-
-            </form>
-
-        </section>
-
-    </main>
-
-    <!-- Configuração -->
-    <script src="js/config.js"></script>
-
-    <!-- API -->
-    <script src="js/api.js"></script>
-
-    <!-- Sessão -->
-    <script src="js/session.js"></script>
-
-    <!-- Autenticação -->
-    <script src="js/auth.js"></script>
-
-    <!-- Login -->
-    <script src="js/login.js"></script>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/login.js"></script>
 
 </body>
-
 </html>
