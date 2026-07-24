@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Termômetro Emocional • Portal RH CMIVET
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="app.css">
+
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <img
+                src="ativos/cmivet-logo-oficial.jpeg"
+                alt="CMIVET">
+
+            <div>
+
+                <strong>RH CMIVET</strong>
+
+                <span>
+
+                    Portal Corporativo
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="portal.html">
+
+                🏠 Dashboard
+
+            </a>
+
+            <a
+                class="active"
+                href="termometro.html">
+
+                😊 Termômetro
+
+            </a>
+
+            <a href="comunicados.html">
+
+                📢 Comunicados
+
+            </a>
+
+            <a href="cafe-rh.html">
+
+                ☕ Café RH
+
+            </a>
+
+            <a href="biblioteca.html">
+
+                📚 Biblioteca
+
+            </a>
+
+            <a href="universidade.html">
+
+                🎓 Universidade
+
+            </a>
+
+            <a href="avaliacoes.html">
+
+                📋 Avaliações
+
+            </a>
+
+            <a href="perfil.html">
+
+                👤 Meu Perfil
+
+            </a>
+
+            <a
+                id="adminLink"
+                hidden
+                href="admin.html">
+
+                🔐 Administração
+
+            </a>
+
+        </nav>
+
+        <button
+            id="logout"
+            class="btn danger">
+
+            ↩ Sair
+
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="main">
+              <!-- TOPO -->
+
+        <header class="topbar">
+
+            <div>
+
+                <small>
+
+                    PORTAL RH CMIVET
+
+                </small>
+
+                <h1 id="welcome">
+
+                    Termômetro Emocional
+
+                </h1>
+
+            </div>
+
+            <div class="profile-chip">
+
+                <div
+                    id="avatar"
+                    class="avatar">
+
+                    --
+
+                </div>
+
+                <div>
+
+                    <strong id="userName">
+
+                        Carregando...
+
+                    </strong>
+
+                    <span id="userRole">
+
+                        ...
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div>
+
+                <span class="pill">
+
+                    Saúde Organizacional
+
+                </span>
+
+                <h2>
+
+                    Como você está hoje?
+
+                </h2>
+
+                <p>
+
+                    Sua resposta é utilizada pelo RH para acompanhar
+                    o clima organizacional e promover ações de
+                    melhoria no ambiente de trabalho.
+
+                </p>
+
+            </div>
+
+        </section>
+        <!-- ========================================= -->
+<!-- TERMÔMETRO EMOCIONAL -->
+<!-- ========================================= -->
+
+<section class="panel">
+
+    <div class="panel-head">
+
+        <h2>
+
+            😊 Termômetro Emocional
+
+        </h2>
+
+        <span
+            id="statusTermometro"
+            class="badge">
+
+            Verificando...
+
+        </span>
+
+    </div>
+
+    <form id="thermometerForm">
+
+        <div class="form-group">
+
+            <label>
+
+                Como você está hoje?
+
+            </label>
+
+            <div class="mood-grid">
+
+                <label class="mood-card">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="5"
+                        required>
+
+                    <span class="emoji">😁</span>
+
+                    <span>Muito Feliz</span>
+
+                </label>
+
+                <label class="mood-card">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="4">
+
+                    <span class="emoji">🙂</span>
+
+                    <span>Bem</span>
+
+                </label>
+
+                <label class="mood-card">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="3">
+
+                    <span class="emoji">😐</span>
+
+                    <span>Normal</span>
+
+                </label>
+
+                <label class="mood-card">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="2">
+
+                    <span class="emoji">😕</span>
+
+                    <span>Cansado</span>
+
+                </label>
+
+                <label class="mood-card">
+
+                    <input
+                        type="radio"
+                        name="humor"
+                        value="1">
+
+                    <span class="emoji">😢</span>
+
+                    <span>Muito Mal</span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                Como está seu nível de energia?
+
+            </label>
+
+            <select
+                id="energia"
+                required>
+
+                <option value="">
+
+                    Selecione
+
+                </option>
+
+                <option>
+
+                    Muito Alta
+
+                </option>
+
+                <option>
+
+                    Alta
+
+                </option>
+
+                <option>
+
+                    Normal
+
+                </option>
+
+                <option>
+
+                    Baixa
+
+                </option>
+
+                <option>
+
+                    Muito Baixa
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                Deseja deixar um comentário?
+
+            </label>
+
+            <textarea
+                id="observacao"
+                rows="4"
+                maxlength="500"
+                placeholder="Opcional..."></textarea>
+
+        </div>
+
+        <div class="actions">
+
+            <button
+                id="sendThermometer"
+                type="submit"
+                class="btn">
+
+                Enviar Resposta
+
+            </button>
+
+            <span
+                id="thermometerMessage">
+
+            </span>
+
+        </div>
+
+    </form>
+
+</section>
+/*************************************************
+ * TERMÔMETRO EMOCIONAL
+ *************************************************/
+
+async function verificarTermometroHoje() {
+
+    const status =
+        document.getElementById(
+            "statusTermometro"
+        );
+
+    if (!status) return;
+
+    try {
+
+        const resposta =
+            await API.post({
+
+                action: "verificarTermometroHoje",
+
+                token: TOKEN
+
+            });
+
+        if (
+            resposta.sucesso &&
+            resposta.respondido
+        ) {
+
+            status.textContent =
+                "✅ Respondido hoje";
+
+            status.classList.add(
+                "success"
+            );
+
+            const form =
+                document.getElementById(
+                    "thermometerForm"
+                );
+
+            if (form) {
+
+                form.style.display =
+                    "none";
+
+            }
+
+        }
+
+        else {
+
+            status.textContent =
+                "Pendente";
+
+        }
+
+    }
+
+    catch (erro) {
+
+        console.error(erro);
+
+        status.textContent =
+            "Indisponível";
+
+    }
+
+}
+      /*************************************************
+ * ENVIO DO TERMÔMETRO
+ *************************************************/
+
+function configurarFormularioTermometro() {
+
+    const form =
+        document.getElementById(
+            "thermometerForm"
+        );
+
+    if (!form) return;
+
+    form.addEventListener(
+
+        "submit",
+
+        enviarTermometro
+
+    );
+
+}
+      async function enviarTermometro(event) {
+
+    event.preventDefault();
+
+    const mensagem =
+        document.getElementById(
+            "thermometerMessage"
+        );
+
+    const botao =
+        document.getElementById(
+            "sendThermometer"
+        );
+
+    const humor =
+
+        formValor(
+            "input[name='humor']:checked"
+        );
+
+    const energia =
+        document.getElementById(
+            "energia"
+        ).value;
+
+    const observacao =
+        document.getElementById(
+            "observacao"
+        ).value;
+
+    mensagem.textContent = "";
+
+    botao.disabled = true;
+
+    botao.textContent =
+        "Enviando...";
+
+    try {
+
+        const resposta =
+            await API.post({
+
+                action: "termometro",
+
+                token: TOKEN,
+
+                humor,
+
+                energia,
+
+                observacao
+
+            });
+
+        if (!resposta.sucesso) {
+
+            throw new Error(
+
+                resposta.erro ||
+
+                "Erro ao enviar."
+
+            );
+
+        }
+
+        mensagem.textContent =
+            "Resposta registrada.";
+
+        mensagem.className =
+            "success";
+
+        verificarTermometroHoje();
+
+    }
+
+    catch (erro) {
+
+        console.error(erro);
+
+        mensagem.textContent =
+            erro.message;
+
+        mensagem.className =
+            "error";
+
+    }
+
+    finally {
+
+        botao.disabled = false;
+
+        botao.textContent =
+            "Enviar Resposta";
+
+    }
+
+}
+      function formValor(seletor) {
+
+    const campo =
+        document.querySelector(seletor);
+
+    return campo
+        ? campo.value
+        : "";
+
+}
+      
