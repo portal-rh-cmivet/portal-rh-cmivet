@@ -206,75 +206,55 @@ function configurarFormulario() {
 async function verificarTermometroHoje() {
 
     const status =
-        document.getElementById(
-            "statusTermometro"
-        );
+        document.getElementById("statusTermometro");
 
     const formulario =
-        document.getElementById(
-            "thermometerForm"
-        );
+        document.getElementById("thermometerForm");
 
     if (!status) return;
 
     try {
 
-       const resposta =
-    await API.verificarTermometroHoje(
-        TOKEN
-    );
+        const resposta =
+            await API.verificarTermometroHoje(TOKEN);
+
+        console.log("========== TERMÔMETRO ==========");
+        console.log("TOKEN:", TOKEN);
+        console.log("Resposta da API:", resposta);
 
         if (!resposta.sucesso) {
 
             throw new Error(
-
-                resposta.erro ||
-
-                "Erro ao verificar."
-
+                resposta.erro || "Erro ao verificar."
             );
 
         }
 
-        if (resposta.respondido) {
+        if (resposta.respondido === true) {
 
-            status.textContent =
-                "✅ Respondido hoje";
+            console.log("Usuário já respondeu hoje.");
 
-            status.classList.remove(
-                "warning"
-            );
+            status.textContent = "✅ Respondido hoje";
 
-            status.classList.add(
-                "success"
-            );
+            status.className = "badge success";
 
             if (formulario) {
 
-                formulario.style.display =
-                    "none";
+                formulario.style.display = "none";
 
             }
 
-        }
+        } else {
 
-        else {
+            console.log("Usuário ainda NÃO respondeu hoje.");
 
-            status.textContent =
-                "🟡 Pendente";
+            status.textContent = "🟡 Pendente";
 
-            status.classList.remove(
-                "success"
-            );
-
-            status.classList.add(
-                "warning"
-            );
+            status.className = "badge warning";
 
             if (formulario) {
 
-                formulario.style.display =
-                    "block";
+                formulario.style.display = "block";
 
             }
 
@@ -284,18 +264,11 @@ async function verificarTermometroHoje() {
 
     catch (erro) {
 
-        console.error(erro);
+        console.error("Erro ao verificar termômetro:", erro);
 
-        status.textContent =
-            "⚠ Erro ao consultar";
+        status.textContent = "⚠ Erro ao consultar";
 
-        status.classList.remove(
-            "success"
-        );
-
-        status.classList.add(
-            "error"
-        );
+        status.className = "badge error";
 
     }
 
