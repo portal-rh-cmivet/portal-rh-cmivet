@@ -397,203 +397,29 @@
     </form>
 
 </section>
-/*************************************************
- * TERMÔMETRO EMOCIONAL
- *************************************************/
 
-async function verificarTermometroHoje() {
+        <!-- RODAPÉ -->
 
-    const status =
-        document.getElementById(
-            "statusTermometro"
-        );
+        <footer class="footer">
 
-    if (!status) return;
+            <strong>Portal RH CMIVET</strong>
 
-    try {
+            <br>
 
-        const resposta =
-            await API.post({
+            Versão Enterprise • Desenvolvido em Google Apps Script
 
-                action: "verificarTermometroHoje",
+        </footer>
 
-                token: TOKEN
+    </main>
 
-            });
+</div>
 
-        if (
-            resposta.sucesso &&
-            resposta.respondido
-        ) {
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/session.js"></script>
+<script src="js/termometro.js"></script>
 
-            status.textContent =
-                "✅ Respondido hoje";
+</body>
 
-            status.classList.add(
-                "success"
-            );
-
-            const form =
-                document.getElementById(
-                    "thermometerForm"
-                );
-
-            if (form) {
-
-                form.style.display =
-                    "none";
-
-            }
-
-        }
-
-        else {
-
-            status.textContent =
-                "Pendente";
-
-        }
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-        status.textContent =
-            "Indisponível";
-
-    }
-
-}
-      /*************************************************
- * ENVIO DO TERMÔMETRO
- *************************************************/
-
-function configurarFormularioTermometro() {
-
-    const form =
-        document.getElementById(
-            "thermometerForm"
-        );
-
-    if (!form) return;
-
-    form.addEventListener(
-
-        "submit",
-
-        enviarTermometro
-
-    );
-
-}
-      async function enviarTermometro(event) {
-
-    event.preventDefault();
-
-    const mensagem =
-        document.getElementById(
-            "thermometerMessage"
-        );
-
-    const botao =
-        document.getElementById(
-            "sendThermometer"
-        );
-
-    const humor =
-
-        formValor(
-            "input[name='humor']:checked"
-        );
-
-    const energia =
-        document.getElementById(
-            "energia"
-        ).value;
-
-    const observacao =
-        document.getElementById(
-            "observacao"
-        ).value;
-
-    mensagem.textContent = "";
-
-    botao.disabled = true;
-
-    botao.textContent =
-        "Enviando...";
-
-    try {
-
-        const resposta =
-            await API.post({
-
-                action: "termometro",
-
-                token: TOKEN,
-
-                humor,
-
-                energia,
-
-                observacao
-
-            });
-
-        if (!resposta.sucesso) {
-
-            throw new Error(
-
-                resposta.erro ||
-
-                "Erro ao enviar."
-
-            );
-
-        }
-
-        mensagem.textContent =
-            "Resposta registrada.";
-
-        mensagem.className =
-            "success";
-
-        verificarTermometroHoje();
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-        mensagem.textContent =
-            erro.message;
-
-        mensagem.className =
-            "error";
-
-    }
-
-    finally {
-
-        botao.disabled = false;
-
-        botao.textContent =
-            "Enviar Resposta";
-
-    }
-
-}
-      function formValor(seletor) {
-
-    const campo =
-        document.querySelector(seletor);
-
-    return campo
-        ? campo.value
-        : "";
-
-}
-      
+</html>
