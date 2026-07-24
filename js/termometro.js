@@ -205,23 +205,17 @@ function configurarFormulario() {
 
 async function verificarTermometroHoje() {
 
-    const status =
-        document.getElementById("statusTermometro");
-
-    const formulario =
-        document.getElementById("thermometerForm");
+    const status = document.getElementById("statusTermometro");
+    const formulario = document.getElementById("thermometerForm");
 
     if (!status) return;
 
     try {
 
-       const resposta =
-    await API.verificarTermometroHoje(
-        TOKEN
-    );
+        const resposta = await API.verificarTermometroHoje(TOKEN);
 
-console.log("Resposta completa:", JSON.stringify(resposta));
-console.log("Resposta objeto:", resposta);
+        console.log("Resposta completa:", JSON.stringify(resposta));
+        console.log("Resposta objeto:", resposta);
 
         if (!resposta.sucesso) {
 
@@ -231,18 +225,16 @@ console.log("Resposta objeto:", resposta);
 
         }
 
-        if (resposta.respondido === true) {
+        // A API retorna: respondeu
+        if (resposta.respondeu === true) {
 
             console.log("Usuário já respondeu hoje.");
 
             status.textContent = "✅ Respondido hoje";
-
             status.className = "badge success";
 
             if (formulario) {
-
                 formulario.style.display = "none";
-
             }
 
         } else {
@@ -250,13 +242,10 @@ console.log("Resposta objeto:", resposta);
             console.log("Usuário ainda NÃO respondeu hoje.");
 
             status.textContent = "🟡 Pendente";
-
             status.className = "badge warning";
 
             if (formulario) {
-
                 formulario.style.display = "block";
-
             }
 
         }
@@ -268,12 +257,10 @@ console.log("Resposta objeto:", resposta);
         console.error("Erro ao verificar termômetro:", erro);
 
         status.textContent = "⚠ Erro ao consultar";
-
         status.className = "badge error";
 
     }
 
-}
   /*************************************************
  * ENVIO DO TERMÔMETRO
  *************************************************/
