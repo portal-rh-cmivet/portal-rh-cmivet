@@ -562,7 +562,21 @@ async function carregarResumoTermometro() {
         );
 
     }
-      /*************************************************
+
+    catch (erro) {
+
+        console.error(
+
+            "Erro ao carregar resumo:",
+
+            erro
+
+        );
+
+    }
+
+}
+/*************************************************
  * UTILITÁRIOS
  *************************************************/
 
