@@ -215,12 +215,13 @@ async function verificarTermometroHoje() {
 
     try {
 
-        const resposta =
-            await API.verificarTermometroHoje(TOKEN);
+       const resposta =
+    await API.verificarTermometroHoje(
+        TOKEN
+    );
 
-        console.log("========== TERMÔMETRO ==========");
-        console.log("TOKEN:", TOKEN);
-        console.log("Resposta da API:", resposta);
+console.log("Resposta completa:", JSON.stringify(resposta));
+console.log("Resposta objeto:", resposta);
 
         if (!resposta.sucesso) {
 
