@@ -50,7 +50,7 @@ async function iniciarPagina() {
 
         await verificarTermometroHoje();
 
-    }
+      }
 
     catch (erro) {
 
@@ -59,6 +59,8 @@ async function iniciarPagina() {
         Auth.logout();
 
     }
+
+}
   /*************************************************
  * DADOS DO USUÁRIO
  *************************************************/
@@ -512,5 +514,3 @@ window.addEventListener(
 /*************************************************
  * FIM DO ARQUIVO
  *************************************************/
-
-}
