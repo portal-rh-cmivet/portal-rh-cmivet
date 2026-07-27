@@ -1,408 +1,272 @@
 <!doctype html>
 <html lang="pt-BR">
-
 <head>
 
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1">
 
-    <title>Dashboard Corporativo | RH CMIVET</title>
+  <title>Dashboard Corporativo | RH CMIVET</title>
 
-    <meta
-        name="theme-color"
-        content="#0f6258">
+  <meta
+    name="theme-color"
+    content="#0f6258">
 
-    <meta
-        name="description"
-        content="Dashboard Corporativo do Portal RH CMIVET.">
+  <meta
+    name="description"
+    content="Dashboard Corporativo do Portal RH CMIVET.">
 
-    <meta
-        name="color-scheme"
-        content="light">
+  <meta
+    name="color-scheme"
+    content="light">
 
-    <link
-        rel="icon"
-        href="assets/app-icon.svg"
-        type="image/svg+xml">
+  <link
+    rel="icon"
+    href="assets/app-icon.svg"
+    type="image/svg+xml">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com">
+  <!-- Google Fonts -->
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
-        rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
-    <link
-        rel="stylesheet"
-        href="enterprise.css">
+  <!-- Material Symbols -->
 
-    <link
-        rel="stylesheet"
-        href="dashboard.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+    rel="stylesheet">
+
+  <!-- Enterprise -->
+
+  <link
+    rel="stylesheet"
+    href="enterprise.css">
+
+  <!-- Dashboard -->
+
+  <link
+    rel="stylesheet"
+    href="dashboard.css">
 
 </head>
 
 <body>
+    <aside class="sidebar" id="sidebar">
 
-<div class="app-shell">
-  <aside class="sidebar" id="sidebar">
-
-    <div class="brand">
-
-        <img
-            src="assets/cmivet-logo-oficial.jpeg"
-            alt="CMIVET">
-
-        <div class="brand-info">
-
-            <strong>
-
-                RH CMIVET
-
-            </strong>
-
-            <span>
-
-                Dashboard Corporativo
-
-            </span>
-
-        </div>
-
-    </div>
-
-    <nav class="menu">
-
-        <a
-            class="menu-item active"
-            href="dashboard.html">
-
-            <span class="material-symbols-rounded">
-
-                dashboard
-
-            </span>
-
-            <span>
-
-                Dashboard
-
-            </span>
-
-        </a>
-
-        <a
-            class="menu-item"
-            href="index.html">
-
-            <span class="material-symbols-rounded">
-
-                home
-
-            </span>
-
-            <span>
-
-                Portal do Colaborador
-
-            </span>
-
-        </a>
-
-        <a
-            class="menu-item"
-            href="biblioteca.html">
-
-            <span class="material-symbols-rounded">
-
-                menu_book
-
-            </span>
-
-            <span>
-
-                Biblioteca RH
-
-            </span>
-
-        </a>
-
-        <a
-            class="menu-item"
-            href="universidade.html">
-
-            <span class="material-symbols-rounded">
-
-                school
-
-            </span>
-
-            <span>
-
-                Universidade CMIVET
-
-            </span>
-
-        </a>
-
-        <a
-            class="menu-item"
-            href="avaliacoes.html">
-
-            <span class="material-symbols-rounded">
-
-                assignment
-
-            </span>
-
-            <span>
-
-                Avaliações
-
-            </span>
-
-        </a>
-
-        <a
-            class="menu-item"
-            href="perfil.html">
-
-            <span class="material-symbols-rounded">
-
-                person
-
-            </span>
-
-            <span>
-
-                Meu Perfil
-
-            </span>
-
-        </a>
-
-        <a
-            class="menu-item"
-            href="admin.html">
-
-            <span class="material-symbols-rounded">
-
-                admin_panel_settings
-
-            </span>
-
-            <span>
-
-                Administração
-
-            </span>
-
-        </a>
-
-    </nav>
-
-    <div class="sidebar-footer">
-
-        <span>
-
-            Portal RH CMIVET
-
-        </span>
-
-        <small>
-
-            Enterprise 2026
-
-        </small>
-
-    </div>
-
-</aside>
-
-<main class="main">
-
-<header class="topbar">
-
-    <button
-        class="mobile-menu"
-        id="mobileMenu"
-        aria-label="Abrir menu">
-
-        <span class="material-symbols-rounded">
-
-            menu
-
-        </span>
-
-    </button>
-
-    <div class="topbar-title">
-
-        <p class="eyebrow">
-
-            Portal RH CMIVET
-
-        </p>
-
-        <h1 id="greetingTitle">
-
-            Olá!
-
-        </h1>
-
-        <p
-            class="date-text"
-            id="currentDate">
-
-        </p>
-
-    </div>
-
-    <div class="profile-chip">
-
-        <div class="avatar">
-
-            MC
-
-        </div>
-
-        <div>
-
-            <strong>
-
-                Mariah
-
-            </strong>
-
-            <span>
-
-                Recursos Humanos
-
-            </span>
-
-        </div>
-
-    </div>
-
-</header>
-<aside class="sidebar" id="sidebar">
   <div class="brand">
-    <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET">
+
+    <img
+      src="assets/cmivet-logo-oficial.jpeg"
+      alt="CMIVET">
+
     <div>
+
       <strong>RH CMIVET</strong>
+
       <span>Dashboard Corporativo</span>
+
     </div>
+
   </div>
 
   <nav class="menu">
+
     <a class="menu-item active" href="dashboard.html">
+
       <span class="material-symbols-rounded">dashboard</span>
+
       <span>Dashboard</span>
+
     </a>
 
     <a class="menu-item" href="index.html">
+
       <span class="material-symbols-rounded">home</span>
+
       <span>Portal do Colaborador</span>
+
     </a>
 
     <a class="menu-item" href="biblioteca.html">
+
       <span class="material-symbols-rounded">menu_book</span>
+
       <span>Biblioteca RH</span>
+
     </a>
 
     <a class="menu-item" href="universidade.html">
+
       <span class="material-symbols-rounded">school</span>
+
       <span>Universidade CMIVET</span>
+
     </a>
 
     <a class="menu-item" href="avaliacoes.html">
+
       <span class="material-symbols-rounded">assignment</span>
+
       <span>Avaliações</span>
+
     </a>
 
     <a class="menu-item" href="perfil.html">
+
       <span class="material-symbols-rounded">person</span>
+
       <span>Meu Perfil</span>
+
     </a>
 
     <a class="menu-item" href="admin.html">
+
       <span class="material-symbols-rounded">admin_panel_settings</span>
+
       <span>Administração</span>
+
     </a>
+
   </nav>
 
   <div class="sidebar-footer">
+
     <span>Portal RH CMIVET</span>
+
     <small>Enterprise 2026</small>
+
   </div>
+
 </aside>
 
 <main class="main">
 
   <header class="topbar">
 
-    <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">
+    <button
+      class="mobile-menu"
+      id="mobileMenu"
+      aria-label="Abrir menu">
+
       <span class="material-symbols-rounded">menu</span>
+
     </button>
 
     <div>
-      <p class="eyebrow">Portal RH CMIVET</p>
 
-      <h1 id="greetingTitle">Olá!</h1>
+      <p class="eyebrow">
 
-      <p class="date-text" id="currentDate"></p>
+        Portal RH CMIVET
+
+      </p>
+
+      <h1 id="greetingTitle">
+
+        Olá!
+
+      </h1>
+
+      <p
+        class="date-text"
+        id="currentDate">
+
+      </p>
+
     </div>
 
     <div class="profile-chip">
-      <div class="avatar">MC</div>
-      <div>
-        <strong>Mariah</strong>
-        <span>Recursos Humanos</span>
+
+      <div class="avatar">
+
+        MC
+
       </div>
+
+      <div>
+
+        <strong>
+
+          Mariah
+
+        </strong>
+
+        <span>
+
+          Recursos Humanos
+
+        </span>
+
+      </div>
+
     </div>
 
   </header>
-  <section class="hero">
+    <section class="hero">
 
   <div>
 
-    <span class="tag">Dashboard Corporativo</span>
+    <span class="tag">
 
-    <h2>Bem-vinda ao centro de gestão do Portal RH</h2>
+      Dashboard Corporativo
+
+    </span>
+
+    <h2>
+
+      Bem-vinda ao centro de gestão do Portal RH
+
+    </h2>
 
     <p>
+
       Acompanhe comunicados, cursos, avaliações, documentos,
       agenda e benefícios em uma única tela.
+
     </p>
 
     <div class="hero-actions">
 
       <a class="btn primary" href="index.html">
 
-        <span class="material-symbols-rounded">home</span>
+        <span class="material-symbols-rounded">
 
-        <span>Acessar Portal</span>
+          home
+
+        </span>
+
+        <span>
+
+          Acessar Portal
+
+        </span>
 
       </a>
 
       <a class="btn secondary" href="admin.html">
 
-        <span class="material-symbols-rounded">admin_panel_settings</span>
+        <span class="material-symbols-rounded">
 
-        <span>Abrir Administração</span>
+          admin_panel_settings
+
+        </span>
+
+        <span>
+
+          Abrir Administração
+
+        </span>
 
       </a>
 
@@ -411,153 +275,247 @@
   </div>
 
   <img
-      src="assets/cmivet-animais-hero.png"
-      alt="Dashboard RH CMIVET">
+    src="assets/cmivet-animais-hero.png"
+    alt="Dashboard RH CMIVET">
 
 </section>
-
 
 <section class="metrics">
 
   <article class="metric">
 
     <span class="material-symbols-rounded">
+
       campaign
+
     </span>
 
-    <strong id="metricAnnouncements">0</strong>
+    <strong id="metricAnnouncements">
 
-    <small>Comunicados ativos</small>
+      0
+
+    </strong>
+
+    <small>
+
+      Comunicados ativos
+
+    </small>
 
   </article>
 
   <article class="metric">
 
     <span class="material-symbols-rounded">
+
       folder
+
     </span>
 
-    <strong id="metricDocuments">0</strong>
+    <strong id="metricDocuments">
 
-    <small>Documentos na biblioteca</small>
+      0
+
+    </strong>
+
+    <small>
+
+      Documentos na biblioteca
+
+    </small>
 
   </article>
 
   <article class="metric">
 
     <span class="material-symbols-rounded">
+
       school
+
     </span>
 
-    <strong id="metricCourses">0</strong>
+    <strong id="metricCourses">
 
-    <small>Cursos disponíveis</small>
+      0
+
+    </strong>
+
+    <small>
+
+      Cursos disponíveis
+
+    </small>
 
   </article>
 
   <article class="metric">
 
     <span class="material-symbols-rounded">
+
       assignment
+
     </span>
 
-    <strong id="metricEvaluations">0</strong>
+    <strong id="metricEvaluations">
 
-    <small>Avaliações pendentes</small>
+      0
+
+    </strong>
+
+    <small>
+
+      Avaliações pendentes
+
+    </small>
 
   </article>
 
   <article class="metric">
 
     <span class="material-symbols-rounded">
+
       cake
+
     </span>
 
-    <strong id="metricBirthdays">0</strong>
+    <strong id="metricBirthdays">
 
-    <small>Aniversariantes do mês</small>
+      0
+
+    </strong>
+
+    <small>
+
+      Aniversariantes do mês
+
+    </small>
 
   </article>
 
   <article class="metric">
 
     <span class="material-symbols-rounded">
+
       redeem
+
     </span>
 
-    <strong id="metricBenefits">0</strong>
+    <strong id="metricBenefits">
 
-    <small>Benefícios disponíveis</small>
+      0
+
+    </strong>
+
+    <small>
+
+      Benefícios disponíveis
+
+    </small>
 
   </article>
 
 </section>
-
 
 <section class="quick-actions">
 
   <a href="index.html#comunicados">
 
     <span class="material-symbols-rounded">
+
       campaign
+
     </span>
 
-    <span>Comunicados</span>
+    <span>
+
+      Comunicados
+
+    </span>
 
   </a>
 
   <a href="biblioteca.html">
 
     <span class="material-symbols-rounded">
+
       menu_book
+
     </span>
 
-    <span>Biblioteca</span>
+    <span>
+
+      Biblioteca
+
+    </span>
 
   </a>
 
   <a href="universidade.html">
 
     <span class="material-symbols-rounded">
+
       school
+
     </span>
 
-    <span>Universidade</span>
+    <span>
+
+      Universidade
+
+    </span>
 
   </a>
 
   <a href="avaliacoes.html">
 
     <span class="material-symbols-rounded">
+
       assignment
+
     </span>
 
-    <span>Avaliações</span>
+    <span>
+
+      Avaliações
+
+    </span>
 
   </a>
 
   <a href="perfil.html">
 
     <span class="material-symbols-rounded">
+
       person
+
     </span>
 
-    <span>Meu Perfil</span>
+    <span>
+
+      Meu Perfil
+
+    </span>
 
   </a>
 
   <a href="index.html#cafe">
 
     <span class="material-symbols-rounded">
+
       local_cafe
+
     </span>
 
-    <span>Café com RH</span>
+    <span>
+
+      Café com RH
+
+    </span>
 
   </a>
 
 </section>
-<section class="dashboard-grid two">
+    <section class="dashboard-grid two">
 
   <div class="panel">
 
@@ -565,19 +523,33 @@
 
       <div>
 
-        <h3>Comunicados recentes</h3>
+        <h3>
 
-        <p>Últimas publicações do RH.</p>
+          Comunicados recentes
+
+        </h3>
+
+        <p>
+
+          Últimas publicações do RH.
+
+        </p>
 
       </div>
 
       <a class="btn ghost" href="index.html#comunicados">
 
         <span class="material-symbols-rounded">
+
           arrow_forward
+
         </span>
 
-        <span>Ver todos</span>
+        <span>
+
+          Ver todos
+
+        </span>
 
       </a>
 
@@ -597,9 +569,17 @@
 
       <div>
 
-        <h3>Notificações</h3>
+        <h3>
 
-        <p>Itens que precisam de atenção.</p>
+          Notificações
+
+        </h3>
+
+        <p>
+
+          Itens que precisam de atenção.
+
+        </p>
 
       </div>
 
@@ -624,9 +604,17 @@
 
       <div>
 
-        <h3>Aniversariantes</h3>
+        <h3>
 
-        <p>Comemorações do mês.</p>
+          Aniversariantes
+
+        </h3>
+
+        <p>
+
+          Comemorações do mês.
+
+        </p>
 
       </div>
 
@@ -647,9 +635,17 @@
 
       <div>
 
-        <h3>Agenda Corporativa</h3>
+        <h3>
 
-        <p>Próximos eventos e treinamentos.</p>
+          Agenda Corporativa
+
+        </h3>
+
+        <p>
+
+          Próximos eventos e treinamentos.
+
+        </p>
 
       </div>
 
@@ -670,9 +666,17 @@
 
       <div>
 
-        <h3>Benefícios</h3>
+        <h3>
 
-        <p>Acessos rápidos.</p>
+          Benefícios
+
+        </h3>
+
+        <p>
+
+          Acessos rápidos.
+
+        </p>
 
       </div>
 
@@ -687,7 +691,7 @@
   </div>
 
 </section>
-<section class="dashboard-grid two">
+  <section class="dashboard-grid two">
 
   <div class="panel">
 
@@ -695,19 +699,33 @@
 
       <div>
 
-        <h3>Universidade CMIVET</h3>
+        <h3>
 
-        <p>Resumo de desenvolvimento.</p>
+          Universidade CMIVET
+
+        </h3>
+
+        <p>
+
+          Resumo de desenvolvimento.
+
+        </p>
 
       </div>
 
       <a class="btn ghost" href="universidade.html">
 
         <span class="material-symbols-rounded">
+
           open_in_new
+
         </span>
 
-        <span>Abrir</span>
+        <span>
+
+          Abrir
+
+        </span>
 
       </a>
 
@@ -793,26 +811,39 @@
 
   </div>
 
-
   <div class="panel">
 
     <div class="panel-head">
 
       <div>
 
-        <h3>Últimos documentos</h3>
+        <h3>
 
-        <p>Novidades da Biblioteca RH.</p>
+          Últimos documentos
+
+        </h3>
+
+        <p>
+
+          Novidades da Biblioteca RH.
+
+        </p>
 
       </div>
 
       <a class="btn ghost" href="biblioteca.html">
 
         <span class="material-symbols-rounded">
+
           open_in_new
+
         </span>
 
-        <span>Abrir</span>
+        <span>
+
+          Abrir
+
+        </span>
 
       </a>
 
@@ -828,11 +859,11 @@
 
 </section>
 
-    </main>
+</main>
 
-  </div>
+</div>
 
-  <script src="dashboard.js"></script>
+<script src="dashboard.js"></script>
 
 </body>
 
