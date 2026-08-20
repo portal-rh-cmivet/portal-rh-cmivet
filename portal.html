@@ -14,39 +14,78 @@
 <style>
 
 /* =========================================================
-   AJUSTES VISUAIS DO PORTAL RH CMIVET
+   AJUSTES VISUAIS — PORTAL RH CMIVET
+   NÃO ALTERA AS FUNCIONALIDADES DO SISTEMA
 ========================================================= */
 
 
 /* =========================================================
-   SIDEBAR / LOGO
+   SIDEBAR
 ========================================================= */
 
 .sidebar .brand {
+
     display: flex !important;
+
     align-items: center !important;
+
     gap: 10px !important;
+
     background: transparent !important;
+
 }
+
+
+/* =========================================================
+   LOGO OFICIAL — PNG TRANSPARENTE
+========================================================= */
 
 .sidebar .brand img {
-    width: 72px !important;
-    height: 48px !important;
+
+    width: 82px !important;
+
+    height: auto !important;
+
+    max-height: 50px !important;
+
     object-fit: contain !important;
+
+    display: block !important;
+
     background: transparent !important;
+
+    background-color: transparent !important;
+
     border: none !important;
+
     border-radius: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
+
     box-shadow: none !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
 }
+
+
+/* =========================================================
+   TEXTO DA SIDEBAR
+========================================================= */
 
 .sidebar .brand strong {
+
     color: #ffffff !important;
+
+    font-weight: 700 !important;
+
 }
 
+
 .sidebar .brand span {
+
     color: #c9ab5d !important;
+
 }
 
 
@@ -62,11 +101,13 @@
 
     padding: 0 !important;
 
-    overflow: hidden !important;
+    margin: 0 !important;
 
     height: 280px !important;
 
     min-height: 280px !important;
+
+    overflow: hidden !important;
 
     background: #ffffff !important;
 
@@ -76,7 +117,7 @@
 
 
 /* =========================================================
-   PARTE ESQUERDA DO BANNER
+   ÁREA DE TEXTO DO BANNER
 ========================================================= */
 
 .hero > div:first-child {
@@ -95,7 +136,7 @@
 
 
 /* =========================================================
-   PARTE DA FOTO
+   FOTO DO BANNER
 ========================================================= */
 
 .hero > img {
@@ -127,7 +168,9 @@
 }
 
 
-/* remove elementos extras que possam criar o dourado */
+/* =========================================================
+   REMOVE QUALQUER FUNDO EXTRA DO BANNER
+========================================================= */
 
 .hero::before,
 .hero::after {
@@ -140,7 +183,7 @@
 
 
 /* =========================================================
-   AJUSTE DO TÍTULO
+   TÍTULO DO BANNER
 ========================================================= */
 
 .hero h2 {
@@ -153,7 +196,7 @@
 
 
 /* =========================================================
-   RESPONSIVO
+   RESPONSIVIDADE
 ========================================================= */
 
 @media (max-width: 1000px) {
@@ -167,6 +210,7 @@
         min-height: 270px !important;
 
     }
+
 
     .hero > img {
 
@@ -189,11 +233,13 @@
 
     }
 
+
     .hero > div:first-child {
 
         padding: 28px 24px !important;
 
     }
+
 
     .hero > img {
 
@@ -210,11 +256,12 @@
 
     .sidebar .brand img {
 
-        width: 60px !important;
+        width: 70px !important;
 
-        height: 42px !important;
+        max-height: 45px !important;
 
     }
+
 
     .hero > img {
 
@@ -248,20 +295,23 @@
 
 
         <img
-            src="assets/cmivet-logo-oficial.png"
+            src="assets/cmivet-logo-oficial.png?v=2"
             alt="CMIVET"
         >
 
 
         <div>
 
+
             <strong>
                 RH CMIVET
             </strong>
 
+
             <span id="sideRole">
                 Portal Corporativo
             </span>
+
 
         </div>
 
@@ -269,78 +319,78 @@
     </div>
 
 
-    <!-- =================================================
-         MENU
-    ================================================== -->
+<!-- =====================================================
+     MENU
+===================================================== -->
 
-    <nav>
-
-
-        <a
-            class="active"
-            href="portal.html"
-        >
-            🏠 Dashboard
-        </a>
+<nav>
 
 
-        <a href="termometro.html">
-            😊 Termômetro
-        </a>
-
-
-        <a href="comunicados.html">
-            📢 Comunicados
-        </a>
-
-
-        <a href="cafe-rh.html">
-            ☕ Café RH
-        </a>
-
-
-        <a href="biblioteca.html">
-            📚 Biblioteca RH
-        </a>
-
-
-        <a href="universidade.html">
-            🎓 Universidade
-        </a>
-
-
-        <a href="avaliacoes.html">
-            📋 Avaliações
-        </a>
-
-
-        <a href="perfil.html">
-            👤 Meu Perfil
-        </a>
-
-
-        <a
-            id="adminLink"
-            hidden
-            href="admin.html"
-        >
-            🔐 Administração
-        </a>
-
-
-    </nav>
-
-
-    <!-- =================================================
-         LOGOUT
-    ================================================== -->
-
-    <button
-        id="logout"
-        class="btn danger"
+    <a
+        class="active"
+        href="portal.html"
     >
-        ↩ Sair
-    </button>
+        🏠 Dashboard
+    </a>
+
+
+    <a href="termometro.html">
+        😊 Termômetro
+    </a>
+
+
+    <a href="comunicados.html">
+        📢 Comunicados
+    </a>
+
+
+    <a href="cafe-rh.html">
+        ☕ Café RH
+    </a>
+
+
+    <a href="biblioteca.html">
+        📚 Biblioteca RH
+    </a>
+
+
+    <a href="universidade.html">
+        🎓 Universidade
+    </a>
+
+
+    <a href="avaliacoes.html">
+        📋 Avaliações
+    </a>
+
+
+    <a href="perfil.html">
+        👤 Meu Perfil
+    </a>
+
+
+    <a
+        id="adminLink"
+        hidden
+        href="admin.html"
+    >
+        🔐 Administração
+    </a>
+
+
+</nav>
+
+
+<!-- =====================================================
+     SAIR
+===================================================== -->
+
+<button
+    id="logout"
+    class="btn danger"
+>
+    ↩ Sair
+</button>
 
 
 </aside>
@@ -362,6 +412,7 @@
 
     <div>
 
+
         <small>
             PORTAL RH CMIVET
         </small>
@@ -370,6 +421,7 @@
         <h1 id="welcome">
             Carregando...
         </h1>
+
 
     </div>
 
@@ -387,6 +439,7 @@
 
         <div>
 
+
             <strong id="userName">
                 Carregando...
             </strong>
@@ -395,6 +448,7 @@
             <span id="userRole">
                 ...
             </span>
+
 
         </div>
 
@@ -406,13 +460,11 @@
 
 
 <!-- =====================================================
-     BANNER PRINCIPAL
+     BANNER
 ===================================================== -->
 
 <section class="hero">
 
-
-    <!-- TEXTO -->
 
     <div>
 
@@ -437,10 +489,8 @@
     </div>
 
 
-    <!-- IMAGEM -->
-
     <img
-        src="assets/hero-foto-cmivet.jpg"
+        src="assets/hero-foto-cmivet.jpg?v=2"
         alt="CMIVET"
     >
 
@@ -449,7 +499,7 @@
 
 
 <!-- =====================================================
-     CARDS DO DASHBOARD
+     DASHBOARD
 ===================================================== -->
 
 <section class="dashboard-grid">
@@ -619,7 +669,7 @@
 
 
 <!-- =====================================================
-     COMUNICADOS RECENTES
+     COMUNICADOS
 ===================================================== -->
 
 <section class="panel">
@@ -711,7 +761,7 @@
 
 
 <!-- =====================================================
-     SCRIPTS — NÃO ALTERAR
+     SCRIPTS
 ===================================================== -->
 
 <script src="js/config.js"></script>
