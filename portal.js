@@ -1,8 +1,10 @@
 /*************************************************
  * PORTAL RH CMIVET
  * portal.js
- * Versão 7.0
+ * Versão 8.0
+ * Termômetro integrado ao Portal
  *************************************************/
+
 
 /*************************************************
  * CONFIGURAÇÃO
@@ -11,6 +13,7 @@
 const TOKEN = Auth.getToken();
 
 const USER = Auth.getUser() || {};
+
 
 /*************************************************
  * SEM LOGIN
@@ -22,6 +25,7 @@ if (!TOKEN) {
 
 }
 
+
 /*************************************************
  * INICIALIZAÇÃO
  *************************************************/
@@ -30,6 +34,7 @@ document.addEventListener(
     "DOMContentLoaded",
     iniciarPortal
 );
+
 
 async function iniciarPortal() {
 
@@ -42,6 +47,8 @@ async function iniciarPortal() {
         configurarMenu();
 
         configurarLogout();
+
+        configurarModalTermometro();
 
         await carregarDashboard();
 
@@ -56,6 +63,7 @@ async function iniciarPortal() {
     }
 
 }
+
 
 /*************************************************
  * DASHBOARD
@@ -73,6 +81,7 @@ async function carregarDashboard() {
 
 }
 
+
 /*************************************************
  * DADOS DO USUÁRIO
  *************************************************/
@@ -81,9 +90,11 @@ function carregarUsuario() {
 
     if (!USER) return;
 
+
     const primeiroNome =
         (USER.nome || "")
             .split(" ")[0];
+
 
     const iniciais =
         (USER.nome || "")
@@ -94,17 +105,22 @@ function carregarUsuario() {
             .join("")
             .toUpperCase();
 
+
     const welcome =
         document.getElementById("welcome");
+
 
     const userName =
         document.getElementById("userName");
 
+
     const userRole =
         document.getElementById("userRole");
 
+
     const avatar =
         document.getElementById("avatar");
+
 
     if (welcome) {
 
@@ -113,12 +129,14 @@ function carregarUsuario() {
 
     }
 
+
     if (userName) {
 
         userName.textContent =
             USER.nome || "";
 
     }
+
 
     if (userRole) {
 
@@ -129,6 +147,7 @@ function carregarUsuario() {
 
     }
 
+
     if (avatar) {
 
         avatar.textContent =
@@ -137,6 +156,7 @@ function carregarUsuario() {
     }
 
 }
+
 
 /*************************************************
  * MENU
@@ -147,13 +167,16 @@ function configurarMenu() {
     const adminLink =
         document.getElementById("adminLink");
 
+
     if (!adminLink) return;
+
 
     adminLink.hidden =
         String(USER.perfil)
             .toLowerCase() !== "admin";
 
 }
+
 
 /*************************************************
  * LOGOUT
@@ -164,7 +187,9 @@ function configurarLogout() {
     const btn =
         document.getElementById("logout");
 
+
     if (!btn) return;
+
 
     btn.addEventListener(
         "click",
@@ -172,6 +197,8 @@ function configurarLogout() {
     );
 
 }
+
+
 /*************************************************
  * COMUNICAÇÃO COM API
  *************************************************/
@@ -190,25 +217,28 @@ async function post(dados) {
 
                 headers: {
 
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
 
                 },
 
-                body: JSON.stringify(dados)
+                body:
+                    JSON.stringify(dados)
 
             }
 
         );
 
+
         if (!resposta.ok) {
 
             throw new Error(
-
-                "Erro HTTP " + resposta.status
-
+                "Erro HTTP " +
+                resposta.status
             );
 
         }
+
 
         return await resposta.json();
 
@@ -217,11 +247,8 @@ async function post(dados) {
     catch (erro) {
 
         console.error(
-
             "Erro na API:",
-
             erro
-
         );
 
         throw erro;
@@ -229,6 +256,7 @@ async function post(dados) {
     }
 
 }
+
 
 /*************************************************
  * COMUNICADOS
@@ -238,21 +266,21 @@ async function carregarComunicados() {
 
     try {
 
-        const resposta = await fetch(
+        const resposta =
+            await fetch(
+                `${CONFIG.API_URL}?action=comunicados&t=${Date.now()}`
+            );
 
-            `${CONFIG.API_URL}?action=comunicados&t=${Date.now()}`
 
-        );
+        const dados =
+            await resposta.json();
 
-        const dados = await resposta.json();
 
         const lista =
-
             Array.isArray(dados)
-
                 ? dados
-
                 : [];
+
 
         renderizarComunicados(lista);
 
@@ -268,6 +296,7 @@ async function carregarComunicados() {
 
 }
 
+
 /*************************************************
  * RENDERIZA COMUNICADOS
  *************************************************/
@@ -275,20 +304,17 @@ async function carregarComunicados() {
 function renderizarComunicados(lista) {
 
     const container =
-
         document.getElementById(
-
             "announcements"
-
         );
+
 
     if (!container) return;
 
+
     if (!lista.length) {
 
-        container.innerHTML =
-
-            `
+        container.innerHTML = `
 
             <div class="empty">
 
@@ -296,7 +322,8 @@ function renderizarComunicados(lista) {
 
             </div>
 
-            `;
+        `;
+
 
         atualizarStatusComunicados(0);
 
@@ -304,41 +331,38 @@ function renderizarComunicados(lista) {
 
     }
 
+
     container.innerHTML =
-
         lista
+            .slice(0, 6)
+            .map(item => `
 
-        .slice(0, 6)
+                <article class="card">
 
-        .map(item => `
+                    <h3>
+                        ${escapeHtml(
+                            item.titulo || ""
+                        )}
+                    </h3>
 
-            <article class="card">
+                    <p>
+                        ${escapeHtml(
+                            item.descricao || ""
+                        )}
+                    </p>
 
-                <h3>
+                </article>
 
-                    ${escapeHtml(item.titulo || "")}
+            `)
+            .join("");
 
-                </h3>
-
-                <p>
-
-                    ${escapeHtml(item.descricao || "")}
-
-                </p>
-
-            </article>
-
-        `)
-
-        .join("");
 
     atualizarStatusComunicados(
-
         lista.length
-
     );
 
 }
+
 
 /*************************************************
  * STATUS DOS COMUNICADOS
@@ -347,85 +371,385 @@ function renderizarComunicados(lista) {
 function atualizarStatusComunicados(total) {
 
     const status =
-
         document.getElementById(
-
             "statusComunicados"
-
         );
 
+
     if (!status) return;
+
 
     if (total === 0) {
 
         status.textContent =
-
             "Nenhum comunicado";
 
         return;
 
     }
 
+
     if (total === 1) {
 
         status.textContent =
-
             "1 comunicado";
 
         return;
 
     }
 
-    status.textContent =
 
+    status.textContent =
         `${total} comunicados`;
 
 }
+
+
 /*************************************************
- * TERMÔMETRO EMOCIONAL
+ * TERMÔMETRO
  *************************************************/
 
 async function verificarTermometroHoje() {
 
     const status =
-
         document.getElementById(
-
             "statusTermometro"
-
         );
 
+
     if (!status) return;
+
 
     try {
 
         const resposta =
-
             await API.verificarTermometroHoje(
-
                 TOKEN
-
             );
 
-        if (
 
-            resposta.sucesso &&
+        console.log(
+            "Verificação do Termômetro:",
+            resposta
+        );
 
-            resposta.respondeu
 
-        ) {
+        if (!resposta.sucesso) {
 
             status.textContent =
+                "Indisponível";
 
-                "Respondido hoje";
+            return;
+
+        }
+
+
+        if (resposta.respondeu === true) {
+
+            status.textContent =
+                "✅ Respondido hoje";
+
+            status.className =
+                "badge success";
+
+            fecharModalTermometro();
 
         }
 
         else {
 
             status.textContent =
+                "🟡 Pendente";
 
-                "Pendente";
+            status.className =
+                "badge warning";
+
+
+            /*
+             * O funcionário ainda não respondeu.
+             * Abre automaticamente o Termômetro.
+             */
+
+            abrirModalTermometro();
+
+        }
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao verificar Termômetro:",
+            erro
+        );
+
+
+        status.textContent =
+            "⚠ Indisponível";
+
+    }
+
+}
+
+
+/*************************************************
+ * MODAL DO TERMÔMETRO
+ *************************************************/
+
+function configurarModalTermometro() {
+
+    const modal =
+        document.getElementById(
+            "termometroModal"
+        );
+
+
+    const fechar =
+        document.getElementById(
+            "fecharTermometro"
+        );
+
+
+    const frame =
+        document.getElementById(
+            "termometroFrame"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "termometroLoading"
+        );
+
+
+    if (!modal) return;
+
+
+    /*
+     * Botão X
+     */
+
+    if (fechar) {
+
+        fechar.addEventListener(
+            "click",
+            function () {
+
+                fecharModalTermometro();
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Quando o Termômetro carregar
+     */
+
+    if (frame) {
+
+        frame.addEventListener(
+            "load",
+            function () {
+
+                if (loading) {
+
+                    loading.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Mensagem enviada pelo termometro.js
+     */
+
+    window.addEventListener(
+        "message",
+        function (event) {
+
+            if (
+                !frame ||
+                event.source !== frame.contentWindow
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                event.data &&
+                event.data.tipo ===
+                    "TERMOMETRO_RESPONDIDO"
+            ) {
+
+                console.log(
+                    "Termômetro respondido."
+                );
+
+
+                atualizarStatusDepoisDaResposta();
+
+            }
+
+        }
+    );
+
+
+    /*
+     * ESC
+     */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                modal.style.display === "flex"
+            ) {
+
+                /*
+                 * Permite fechar somente se
+                 * a resposta já tiver sido
+                 * registrada.
+                 */
+
+                verificarPodeFechar();
+
+            }
+
+        }
+    );
+
+}
+
+
+/*************************************************
+ * ABRIR MODAL
+ *************************************************/
+
+function abrirModalTermometro() {
+
+    const modal =
+        document.getElementById(
+            "termometroModal"
+        );
+
+
+    const frame =
+        document.getElementById(
+            "termometroFrame"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "termometroLoading"
+        );
+
+
+    if (!modal || !frame) return;
+
+
+    /*
+     * Evita recarregar o iframe
+     * se ele já estiver aberto.
+     */
+
+    if (
+        !frame.src ||
+        !frame.src.includes("termometro.html")
+    ) {
+
+        frame.src =
+            "termometro.html?modal=1";
+
+    }
+
+
+    if (loading) {
+
+        loading.style.display =
+            "flex";
+
+    }
+
+
+    modal.style.display =
+        "flex";
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/*************************************************
+ * FECHAR MODAL
+ *************************************************/
+
+function fecharModalTermometro() {
+
+    const modal =
+        document.getElementById(
+            "termometroModal"
+        );
+
+
+    if (!modal) return;
+
+
+    modal.style.display =
+        "none";
+
+
+    document.body.style.overflow =
+        "";
+
+
+    const frame =
+        document.getElementById(
+            "termometroFrame"
+        );
+
+
+    /*
+     * Não removemos o iframe.
+     * Assim a sessão continua intacta.
+     */
+
+}
+
+
+/*************************************************
+ * VERIFICA SE PODE FECHAR
+ *************************************************/
+
+async function verificarPodeFechar() {
+
+    try {
+
+        const resposta =
+            await API.verificarTermometroHoje(
+                TOKEN
+            );
+
+
+        if (
+            resposta.sucesso &&
+            resposta.respondeu === true
+        ) {
+
+            fecharModalTermometro();
 
         }
 
@@ -435,25 +759,64 @@ async function verificarTermometroHoje() {
 
         console.error(erro);
 
-        status.textContent =
+    }
 
-            "Indisponível";
+}
+
+
+/*************************************************
+ * APÓS RESPOSTA
+ *************************************************/
+
+async function atualizarStatusDepoisDaResposta() {
+
+    const status =
+        document.getElementById(
+            "statusTermometro"
+        );
+
+
+    try {
+
+        const resposta =
+            await API.verificarTermometroHoje(
+                TOKEN
+            );
+
+
+        if (
+            resposta.sucesso &&
+            resposta.respondeu === true
+        ) {
+
+            if (status) {
+
+                status.textContent =
+                    "✅ Respondido hoje";
+
+                status.className =
+                    "badge success";
+
+            }
+
+
+            fecharModalTermometro();
+
+        }
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro após resposta:",
+            erro
+        );
 
     }
 
 }
 
-/*************************************************
- * ABRIR TERMÔMETRO
- *************************************************/
-
-function abrirTermometro() {
-
-    window.location.href =
-
-        "termometro.html";
-
-}
 
 /*************************************************
  * ATUALIZA STATUS
@@ -461,104 +824,45 @@ function abrirTermometro() {
 
 async function atualizarStatusTermometro() {
 
-    try {
-
-        const resposta =
-
-            await API.verificarTermometroHoje(
-
-                TOKEN
-
-            );
-
-        const card =
-
-            document.getElementById(
-
-                "statusTermometro"
-
-            );
-
-        if (!card) return;
-
-        if (
-
-            resposta.sucesso &&
-
-            resposta.respondeu
-
-        ) {
-
-            card.textContent =
-
-                "Respondido hoje";
-
-        }
-
-        else {
-
-            card.textContent =
-
-                "Pendente";
-
-        }
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
+    await verificarTermometroHoje();
 
 }
 
+
 /*************************************************
- * RESUMO DOS ÚLTIMOS 90 DIAS
+ * RESUMO 90 DIAS
  *************************************************/
 
 async function carregarResumoTermometro() {
 
     if (
-
         String(USER.perfil)
-
-            .toLowerCase()
-
-            !== "admin"
-
+            .toLowerCase() !== "admin"
     ) {
 
         return;
 
     }
 
+
     try {
 
         const resposta =
-
             await API.resumoTermometro90(
-
                 TOKEN
-
             );
 
-        if (
 
-            !resposta.sucesso
-
-        ) {
+        if (!resposta.sucesso) {
 
             return;
 
         }
 
+
         console.log(
-
             "Resumo Termômetro:",
-
             resposta
-
         );
 
     }
@@ -566,16 +870,15 @@ async function carregarResumoTermometro() {
     catch (erro) {
 
         console.error(
-
             "Erro ao carregar resumo:",
-
             erro
-
         );
 
     }
 
 }
+
+
 /*************************************************
  * UTILITÁRIOS
  *************************************************/
@@ -586,9 +889,6 @@ function $(id) {
 
 }
 
-/*************************************************
- * MENSAGENS
- *************************************************/
 
 function showMessage(id, texto) {
 
@@ -600,9 +900,6 @@ function showMessage(id, texto) {
 
 }
 
-/*************************************************
- * LOADING
- *************************************************/
 
 function setLoading(id, ativo = true) {
 
@@ -612,210 +909,129 @@ function setLoading(id, ativo = true) {
 
     if (ativo) {
 
-        elemento.classList.add("loading");
+        elemento.classList.add(
+            "loading"
+        );
 
     }
 
     else {
 
-        elemento.classList.remove("loading");
+        elemento.classList.remove(
+            "loading"
+        );
 
     }
 
 }
 
-/*************************************************
- * FORMATAR DATA
- *************************************************/
 
 function formatDate(data) {
 
-    if (!data) {
-
-        return "";
-
-    }
+    if (!data) return "";
 
     return new Intl.DateTimeFormat(
-
         "pt-BR",
-
         {
-
-            dateStyle: "short",
-
-            timeStyle: "short"
-
+            dateStyle:"short",
+            timeStyle:"short"
         }
-
     ).format(
-
         new Date(data)
-
     );
 
 }
 
-/*************************************************
- * ESCAPAR HTML
- *************************************************/
 
 function escapeHtml(texto) {
 
-    if (!texto) {
-
-        return "";
-
-    }
+    if (!texto) return "";
 
     return String(texto)
-
-        .replace(/&/g, "&amp;")
-
-        .replace(/</g, "&lt;")
-
-        .replace(/>/g, "&gt;")
-
-        .replace(/"/g, "&quot;")
-
-        .replace(/'/g, "&#039;");
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
-/*************************************************
- * CAPITALIZAR
- *************************************************/
 
 function capitalize(texto) {
 
-    if (!texto) {
-
-        return "";
-
-    }
+    if (!texto) return "";
 
     return texto.charAt(0).toUpperCase() +
-
         texto.slice(1).toLowerCase();
 
 }
 
-/*************************************************
- * PRIMEIRO NOME
- *************************************************/
 
 function primeiroNome(nome) {
 
-    if (!nome) {
-
-        return "";
-
-    }
+    if (!nome) return "";
 
     return nome
-
         .trim()
-
         .split(" ")[0];
 
 }
 
-/*************************************************
- * INICIAIS
- *************************************************/
 
 function obterIniciais(nome) {
 
-    if (!nome) {
-
-        return "--";
-
-    }
+    if (!nome) return "--";
 
     return nome
-
         .trim()
-
         .split(" ")
-
         .filter(Boolean)
-
-        .slice(0, 2)
-
+        .slice(0,2)
         .map(p => p[0])
-
         .join("")
-
         .toUpperCase();
 
 }
 
-/*************************************************
- * DATA ATUAL
- *************************************************/
 
 function hoje() {
 
     return new Date()
-
-        .toLocaleDateString(
-
-            "pt-BR"
-
-        );
+        .toLocaleDateString("pt-BR");
 
 }
 
-/*************************************************
- * DATA/HORA
- *************************************************/
 
 function agora() {
 
     return new Date()
-
-        .toLocaleString(
-
-            "pt-BR"
-
-        );
+        .toLocaleString("pt-BR");
 
 }
 
-/*************************************************
- * LOG
- *************************************************/
 
 function log(...dados) {
 
-    if (
+    if (CONFIG.DEBUG) {
 
-        CONFIG.DEBUG
-
-    ) {
-
-        console.log(
-
-            ...dados
-
-        );
+        console.log(...dados);
 
     }
 
 }
-  /*************************************************
- * MÓDULOS DO PORTAL
- *************************************************/
+
 
 /*************************************************
- * CAFÉ COM RH
+ * MÓDULOS
  *************************************************/
 
 async function carregarCafeRH() {
 
     try {
 
-        log("Carregando Café com RH...");
+        log(
+            "Carregando Café com RH..."
+        );
 
     }
 
@@ -827,15 +1043,14 @@ async function carregarCafeRH() {
 
 }
 
-/*************************************************
- * BIBLIOTECA RH
- *************************************************/
 
 async function carregarBiblioteca() {
 
     try {
 
-        log("Carregando Biblioteca...");
+        log(
+            "Carregando Biblioteca..."
+        );
 
     }
 
@@ -847,15 +1062,14 @@ async function carregarBiblioteca() {
 
 }
 
-/*************************************************
- * UNIVERSIDADE CMIVET
- *************************************************/
 
 async function carregarUniversidade() {
 
     try {
 
-        log("Carregando Universidade...");
+        log(
+            "Carregando Universidade..."
+        );
 
     }
 
@@ -867,15 +1081,14 @@ async function carregarUniversidade() {
 
 }
 
-/*************************************************
- * AVALIAÇÕES
- *************************************************/
 
 async function carregarAvaliacoes() {
 
     try {
 
-        log("Carregando Avaliações...");
+        log(
+            "Carregando Avaliações..."
+        );
 
     }
 
@@ -887,15 +1100,14 @@ async function carregarAvaliacoes() {
 
 }
 
-/*************************************************
- * BENEFÍCIOS
- *************************************************/
 
 async function carregarBeneficios() {
 
     try {
 
-        log("Carregando Benefícios...");
+        log(
+            "Carregando Benefícios..."
+        );
 
     }
 
@@ -907,15 +1119,14 @@ async function carregarBeneficios() {
 
 }
 
-/*************************************************
- * PERFIL
- *************************************************/
 
 async function carregarPerfil() {
 
     try {
 
-        log("Carregando Perfil...");
+        log(
+            "Carregando Perfil..."
+        );
 
     }
 
@@ -927,29 +1138,24 @@ async function carregarPerfil() {
 
 }
 
-/*************************************************
- * ADMINISTRAÇÃO
- *************************************************/
 
 async function carregarAdministracao() {
 
     if (
-
         String(USER.perfil)
-
-            .toLowerCase()
-
-            !== "admin"
-
+            .toLowerCase() !== "admin"
     ) {
 
         return;
 
     }
 
+
     try {
 
-        log("Carregando Administração...");
+        log(
+            "Carregando Administração..."
+        );
 
     }
 
@@ -960,24 +1166,24 @@ async function carregarAdministracao() {
     }
 
 }
-  /*************************************************
+
+
+/*************************************************
  * NAVEGAÇÃO
  *************************************************/
 
 function abrirPagina(pagina) {
 
-    if (!pagina) {
+    if (!pagina) return;
 
-        return;
-
-    }
-
-    window.location.href = pagina;
+    window.location.href =
+        pagina;
 
 }
 
+
 /*************************************************
- * RECARREGAR DASHBOARD
+ * DASHBOARD
  *************************************************/
 
 async function atualizarDashboard() {
@@ -996,8 +1202,9 @@ async function atualizarDashboard() {
 
 }
 
+
 /*************************************************
- * ATUALIZAR DADOS DO USUÁRIO
+ * USUÁRIO
  *************************************************/
 
 async function atualizarUsuario() {
@@ -1016,159 +1223,63 @@ async function atualizarUsuario() {
 
 }
 
-/*************************************************
- * EVENTOS
- *************************************************/
-
-function configurarEventos() {
-
-    const sair =
-
-        document.getElementById("logout");
-
-    if (sair) {
-
-        sair.addEventListener(
-
-            "click",
-
-            () => Auth.logout()
-
-        );
-
-    }
-
-}
 
 /*************************************************
- * ATALHOS DO DASHBOARD
+ * ATALHOS
  *************************************************/
 
 function configurarAtalhos() {
 
     document
-
-        .querySelectorAll(
-
-            "[data-link]"
-
-        )
-
+        .querySelectorAll("[data-link]")
         .forEach(botao => {
 
             botao.addEventListener(
-
                 "click",
-
                 function () {
 
                     abrirPagina(
-
                         this.dataset.link
-
                     );
 
                 }
-
             );
 
         });
 
 }
 
-/*************************************************
- * INICIALIZAÇÃO FINAL
- *************************************************/
-
-async function iniciarSistema() {
-
-    try {
-
-        configurarEventos();
-
-        configurarAtalhos();
-
-        await atualizarDashboard();
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
 
 /*************************************************
  * ERROS GLOBAIS
  *************************************************/
 
 window.addEventListener(
-
     "error",
-
     function (event) {
 
         console.error(
-
             "Erro:",
-
             event.error
-
         );
 
     }
-
 );
+
 
 window.addEventListener(
-
     "unhandledrejection",
-
     function (event) {
 
         console.error(
-
             "Promise rejeitada:",
-
             event.reason
-
         );
 
     }
-
 );
 
-/*************************************************
- * EXECUÇÃO
- *************************************************/
-
-document.addEventListener(
-
-    "DOMContentLoaded",
-
-    async () => {
-
-        await iniciarSistema();
-
-    }
-
-);
 
 /*************************************************
- * FIM DO ARQUIVO
+ * FIM
  *************************************************/
-  
-
-    catch (erro) {
-
-        console.error(
-
-            erro
-
-        );
-
-    }
-
-}
