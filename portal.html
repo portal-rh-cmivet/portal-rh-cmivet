@@ -15,7 +15,6 @@
 
 /* =========================================================
    AJUSTES VISUAIS — PORTAL RH CMIVET
-   NÃO ALTERA AS FUNCIONALIDADES DO SISTEMA
 ========================================================= */
 
 
@@ -37,7 +36,7 @@
 
 
 /* =========================================================
-   LOGO OFICIAL — PNG TRANSPARENTE
+   LOGO OFICIAL
 ========================================================= */
 
 .sidebar .brand img {
@@ -70,7 +69,7 @@
 
 
 /* =========================================================
-   TEXTO DA SIDEBAR
+   TEXTO DA MARCA
 ========================================================= */
 
 .sidebar .brand strong {
@@ -85,6 +84,28 @@
 .sidebar .brand span {
 
     color: #c9ab5d !important;
+
+}
+
+
+/* =========================================================
+   REMOVE O TOPO DO PORTAL
+========================================================= */
+
+.topbar {
+
+    display: none !important;
+
+}
+
+
+/* =========================================================
+   CONTEÚDO PRINCIPAL
+========================================================= */
+
+.main {
+
+    padding-top: 24px !important;
 
 }
 
@@ -117,7 +138,7 @@
 
 
 /* =========================================================
-   ÁREA DE TEXTO DO BANNER
+   TEXTO DO BANNER
 ========================================================= */
 
 .hero > div:first-child {
@@ -169,7 +190,7 @@
 
 
 /* =========================================================
-   REMOVE QUALQUER FUNDO EXTRA DO BANNER
+   REMOVE FUNDOS EXTRAS
 ========================================================= */
 
 .hero::before,
@@ -196,7 +217,7 @@
 
 
 /* =========================================================
-   RESPONSIVIDADE
+   RESPONSIVO
 ========================================================= */
 
 @media (max-width: 1000px) {
@@ -302,16 +323,13 @@
 
         <div>
 
-
             <strong>
                 RH CMIVET
             </strong>
 
-
             <span id="sideRole">
                 Portal Corporativo
             </span>
-
 
         </div>
 
@@ -404,63 +422,7 @@
 
 
 <!-- =====================================================
-     TOPO
-===================================================== -->
-
-<header class="topbar">
-
-
-    <div>
-
-
-        <small>
-            PORTAL RH CMIVET
-        </small>
-
-
-        <h1 id="welcome">
-            Carregando...
-        </h1>
-
-
-    </div>
-
-
-    <div class="profile-chip">
-
-
-        <div
-            id="avatar"
-            class="avatar"
-        >
-            --
-        </div>
-
-
-        <div>
-
-
-            <strong id="userName">
-                Carregando...
-            </strong>
-
-
-            <span id="userRole">
-                ...
-            </span>
-
-
-        </div>
-
-
-    </div>
-
-
-</header>
-
-
-<!-- =====================================================
-     BANNER
+     BANNER PRINCIPAL
 ===================================================== -->
 
 <section class="hero">
@@ -669,7 +631,7 @@
 
 
 <!-- =====================================================
-     COMUNICADOS
+     COMUNICADOS RECENTES
 ===================================================== -->
 
 <section class="panel">
@@ -761,7 +723,7 @@
 
 
 <!-- =====================================================
-     SCRIPTS
+     SCRIPTS — MANTIDOS
 ===================================================== -->
 
 <script src="js/config.js"></script>
