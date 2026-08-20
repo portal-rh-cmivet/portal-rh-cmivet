@@ -3,624 +3,624 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Portal RH CMIVET</title>
+<title>Portal RH CMIVET</title>
 
-    <link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app.css">
 
-    <!-- =====================================================
-         AJUSTE VISUAL DO HERO
-         Não altera nenhuma funcionalidade do portal.
-         ===================================================== -->
 
-    <style>
+<style>
 
-        /* HERO PRINCIPAL */
+/* =====================================================
+   HERO CMIVET — COMPACTO
+   ===================================================== */
 
-        .hero.hero-cmivet {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-            min-height: 300px;
-            align-items: stretch;
-        }
+.hero.hero-cmivet {
 
-        /* Área do texto */
+    display: grid !important;
 
-        .hero-cmivet .hero-content {
-            padding: 42px 40px !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            box-sizing: border-box;
-        }
+    grid-template-columns: 1.15fr 0.85fr !important;
 
-        /* Área da fotografia */
+    padding: 0 !important;
 
-        .hero-cmivet .hero-image {
-            width: 100%;
-            height: 100%;
-            min-height: 300px;
-            overflow: hidden;
-            padding: 0 !important;
-            margin: 0 !important;
-            background: transparent !important;
-            display: block;
-        }
+    overflow: hidden !important;
 
-        /* Fotografia ocupando TODO o espaço */
+    height: 240px !important;
 
-        .hero-cmivet .hero-image img {
-            display: block !important;
-            width: 100% !important;
-            height: 100% !important;
-            min-height: 300px;
-            max-width: none !important;
-            object-fit: cover !important;
-            object-position: center center !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            border: 0 !important;
-        }
+    min-height: 240px !important;
 
-        /* Remove possíveis fundos do container */
+    align-items: stretch;
 
-        .hero-cmivet,
-        .hero-cmivet .hero-image {
-            background-color: transparent !important;
-        }
+}
 
-        /* =====================================================
-           RESPONSIVO
-           ===================================================== */
 
-        @media (max-width: 900px) {
+/* =====================================================
+   TEXTO
+   ===================================================== */
 
-            .hero.hero-cmivet {
-                grid-template-columns: 1fr !important;
-            }
+.hero-cmivet .hero-content {
 
-            .hero-cmivet .hero-content {
-                padding: 30px 25px !important;
-            }
+    padding: 28px 38px !important;
 
-            .hero-cmivet .hero-image {
-                min-height: 260px;
-            }
+    display: flex;
 
-            .hero-cmivet .hero-image img {
-                min-height: 260px;
-            }
+    flex-direction: column;
 
-        }
+    justify-content: center;
 
-    </style>
+    box-sizing: border-box;
+
+}
+
+
+/* =====================================================
+   FOTO
+   ===================================================== */
+
+.hero-cmivet .hero-image {
+
+    width: 100%;
+
+    height: 240px !important;
+
+    min-height: 240px !important;
+
+    overflow: hidden;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    background: transparent !important;
+
+    display: block;
+
+}
+
+
+/* =====================================================
+   IMAGEM
+   ===================================================== */
+
+.hero-cmivet .hero-image img {
+
+    display: block !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    min-height: 0 !important;
+
+    max-width: none !important;
+
+    object-fit: cover !important;
+
+    object-position: center center !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+
+}
+
+
+/* =====================================================
+   RESPONSIVO
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+    .hero.hero-cmivet {
+
+        grid-template-columns: 1fr !important;
+
+        height: auto !important;
+
+        min-height: 0 !important;
+
+    }
+
+
+    .hero-cmivet .hero-content {
+
+        padding: 28px 25px !important;
+
+    }
+
+
+    .hero-cmivet .hero-image {
+
+        height: 210px !important;
+
+        min-height: 210px !important;
+
+    }
+
+
+    .hero-cmivet .hero-image img {
+
+        height: 210px !important;
+
+    }
+
+}
+
+</style>
 
 </head>
 
 
 <body>
 
+
 <div class="app-shell">
 
 
-    <!-- =====================================================
-         SIDEBAR
-         ===================================================== -->
+<!-- =====================================================
+     MENU LATERAL
+     ===================================================== -->
 
-    <aside class="sidebar">
+<aside class="sidebar">
 
 
-        <div class="brand">
+    <div class="brand">
 
-            <img
-                src="assets/cmivet-logo-oficial.jpeg"
-                alt="CMIVET"
-            >
+        <img
+            src="assets/cmivet-logo-oficial.jpeg"
+            alt="CMIVET"
+        >
 
-            <div>
+        <div>
 
-                <strong>
-                    RH CMIVET
-                </strong>
+            <strong>
+                RH CMIVET
+            </strong>
 
-                <span id="sideRole">
-                    Portal Corporativo
-                </span>
+            <span id="sideRole">
+                Portal Corporativo
+            </span>
 
-            </div>
+        </div>
+
+    </div>
+
+
+    <nav>
+
+
+        <a
+            class="active"
+            href="portal.html"
+        >
+            🏠 Dashboard
+        </a>
+
+
+        <a href="termometro.html">
+            😊 Termômetro
+        </a>
+
+
+        <a href="comunicados.html">
+            📢 Comunicados
+        </a>
+
+
+        <a href="cafe-rh.html">
+            ☕ Café RH
+        </a>
+
+
+        <a href="biblioteca.html">
+            📚 Biblioteca RH
+        </a>
+
+
+        <a href="universidade.html">
+            🎓 Universidade
+        </a>
+
+
+        <a href="avaliacoes.html">
+            📋 Avaliações
+        </a>
+
+
+        <a href="perfil.html">
+            👤 Meu Perfil
+        </a>
+
+
+        <a
+            id="adminLink"
+            hidden
+            href="admin.html"
+        >
+            🔐 Administração
+        </a>
+
+
+    </nav>
+
+
+    <button
+        id="logout"
+        class="btn danger"
+    >
+        ↩ Sair
+    </button>
+
+
+</aside>
+
+
+<!-- =====================================================
+     CONTEÚDO PRINCIPAL
+     ===================================================== -->
+
+<main class="main">
+
+
+<header class="topbar">
+
+
+    <div>
+
+        <small>
+            PORTAL RH CMIVET
+        </small>
+
+
+        <h1 id="welcome">
+            Carregando...
+        </h1>
+
+    </div>
+
+
+    <div class="profile-chip">
+
+
+        <div
+            id="avatar"
+            class="avatar"
+        >
+            --
+        </div>
+
+
+        <div>
+
+            <strong id="userName">
+                Carregando...
+            </strong>
+
+
+            <span id="userRole">
+                ...
+            </span>
 
         </div>
 
 
-        <!-- MENU -->
-
-        <nav>
-
-            <a
-                class="active"
-                href="portal.html"
-            >
-                🏠 Dashboard
-            </a>
+    </div>
 
 
-            <a href="termometro.html">
-                😊 Termômetro
-            </a>
+</header>
 
 
-            <a href="comunicados.html">
-                📢 Comunicados
-            </a>
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+
+<section class="hero hero-cmivet">
 
 
-            <a href="cafe-rh.html">
-                ☕ Café RH
-            </a>
+    <div class="hero-content">
 
 
-            <a href="biblioteca.html">
-                📚 Biblioteca RH
-            </a>
+        <span class="pill">
+            Portal Corporativo
+        </span>
 
 
-            <a href="universidade.html">
-                🎓 Universidade
-            </a>
+        <h2>
+            Bem-vindo ao Portal RH CMIVET
+        </h2>
 
 
-            <a href="avaliacoes.html">
-                📋 Avaliações
-            </a>
+        <p>
+            Centralize comunicados,
+            avaliações, treinamentos,
+            documentos e solicitações
+            em um único ambiente.
+        </p>
 
 
-            <a href="perfil.html">
-                👤 Meu Perfil
-            </a>
+    </div>
 
 
-            <!-- Administração -->
-
-            <a
-                id="adminLink"
-                hidden
-                href="admin.html"
-            >
-                🔐 Administração
-            </a>
-
-        </nav>
+    <div class="hero-image">
 
 
-        <!-- SAIR -->
-
-        <button
-            id="logout"
-            class="btn danger"
+        <img
+            src="assets/hero-foto-cmivet.jpg"
+            alt="CMIVET"
         >
-            ↩ Sair
-        </button>
 
 
-    </aside>
+    </div>
 
 
+</section>
 
-    <!-- =====================================================
-         CONTEÚDO PRINCIPAL
-         ===================================================== -->
 
-    <main class="main">
 
+<!-- =====================================================
+     CARDS
+     ===================================================== -->
 
-        <!-- =================================================
-             TOPO
-             ================================================= -->
+<section class="dashboard-grid">
 
-        <header class="topbar">
 
+    <a
+        href="termometro.html"
+        class="card card-link"
+    >
 
-            <div>
+        <span>😊</span>
 
-                <small>
-                    PORTAL RH CMIVET
-                </small>
+        <h3>
+            Termômetro Emocional
+        </h3>
 
+        <p id="statusTermometro">
+            Verificando...
+        </p>
 
-                <h1 id="welcome">
-                    Carregando...
-                </h1>
+    </a>
 
-            </div>
 
 
+    <a
+        href="comunicados.html"
+        class="card card-link"
+    >
 
-            <!-- PERFIL -->
+        <span>📢</span>
 
-            <div class="profile-chip">
+        <h3>
+            Comunicados
+        </h3>
 
+        <p id="statusComunicados">
+            Carregando...
+        </p>
 
-                <div
-                    id="avatar"
-                    class="avatar"
-                >
-                    --
-                </div>
+    </a>
 
 
-                <div>
 
-                    <strong id="userName">
-                        Carregando...
-                    </strong>
+    <a
+        href="cafe-rh.html"
+        class="card card-link"
+    >
 
+        <span>☕</span>
 
-                    <span id="userRole">
-                        ...
-                    </span>
+        <h3>
+            Café com RH
+        </h3>
 
-                </div>
+        <p>
+            Solicite um atendimento
+            confidencial
+        </p>
 
-            </div>
+    </a>
 
 
-        </header>
 
+    <a
+        href="biblioteca.html"
+        class="card card-link"
+    >
 
+        <span>📚</span>
 
-        <!-- =================================================
-             HERO CMIVET
-             ================================================= -->
+        <h3>
+            Biblioteca RH
+        </h3>
 
-        <section class="hero hero-cmivet">
+        <p>
+            Documentos e materiais
+        </p>
 
+    </a>
 
-            <!-- TEXTO -->
 
-            <div class="hero-content">
 
+    <a
+        href="universidade.html"
+        class="card card-link"
+    >
 
-                <span class="pill">
-                    Portal Corporativo
-                </span>
+        <span>🎓</span>
 
+        <h3>
+            Universidade CMIVET
+        </h3>
 
-                <h2>
-                    Bem-vindo ao Portal RH CMIVET
-                </h2>
+        <p>
+            Cursos e treinamentos
+        </p>
 
+    </a>
 
-                <p>
-                    Centralize comunicados,
-                    avaliações, treinamentos,
-                    documentos e solicitações
-                    em um único ambiente.
-                </p>
 
 
-            </div>
+    <a
+        href="avaliacoes.html"
+        class="card card-link"
+    >
 
+        <span>📋</span>
 
+        <h3>
+            Avaliações
+        </h3>
 
-            <!-- =================================================
-                 FOTO
-                 ================================================= -->
+        <p>
+            Desempenho e feedbacks
+        </p>
 
-            <div class="hero-image">
+    </a>
 
 
-                <img
-                    src="assets/hero-foto-cmivet.jpg"
-                    alt="CMIVET"
-                >
 
+    <a
+        href="perfil.html"
+        class="card card-link"
+    >
 
-            </div>
+        <span>👤</span>
 
+        <h3>
+            Meu Perfil
+        </h3>
 
-        </section>
+        <p>
+            Dados pessoais
+        </p>
 
+    </a>
 
 
-        <!-- =================================================
-             CARDS DO PORTAL
-             ================================================= -->
 
-        <section class="dashboard-grid">
+    <a
+        href="beneficios.html"
+        class="card card-link"
+    >
 
+        <span>💙</span>
 
-            <!-- TERMÔMETRO -->
+        <h3>
+            Benefícios
+        </h3>
 
-            <a
-                href="termometro.html"
-                class="card card-link"
-            >
+        <p>
+            Convênios e vantagens
+        </p>
 
-                <span>
-                    😊
-                </span>
+    </a>
 
-                <h3>
-                    Termômetro Emocional
-                </h3>
 
-                <p id="statusTermometro">
-                    Verificando...
-                </p>
+</section>
 
-            </a>
 
 
+<!-- =====================================================
+     COMUNICADOS
+     ===================================================== -->
 
-            <!-- COMUNICADOS -->
+<section class="panel">
 
-            <a
-                href="comunicados.html"
-                class="card card-link"
-            >
 
-                <span>
-                    📢
-                </span>
+    <div class="panel-head">
 
-                <h3>
-                    Comunicados
-                </h3>
 
-                <p id="statusComunicados">
-                    Carregando...
-                </p>
+        <h2>
+            Comunicados recentes
+        </h2>
 
-            </a>
 
+        <a
+            href="comunicados.html"
+            class="btn btn-small"
+        >
+            Ver todos
+        </a>
 
 
-            <!-- CAFÉ RH -->
+    </div>
 
-            <a
-                href="cafe-rh.html"
-                class="card card-link"
-            >
 
-                <span>
-                    ☕
-                </span>
+    <div
+        id="announcements"
+        class="cards"
+    >
+        Carregando comunicados...
+    </div>
 
-                <h3>
-                    Café com RH
-                </h3>
 
-                <p>
-                    Solicite um atendimento
-                    confidencial
-                </p>
+</section>
 
-            </a>
 
 
+<!-- =====================================================
+     AVISOS
+     ===================================================== -->
 
-            <!-- BIBLIOTECA -->
+<section class="panel">
 
-            <a
-                href="biblioteca.html"
-                class="card card-link"
-            >
 
-                <span>
-                    📚
-                </span>
+    <div class="panel-head">
 
-                <h3>
-                    Biblioteca RH
-                </h3>
+        <h2>
+            Avisos do Sistema
+        </h2>
 
-                <p>
-                    Documentos e materiais
-                </p>
+    </div>
 
-            </a>
 
+    <div id="avisos">
 
+        Tudo funcionando normalmente.
 
-            <!-- UNIVERSIDADE -->
+    </div>
 
-            <a
-                href="universidade.html"
-                class="card card-link"
-            >
 
-                <span>
-                    🎓
-                </span>
+</section>
 
-                <h3>
-                    Universidade CMIVET
-                </h3>
 
-                <p>
-                    Cursos e treinamentos
-                </p>
 
-            </a>
+<!-- =====================================================
+     RODAPÉ
+     ===================================================== -->
 
+<footer class="footer">
 
 
-            <!-- AVALIAÇÕES -->
+    <strong>
+        Portal RH CMIVET
+    </strong>
 
-            <a
-                href="avaliacoes.html"
-                class="card card-link"
-            >
 
-                <span>
-                    📋
-                </span>
+    <br>
 
-                <h3>
-                    Avaliações
-                </h3>
 
-                <p>
-                    Desempenho e feedbacks
-                </p>
+    Versão Enterprise • Desenvolvido em Google Apps Script
 
-            </a>
 
+</footer>
 
 
-            <!-- PERFIL -->
+</main>
 
-            <a
-                href="perfil.html"
-                class="card card-link"
-            >
-
-                <span>
-                    👤
-                </span>
-
-                <h3>
-                    Meu Perfil
-                </h3>
-
-                <p>
-                    Dados pessoais
-                </p>
-
-            </a>
-
-
-
-            <!-- BENEFÍCIOS -->
-
-            <a
-                href="beneficios.html"
-                class="card card-link"
-            >
-
-                <span>
-                    💙
-                </span>
-
-                <h3>
-                    Benefícios
-                </h3>
-
-                <p>
-                    Convênios e vantagens
-                </p>
-
-            </a>
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             COMUNICADOS RECENTES
-             ================================================= -->
-
-        <section class="panel">
-
-
-            <div class="panel-head">
-
-
-                <h2>
-                    Comunicados recentes
-                </h2>
-
-
-                <a
-                    href="comunicados.html"
-                    class="btn btn-small"
-                >
-                    Ver todos
-                </a>
-
-
-            </div>
-
-
-
-            <div
-                id="announcements"
-                class="cards"
-            >
-
-                Carregando comunicados...
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             AVISOS
-             ================================================= -->
-
-        <section class="panel">
-
-
-            <div class="panel-head">
-
-                <h2>
-                    Avisos do Sistema
-                </h2>
-
-            </div>
-
-
-            <div id="avisos">
-
-                Tudo funcionando normalmente.
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             RODAPÉ
-             ================================================= -->
-
-        <footer class="footer">
-
-
-            <strong>
-                Portal RH CMIVET
-            </strong>
-
-
-            <br>
-
-
-            Versão Enterprise
-            • Desenvolvido em Google Apps Script
-
-
-        </footer>
-
-
-    </main>
 
 </div>
 
 
 
 <!-- =====================================================
-     JAVASCRIPT ORIGINAL
-     NÃO ALTERAR
+     SCRIPTS — NÃO ALTERADOS
      ===================================================== -->
 
 <script src="js/config.js"></script>
