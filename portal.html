@@ -14,13 +14,12 @@
 <style>
 
 /* =========================================================
-   AJUSTES VISUAIS DO PORTAL
-   Não altera funcionalidades
+   AJUSTES VISUAIS DO PORTAL RH CMIVET
 ========================================================= */
 
 
 /* =========================================================
-   LOGO / MARCA DA SIDEBAR
+   SIDEBAR / LOGO
 ========================================================= */
 
 .sidebar .brand {
@@ -30,31 +29,21 @@
     background: transparent !important;
 }
 
-
 .sidebar .brand img {
     width: 72px !important;
     height: 48px !important;
-
     object-fit: contain !important;
-
     background: transparent !important;
-
     border: none !important;
-
     border-radius: 0 !important;
-
     padding: 0 !important;
-
     margin: 0 !important;
-
     box-shadow: none !important;
 }
-
 
 .sidebar .brand strong {
     color: #ffffff !important;
 }
-
 
 .sidebar .brand span {
     color: #c9ab5d !important;
@@ -69,24 +58,30 @@
 
     display: grid !important;
 
-    grid-template-columns: 52% 48% !important;
+    grid-template-columns: 54% 46% !important;
 
     padding: 0 !important;
 
     overflow: hidden !important;
 
-    min-height: 300px !important;
+    height: 280px !important;
+
+    min-height: 280px !important;
 
     background: #ffffff !important;
+
+    border-radius: 20px !important;
 
 }
 
 
-/* Área esquerda do banner */
+/* =========================================================
+   PARTE ESQUERDA DO BANNER
+========================================================= */
 
 .hero > div:first-child {
 
-    padding: 36px 38px !important;
+    padding: 30px 38px !important;
 
     display: flex !important;
 
@@ -100,24 +95,24 @@
 
 
 /* =========================================================
-   ÁREA DA FOTO
+   PARTE DA FOTO
 ========================================================= */
 
 .hero > img {
 
     width: 100% !important;
 
-    height: 100% !important;
+    height: 280px !important;
 
     min-width: 0 !important;
 
-    min-height: 300px !important;
+    min-height: 0 !important;
 
     display: block !important;
 
     object-fit: cover !important;
 
-    object-position: center !important;
+    object-position: center center !important;
 
     padding: 0 !important;
 
@@ -127,17 +122,32 @@
 
     border-radius: 0 !important;
 
-    background: transparent !important;
+    background: #003f38 !important;
 
 }
 
 
-/* Remove qualquer fundo dourado criado pelo CSS */
+/* remove elementos extras que possam criar o dourado */
 
 .hero::before,
 .hero::after {
 
+    content: none !important;
+
     display: none !important;
+
+}
+
+
+/* =========================================================
+   AJUSTE DO TÍTULO
+========================================================= */
+
+.hero h2 {
+
+    margin-top: 18px !important;
+
+    margin-bottom: 12px !important;
 
 }
 
@@ -146,19 +156,50 @@
    RESPONSIVO
 ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
 
     .hero {
 
-        grid-template-columns: 1fr !important;
+        grid-template-columns: 52% 48% !important;
+
+        height: 270px !important;
+
+        min-height: 270px !important;
 
     }
 
     .hero > img {
 
-        min-height: 220px !important;
+        height: 270px !important;
+
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .hero {
+
+        grid-template-columns: 1fr !important;
+
+        height: auto !important;
+
+        min-height: 0 !important;
+
+    }
+
+    .hero > div:first-child {
+
+        padding: 28px 24px !important;
+
+    }
+
+    .hero > img {
 
         height: 220px !important;
+
+        min-height: 220px !important;
 
     }
 
@@ -175,9 +216,11 @@
 
     }
 
-    .hero > div:first-child {
+    .hero > img {
 
-        padding: 28px 24px !important;
+        height: 190px !important;
+
+        min-height: 190px !important;
 
     }
 
@@ -212,16 +255,13 @@
 
         <div>
 
-
             <strong>
                 RH CMIVET
             </strong>
 
-
             <span id="sideRole">
                 Portal Corporativo
             </span>
-
 
         </div>
 
@@ -229,7 +269,9 @@
     </div>
 
 
-    <!-- MENU -->
+    <!-- =================================================
+         MENU
+    ================================================== -->
 
     <nav>
 
@@ -289,7 +331,9 @@
     </nav>
 
 
-    <!-- SAIR -->
+    <!-- =================================================
+         LOGOUT
+    ================================================== -->
 
     <button
         id="logout"
@@ -303,7 +347,7 @@
 
 
 <!-- =====================================================
-     CONTEÚDO
+     CONTEÚDO PRINCIPAL
 ===================================================== -->
 
 <main class="main">
@@ -318,7 +362,6 @@
 
     <div>
 
-
         <small>
             PORTAL RH CMIVET
         </small>
@@ -327,7 +370,6 @@
         <h1 id="welcome">
             Carregando...
         </h1>
-
 
     </div>
 
@@ -345,7 +387,6 @@
 
         <div>
 
-
             <strong id="userName">
                 Carregando...
             </strong>
@@ -354,7 +395,6 @@
             <span id="userRole">
                 ...
             </span>
-
 
         </div>
 
@@ -366,7 +406,7 @@
 
 
 <!-- =====================================================
-     BANNER
+     BANNER PRINCIPAL
 ===================================================== -->
 
 <section class="hero">
@@ -397,7 +437,7 @@
     </div>
 
 
-    <!-- FOTO -->
+    <!-- IMAGEM -->
 
     <img
         src="assets/hero-foto-cmivet.jpg"
@@ -409,7 +449,7 @@
 
 
 <!-- =====================================================
-     CARDS
+     CARDS DO DASHBOARD
 ===================================================== -->
 
 <section class="dashboard-grid">
@@ -579,7 +619,7 @@
 
 
 <!-- =====================================================
-     COMUNICADOS
+     COMUNICADOS RECENTES
 ===================================================== -->
 
 <section class="panel">
@@ -671,7 +711,7 @@
 
 
 <!-- =====================================================
-     SCRIPTS
+     SCRIPTS — NÃO ALTERAR
 ===================================================== -->
 
 <script src="js/config.js"></script>
