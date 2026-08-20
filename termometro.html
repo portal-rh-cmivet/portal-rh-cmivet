@@ -3,217 +3,327 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Termômetro Emocional • Portal RH CMIVET
-    </title>
+<title>
+    Termômetro Emocional • Portal RH CMIVET
+</title>
 
-    <link
-        rel="stylesheet"
-        href="app.css">
+<link
+    rel="stylesheet"
+    href="app.css">
+
+
+<style>
+
+/* =========================================================
+   MODO MODAL
+========================================================= */
+
+body.modo-modal {
+
+    background:#ffffff !important;
+
+}
+
+
+body.modo-modal .sidebar {
+
+    display:none !important;
+
+}
+
+
+body.modo-modal .topbar {
+
+    display:none !important;
+
+}
+
+
+body.modo-modal .hero {
+
+    display:none !important;
+
+}
+
+
+body.modo-modal .footer {
+
+    display:none !important;
+
+}
+
+
+body.modo-modal .app-shell {
+
+    display:block !important;
+
+    min-height:100% !important;
+
+}
+
+
+body.modo-modal .main {
+
+    width:100% !important;
+
+    margin:0 !important;
+
+    padding:24px !important;
+
+    box-sizing:border-box !important;
+
+}
+
+
+body.modo-modal .panel {
+
+    margin:0 !important;
+
+    width:100% !important;
+
+    box-shadow:none !important;
+
+    border:none !important;
+
+}
+
+
+/* =========================================================
+   FORMULÁRIO NO MODAL
+========================================================= */
+
+body.modo-modal .panel-head {
+
+    padding-top:0 !important;
+
+}
+
+
+body.modo-modal .panel-head h2 {
+
+    color:#0f6258 !important;
+
+}
+
+
+body.modo-modal .mood-grid {
+
+    margin-top:10px;
+
+}
+
+
+body.modo-modal textarea {
+
+    resize:vertical;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px) {
+
+    body.modo-modal .main {
+
+        padding:15px !important;
+
+    }
+
+}
+
+</style>
 
 </head>
+
 
 <body>
 
 <div class="app-shell">
 
-    <!-- SIDEBAR -->
 
-    <aside class="sidebar">
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
-        <div class="brand">
+<aside class="sidebar">
 
-            <img
-                src="ativos/cmivet-logo-oficial.jpeg"
-                alt="CMIVET">
+    <div class="brand">
 
-            <div>
+        <img
+            src="assets/cmivet-logo-oficial.png?v=2"
+            alt="CMIVET">
 
-                <strong>RH CMIVET</strong>
+        <div>
 
-                <span>
+            <strong>
+                RH CMIVET
+            </strong>
 
-                    Portal Corporativo
-
-                </span>
-
-            </div>
+            <span>
+                Portal Corporativo
+            </span>
 
         </div>
 
-        <nav>
+    </div>
 
-            <a href="portal.html">
 
-                🏠 Dashboard
+    <nav>
 
-            </a>
+        <a href="portal.html">
+            🏠 Dashboard
+        </a>
 
-            <a
-                class="active"
-                href="termometro.html">
+        <a
+            class="active"
+            href="termometro.html">
 
-                😊 Termômetro
+            😊 Termômetro
 
-            </a>
+        </a>
 
-            <a href="comunicados.html">
+        <a href="comunicados.html">
+            📢 Comunicados
+        </a>
 
-                📢 Comunicados
+        <a href="cafe-rh.html">
+            ☕ Café RH
+        </a>
 
-            </a>
+        <a href="biblioteca.html">
+            📚 Biblioteca
+        </a>
 
-            <a href="cafe-rh.html">
+        <a href="universidade.html">
+            🎓 Universidade
+        </a>
 
-                ☕ Café RH
+        <a href="avaliacoes.html">
+            📋 Avaliações
+        </a>
 
-            </a>
+        <a href="perfil.html">
+            👤 Meu Perfil
+        </a>
 
-            <a href="biblioteca.html">
+        <a
+            id="adminLink"
+            hidden
+            href="admin.html">
 
-                📚 Biblioteca
+            🔐 Administração
 
-            </a>
+        </a>
 
-            <a href="universidade.html">
+    </nav>
 
-                🎓 Universidade
 
-            </a>
+    <button
+        id="logout"
+        class="btn danger">
 
-            <a href="avaliacoes.html">
+        ↩ Sair
 
-                📋 Avaliações
+    </button>
 
-            </a>
+</aside>
 
-            <a href="perfil.html">
 
-                👤 Meu Perfil
+<!-- =====================================================
+     CONTEÚDO
+===================================================== -->
 
-            </a>
+<main class="main">
 
-            <a
-                id="adminLink"
-                hidden
-                href="admin.html">
 
-                🔐 Administração
+<header class="topbar">
 
-            </a>
+    <div>
 
-        </nav>
+        <small>
+            PORTAL RH CMIVET
+        </small>
 
-        <button
-            id="logout"
-            class="btn danger">
+        <h1 id="welcome">
+            Termômetro Emocional
+        </h1>
 
-            ↩ Sair
+    </div>
 
-        </button>
 
-    </aside>
+    <div class="profile-chip">
 
-    <!-- CONTEÚDO -->
+        <div
+            id="avatar"
+            class="avatar">
 
-    <main class="main">
-              <!-- TOPO -->
+            --
 
-        <header class="topbar">
+        </div>
 
-            <div>
 
-                <small>
+        <div>
 
-                    PORTAL RH CMIVET
+            <strong id="userName">
+                Carregando...
+            </strong>
 
-                </small>
+            <span id="userRole">
+                ...
+            </span>
 
-                <h1 id="welcome">
+        </div>
 
-                    Termômetro Emocional
+    </div>
 
-                </h1>
+</header>
 
-            </div>
 
-            <div class="profile-chip">
+<section class="hero">
 
-                <div
-                    id="avatar"
-                    class="avatar">
+    <div>
 
-                    --
+        <span class="pill">
+            Saúde Organizacional
+        </span>
 
-                </div>
+        <h2>
+            Como você está hoje?
+        </h2>
 
-                <div>
+        <p>
 
-                    <strong id="userName">
+            Sua resposta é utilizada pelo RH
+            para acompanhar o clima organizacional
+            e promover ações de melhoria no ambiente
+            de trabalho.
 
-                        Carregando...
+        </p>
 
-                    </strong>
+    </div>
 
-                    <span id="userRole">
+</section>
 
-                        ...
 
-                    </span>
-
-                </div>
-
-            </div>
-
-        </header>
-
-        <!-- HERO -->
-
-        <section class="hero">
-
-            <div>
-
-                <span class="pill">
-
-                    Saúde Organizacional
-
-                </span>
-
-                <h2>
-
-                    Como você está hoje?
-
-                </h2>
-
-                <p>
-
-                    Sua resposta é utilizada pelo RH para acompanhar
-                    o clima organizacional e promover ações de
-                    melhoria no ambiente de trabalho.
-
-                </p>
-
-            </div>
-
-        </section>
-<!-- ========================================= -->
-<!-- TERMÔMETRO EMOCIONAL -->
-<!-- ========================================= -->
+<!-- =====================================================
+     TERMÔMETRO
+===================================================== -->
 
 <section class="panel">
 
     <div class="panel-head">
 
         <h2>
-
             😊 Termômetro Emocional
-
         </h2>
 
         <span
@@ -226,17 +336,19 @@
 
     </div>
 
+
     <form id="thermometerForm">
+
 
         <div class="form-group">
 
             <label>
-
                 Como você está hoje?
-
             </label>
 
+
             <div class="mood-grid">
+
 
                 <label class="mood-card">
 
@@ -246,11 +358,16 @@
                         value="5"
                         required>
 
-                    <span class="emoji">😁</span>
+                    <span class="emoji">
+                        😁
+                    </span>
 
-                    <span>Muito Feliz</span>
+                    <span>
+                        Muito Feliz
+                    </span>
 
                 </label>
+
 
                 <label class="mood-card">
 
@@ -259,11 +376,16 @@
                         name="humor"
                         value="4">
 
-                    <span class="emoji">🙂</span>
+                    <span class="emoji">
+                        🙂
+                    </span>
 
-                    <span>Bem</span>
+                    <span>
+                        Bem
+                    </span>
 
                 </label>
+
 
                 <label class="mood-card">
 
@@ -272,11 +394,16 @@
                         name="humor"
                         value="3">
 
-                    <span class="emoji">😐</span>
+                    <span class="emoji">
+                        😐
+                    </span>
 
-                    <span>Normal</span>
+                    <span>
+                        Normal
+                    </span>
 
                 </label>
+
 
                 <label class="mood-card">
 
@@ -285,11 +412,16 @@
                         name="humor"
                         value="2">
 
-                    <span class="emoji">😕</span>
+                    <span class="emoji">
+                        😕
+                    </span>
 
-                    <span>Cansado</span>
+                    <span>
+                        Cansado
+                    </span>
 
                 </label>
+
 
                 <label class="mood-card">
 
@@ -298,62 +430,79 @@
                         name="humor"
                         value="1">
 
-                    <span class="emoji">😢</span>
+                    <span class="emoji">
+                        😢
+                    </span>
 
-                    <span>Muito Mal</span>
+                    <span>
+                        Muito Mal
+                    </span>
 
                 </label>
+
 
             </div>
 
         </div>
 
+
         <div class="form-group">
 
             <label>
-
                 Como está seu nível de energia?
-
             </label>
+
 
             <select
-        id="energia"
-        name="energia"
-        required>
+                id="energia"
+                name="energia"
+                required>
 
-        <option value="">
-            Selecione
-        </option>
+                <option value="">
+                    Selecione
+                </option>
 
-        <option>Muito Alta</option>
+                <option>
+                    Muito Alta
+                </option>
 
-        <option>Alta</option>
+                <option>
+                    Alta
+                </option>
 
-        <option>Normal</option>
+                <option>
+                    Normal
+                </option>
 
-        <option>Baixa</option>
+                <option>
+                    Baixa
+                </option>
 
-        <option>Muito Baixa</option>
+                <option>
+                    Muito Baixa
+                </option>
 
-    </select>
+            </select>
 
-</div>
+        </div>
+
+
         <div class="form-group">
 
             <label>
-
                 Deseja deixar um comentário?
-
             </label>
 
-          <textarea
-    id="observacao"
-    name="observacao"
-    rows="4"
-    maxlength="500"
-    placeholder="Opcional..."></textarea>
+
+            <textarea
+                id="observacao"
+                name="observacao"
+                rows="4"
+                maxlength="500"
+                placeholder="Opcional..."></textarea>
 
         </div>
+
 
         <div class="actions">
 
@@ -366,6 +515,7 @@
 
             </button>
 
+
             <span
                 id="thermometerMessage">
 
@@ -373,31 +523,69 @@
 
         </div>
 
+
     </form>
 
 </section>
 
-        <!-- RODAPÉ -->
 
-        <footer class="footer">
+<footer class="footer">
 
-            <strong>Portal RH CMIVET</strong>
+    <strong>
+        Portal RH CMIVET
+    </strong>
 
-            <br>
+    <br>
 
-            Versão Enterprise • Desenvolvido em Google Apps Script
+    Versão Enterprise • Desenvolvido em Google Apps Script
 
-        </footer>
+</footer>
 
-    </main>
+
+</main>
 
 </div>
 
+
 <script src="js/config.js"></script>
+
 <script src="js/api.js"></script>
+
 <script src="js/auth.js"></script>
+
 <script src="js/session.js"></script>
+
 <script src="js/termometro.js"></script>
+
+
+<script>
+
+/* =========================================================
+   DETECTA SE ESTÁ SENDO ABERTO NO MODAL
+========================================================= */
+
+(function () {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    if (
+        params.get("modal") === "1"
+    ) {
+
+        document.body.classList.add(
+            "modo-modal"
+        );
+
+    }
+
+})();
+
+</script>
+
 
 </body>
 
