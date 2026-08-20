@@ -11,9 +11,185 @@
 
 <link rel="stylesheet" href="app.css">
 
+<style>
+
+/* =========================================================
+   AJUSTES VISUAIS DO PORTAL
+   Não altera funcionalidades
+========================================================= */
+
+
+/* =========================================================
+   LOGO / MARCA DA SIDEBAR
+========================================================= */
+
+.sidebar .brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background: transparent !important;
+}
+
+
+.sidebar .brand img {
+    width: 72px !important;
+    height: 48px !important;
+
+    object-fit: contain !important;
+
+    background: transparent !important;
+
+    border: none !important;
+
+    border-radius: 0 !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    box-shadow: none !important;
+}
+
+
+.sidebar .brand strong {
+    color: #ffffff !important;
+}
+
+
+.sidebar .brand span {
+    color: #c9ab5d !important;
+}
+
+
+/* =========================================================
+   BANNER PRINCIPAL
+========================================================= */
+
+.hero {
+
+    display: grid !important;
+
+    grid-template-columns: 52% 48% !important;
+
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    min-height: 300px !important;
+
+    background: #ffffff !important;
+
+}
+
+
+/* Área esquerda do banner */
+
+.hero > div:first-child {
+
+    padding: 36px 38px !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    justify-content: center !important;
+
+    box-sizing: border-box !important;
+
+}
+
+
+/* =========================================================
+   ÁREA DA FOTO
+========================================================= */
+
+.hero > img {
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    min-width: 0 !important;
+
+    min-height: 300px !important;
+
+    display: block !important;
+
+    object-fit: cover !important;
+
+    object-position: center !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    border: none !important;
+
+    border-radius: 0 !important;
+
+    background: transparent !important;
+
+}
+
+
+/* Remove qualquer fundo dourado criado pelo CSS */
+
+.hero::before,
+.hero::after {
+
+    display: none !important;
+
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .hero {
+
+        grid-template-columns: 1fr !important;
+
+    }
+
+    .hero > img {
+
+        min-height: 220px !important;
+
+        height: 220px !important;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .sidebar .brand img {
+
+        width: 60px !important;
+
+        height: 42px !important;
+
+    }
+
+    .hero > div:first-child {
+
+        padding: 28px 24px !important;
+
+    }
+
+}
+
+</style>
+
 </head>
 
+
 <body>
+
 
 <div class="app-shell">
 
@@ -24,28 +200,31 @@
 
 <aside class="sidebar">
 
+
     <div class="brand">
 
-        <!-- LOGO CMIVET -->
+
         <img
             src="assets/cmivet-logo-oficial.png"
             alt="CMIVET"
         >
 
+
         <div>
 
-            <strong style="color:#ffffff;">
+
+            <strong>
                 RH CMIVET
             </strong>
 
-            <span
-                id="sideRole"
-                style="color:#c9ab5d;"
-            >
+
+            <span id="sideRole">
                 Portal Corporativo
             </span>
 
+
         </div>
+
 
     </div>
 
@@ -53,6 +232,7 @@
     <!-- MENU -->
 
     <nav>
+
 
         <a
             class="active"
@@ -105,6 +285,7 @@
             🔐 Administração
         </a>
 
+
     </nav>
 
 
@@ -117,11 +298,12 @@
         ↩ Sair
     </button>
 
+
 </aside>
 
 
 <!-- =====================================================
-     CONTEÚDO PRINCIPAL
+     CONTEÚDO
 ===================================================== -->
 
 <main class="main">
@@ -133,20 +315,25 @@
 
 <header class="topbar">
 
+
     <div>
+
 
         <small>
             PORTAL RH CMIVET
         </small>
 
+
         <h1 id="welcome">
             Carregando...
         </h1>
+
 
     </div>
 
 
     <div class="profile-chip">
+
 
         <div
             id="avatar"
@@ -158,28 +345,37 @@
 
         <div>
 
+
             <strong id="userName">
                 Carregando...
             </strong>
+
 
             <span id="userRole">
                 ...
             </span>
 
+
         </div>
 
+
     </div>
+
 
 </header>
 
 
 <!-- =====================================================
-     HERO / BANNER
+     BANNER
 ===================================================== -->
 
 <section class="hero">
 
+
+    <!-- TEXTO -->
+
     <div>
+
 
         <span class="pill">
             Portal Corporativo
@@ -192,20 +388,22 @@
 
 
         <p>
-            Centralize comunicados,
-            avaliações,
-            treinamentos,
-            documentos e solicitações
+            Centralize comunicados, avaliações,
+            treinamentos, documentos e solicitações
             em um único ambiente.
         </p>
 
+
     </div>
 
+
+    <!-- FOTO -->
 
     <img
         src="assets/hero-foto-cmivet.jpg"
         alt="CMIVET"
     >
+
 
 </section>
 
@@ -216,8 +414,6 @@
 
 <section class="dashboard-grid">
 
-
-    <!-- TERMÔMETRO -->
 
     <a
         href="termometro.html"
@@ -239,8 +435,6 @@
     </a>
 
 
-    <!-- COMUNICADOS -->
-
     <a
         href="comunicados.html"
         class="card card-link"
@@ -260,8 +454,6 @@
 
     </a>
 
-
-    <!-- CAFÉ RH -->
 
     <a
         href="cafe-rh.html"
@@ -283,8 +475,6 @@
     </a>
 
 
-    <!-- BIBLIOTECA -->
-
     <a
         href="biblioteca.html"
         class="card card-link"
@@ -304,8 +494,6 @@
 
     </a>
 
-
-    <!-- UNIVERSIDADE -->
 
     <a
         href="universidade.html"
@@ -327,8 +515,6 @@
     </a>
 
 
-    <!-- AVALIAÇÕES -->
-
     <a
         href="avaliacoes.html"
         class="card card-link"
@@ -348,8 +534,6 @@
 
     </a>
 
-
-    <!-- PERFIL -->
 
     <a
         href="perfil.html"
@@ -371,8 +555,6 @@
     </a>
 
 
-    <!-- BENEFÍCIOS -->
-
     <a
         href="beneficios.html"
         class="card card-link"
@@ -392,16 +574,19 @@
 
     </a>
 
+
 </section>
 
 
 <!-- =====================================================
-     COMUNICADOS RECENTES
+     COMUNICADOS
 ===================================================== -->
 
 <section class="panel">
 
+
     <div class="panel-head">
+
 
         <h2>
             Comunicados recentes
@@ -415,6 +600,7 @@
             Ver todos
         </a>
 
+
     </div>
 
 
@@ -422,8 +608,11 @@
         id="announcements"
         class="cards"
     >
+
         Carregando comunicados...
+
     </div>
+
 
 </section>
 
@@ -433,6 +622,7 @@
 ===================================================== -->
 
 <section class="panel">
+
 
     <div class="panel-head">
 
@@ -449,6 +639,7 @@
 
     </div>
 
+
 </section>
 
 
@@ -458,18 +649,23 @@
 
 <footer class="footer">
 
+
     <strong>
         Portal RH CMIVET
     </strong>
 
+
     <br>
 
+
     Versão Enterprise • Desenvolvido em Google Apps Script
+
 
 </footer>
 
 
 </main>
+
 
 </div>
 
