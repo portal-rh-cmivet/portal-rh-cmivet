@@ -1,720 +1,1325 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+/* =========================================================
+   PORTAL RH CMIVET — LAYOUT PREMIUM
+   VERSÃO VISUAL
+   NÃO ALTERA IDs, LINKS, API OU INTEGRAÇÕES
+   ========================================================= */
 
-<head>
+:root{
+  --cmivet-green:#075d54;
+  --cmivet-green-dark:#034b44;
+  --cmivet-green-soft:#2d746a;
+  --cmivet-gold:#c9ab5d;
+  --cmivet-gold-light:#ead8a5;
+  --cmivet-cream:#f7f4ec;
+  --cmivet-white:#ffffff;
+  --cmivet-ink:#0b3f3a;
+  --cmivet-muted:#657370;
+  --cmivet-line:#e5ddca;
+  --cmivet-danger:#b94a48;
+  --cmivet-success:#2f7d5b;
+  --cmivet-warning:#c79628;
 
-<meta charset="UTF-8">
+  --shadow:0 10px 28px rgba(12,57,51,.08);
+  --shadow-modal:0 25px 70px rgba(0,0,0,.25);
+}
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+*{
+  box-sizing:border-box;
+}
 
-<title>Portal RH CMIVET</title>
+html,
+body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:var(--cmivet-cream);
+  color:var(--cmivet-ink);
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+}
 
-<link rel="stylesheet" href="app.css">
+body{
+  overflow-x:hidden;
+}
 
-<style>
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+.app-shell{
+  min-height:100vh;
+  display:flex;
+}
 
 /* =========================================================
-   PORTAL RH CMIVET
-========================================================= */
+   SIDEBAR
+   ========================================================= */
 
-.sidebar .brand {
-    display:flex !important;
-    align-items:center !important;
-    gap:10px !important;
-    background:transparent !important;
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:260px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--cmivet-green),
+      var(--cmivet-green-dark)
+    );
+
+  color:#fff;
+
+  padding:22px 16px 18px;
+
+  display:flex;
+  flex-direction:column;
+
+  z-index:20;
+
+  border-right:3px solid var(--cmivet-gold);
 }
 
-.sidebar .brand img {
-    width:82px !important;
-    height:auto !important;
-    max-height:50px !important;
-    object-fit:contain !important;
-    display:block !important;
-    background:transparent !important;
-    background-color:transparent !important;
-    border:none !important;
-    border-radius:0 !important;
-    box-shadow:none !important;
-    padding:0 !important;
-    margin:0 !important;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:0 4px 22px;
+
+  border-bottom:1px solid rgba(255,255,255,.13);
 }
 
-.sidebar .brand strong {
-    color:#ffffff !important;
-    font-weight:700 !important;
+.brand > img{
+  width:76px;
+  height:58px;
+
+  object-fit:contain;
+
+  background:#fff;
+
+  border-radius:9px;
+
+  padding:4px;
 }
 
-.sidebar .brand span {
-    color:#c9ab5d !important;
+.brand strong{
+  display:block;
+
+  font-family:Georgia,serif;
+
+  font-size:20px;
 }
 
+.brand span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#f0c85b;
+
+  font-size:13px;
+
+  font-weight:700;
+}
+
+.sidebar nav{
+  display:flex;
+  flex-direction:column;
+
+  gap:5px;
+
+  margin-top:20px;
+}
+
+.sidebar nav a{
+  display:flex;
+  align-items:center;
+
+  gap:11px;
+
+  min-height:45px;
+
+  padding:10px 13px;
+
+  border-radius:11px;
+
+  color:#fff;
+
+  font-family:Georgia,serif;
+
+  font-weight:700;
+
+  font-size:15px;
+
+  transition:.18s ease;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active{
+  background:rgba(255,255,255,.13);
+
+  box-shadow:
+    inset 3px 0 0 var(--cmivet-gold);
+}
+
+.btn.danger{
+  margin-top:auto;
+
+  width:100%;
+
+  border:1px solid rgba(239,196,75,.9);
+
+  background:transparent;
+
+  color:#f2ca62;
+
+  border-radius:10px;
+
+  padding:11px 14px;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
 
 /* =========================================================
-   REMOVE TOPO
-========================================================= */
+   MAIN
+   ========================================================= */
 
-.topbar {
-    display:none !important;
+.main{
+  margin-left:260px;
+
+  width:calc(100% - 260px);
+
+  padding:30px 34px 22px;
+
+  max-width:1800px;
 }
 
-.main {
-    padding-top:24px !important;
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+
+  gap:20px;
+
+  margin-bottom:20px;
 }
 
+.topbar small{
+  color:var(--cmivet-green);
+
+  font-size:13px;
+
+  font-weight:900;
+
+  letter-spacing:.4px;
+}
+
+.topbar h1{
+  margin:8px 0 0;
+
+  font-family:Georgia,serif;
+
+  font-size:40px;
+
+  line-height:1.08;
+
+  color:var(--cmivet-ink);
+}
+
+.profile-chip{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  min-width:235px;
+
+  padding:7px 14px 7px 7px;
+
+  background:#fff;
+
+  border:1px solid var(--cmivet-line);
+
+  border-radius:40px;
+
+  box-shadow:var(--shadow);
+}
+
+.avatar{
+  width:46px;
+  height:46px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:50%;
+
+  background:var(--cmivet-green);
+
+  color:#fff;
+
+  font-weight:900;
+}
+
+.profile-chip strong{
+  display:block;
+
+  font-size:14px;
+}
+
+.profile-chip span{
+  display:block;
+
+  color:#a7812e;
+
+  font-size:12px;
+
+  margin-top:2px;
+}
 
 /* =========================================================
-   BANNER
-========================================================= */
+   HERO
+   ========================================================= */
 
-.hero {
-    display:grid !important;
-    grid-template-columns:54% 46% !important;
-    padding:0 !important;
-    margin:0 !important;
-    height:280px !important;
-    min-height:280px !important;
-    overflow:hidden !important;
-    background:#ffffff !important;
-    border-radius:20px !important;
+.hero{
+  position:relative;
+
+  min-height:300px;
+
+  display:grid;
+
+  grid-template-columns:1.15fr .85fr;
+
+  align-items:stretch;
+
+  overflow:hidden;
+
+  margin-bottom:18px;
+
+  border:1px solid #d8c58c;
+
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #fffdf7 0%,
+      #f5eedc 100%
+    );
+
+  box-shadow:var(--shadow);
 }
 
-.hero > div:first-child {
-    padding:30px 38px !important;
-    display:flex !important;
-    flex-direction:column !important;
-    justify-content:center !important;
-    box-sizing:border-box !important;
+.hero > div{
+  position:relative;
+
+  z-index:2;
+
+  padding:36px 38px;
 }
 
-.hero > img {
-    width:100% !important;
-    height:280px !important;
-    min-width:0 !important;
-    min-height:0 !important;
-    display:block !important;
-    object-fit:cover !important;
-    object-position:center center !important;
-    padding:0 !important;
-    margin:0 !important;
-    border:none !important;
-    border-radius:0 !important;
-    background:#003f38 !important;
+.pill{
+  display:inline-block;
+
+  padding:7px 13px;
+
+  border-radius:20px;
+
+  background:var(--cmivet-green);
+
+  color:#fff;
+
+  font-size:13px;
+
+  font-weight:900;
 }
 
-.hero::before,
-.hero::after {
-    content:none !important;
-    display:none !important;
+.hero h2{
+  max-width:620px;
+
+  margin:18px 0 12px;
+
+  font-family:Georgia,serif;
+
+  font-size:40px;
+
+  line-height:1.08;
+
+  color:var(--cmivet-ink);
 }
 
+.hero p{
+  max-width:650px;
+
+  margin:0;
+
+  color:#566663;
+
+  font-size:16px;
+
+  line-height:1.6;
+}
+
+.hero > img{
+  width:100%;
+  height:100%;
+
+  min-height:300px;
+
+  object-fit:cover;
+
+  object-position:center;
+
+  background:transparent;
+}
+
+/* =========================================================
+   HERO CMIVET
+   ========================================================= */
+
+.hero-cmivet{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  padding:0 !important;
+
+  overflow:hidden;
+
+  min-height:300px;
+}
+
+.hero-cmivet .hero-content{
+  padding:42px 40px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+}
+
+.hero-cmivet .hero-image{
+  width:100%;
+  height:100%;
+
+  min-height:300px;
+
+  overflow:hidden;
+
+  background:transparent !important;
+}
+
+.hero-cmivet .hero-image img{
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  min-height:300px;
+
+  object-fit:cover;
+
+  object-position:center;
+}
+
+/* =========================================================
+   DASHBOARD CARDS
+   ========================================================= */
+
+.dashboard-grid{
+  display:grid;
+
+  grid-template-columns:repeat(4,1fr);
+
+  gap:13px;
+
+  margin-bottom:18px;
+}
+
+.card{
+  background:#fff;
+
+  border:1px solid var(--cmivet-line);
+
+  border-radius:15px;
+
+  min-height:145px;
+
+  padding:17px 16px;
+
+  box-shadow:
+    0 5px 18px rgba(32,57,52,.05);
+
+  transition:.18s ease;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+
+  border-color:var(--cmivet-gold);
+
+  box-shadow:
+    0 10px 24px rgba(32,57,52,.09);
+}
+
+.card > span{
+  display:grid;
+
+  place-items:center;
+
+  width:43px;
+  height:43px;
+
+  margin-bottom:10px;
+
+  border-radius:50%;
+
+  background:#edf5f2;
+
+  font-size:22px;
+}
+
+.card h3{
+  margin:0 0 7px;
+
+  font-family:Georgia,serif;
+
+  font-size:18px;
+
+  color:var(--cmivet-ink);
+}
+
+.card p{
+  margin:0;
+
+  color:var(--cmivet-muted);
+
+  font-size:13px;
+
+  line-height:1.35;
+}
+
+/* =========================================================
+   PAINÉIS
+   ========================================================= */
+
+.panel{
+  margin-bottom:18px;
+
+  padding:18px;
+
+  background:#fff;
+
+  border:1px solid var(--cmivet-line);
+
+  border-radius:16px;
+
+  box-shadow:
+    0 5px 18px rgba(32,57,52,.05);
+}
+
+.panel-head{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:15px;
+
+  padding-bottom:12px;
+
+  border-bottom:1px solid #eee8db;
+}
+
+.panel-head h2{
+  margin:0;
+
+  font-family:Georgia,serif;
+
+  font-size:22px;
+}
+
+.btn-small{
+  padding:8px 13px;
+
+  border:1px solid #d5b75f;
+
+  border-radius:9px;
+
+  background:#fffdf6;
+
+  color:#71591e;
+
+  font-size:13px;
+
+  font-weight:800;
+}
+
+#announcements{
+  padding-top:10px;
+
+  line-height:1.5;
+}
+
+#avisos{
+  margin-top:12px;
+
+  padding:15px;
+
+  border:1px solid #dbe9dd;
+
+  border-radius:12px;
+
+  background:#eff7f0;
+
+  color:#3f5b52;
+}
+
+/* =========================================================
+   FORMULÁRIOS — TERMÔMETRO
+   ========================================================= */
+
+.form-group{
+  margin-bottom:30px;
+}
+
+.form-group > label{
+  display:block;
+
+  margin-bottom:13px;
+
+  color:var(--cmivet-ink);
+
+  font-size:16px;
+
+  font-weight:800;
+}
+
+/* =========================================================
+   HUMOR
+   ========================================================= */
+
+.mood-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(5, minmax(120px,1fr));
+
+  gap:14px;
+
+  width:100%;
+
+  margin-top:12px;
+}
+
+.mood-card{
+  position:relative;
+
+  min-height:110px;
+
+  padding:18px 10px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:9px;
+
+  text-align:center;
+
+  cursor:pointer;
+
+  border:1px solid #dedbd2;
+
+  border-radius:15px;
+
+  background:#fff;
+
+  color:var(--cmivet-ink);
+
+  font-weight:700;
+
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.mood-card:hover{
+  transform:translateY(-2px);
+
+  border-color:var(--cmivet-gold);
+
+  background:#fffdf7;
+
+  box-shadow:
+    0 7px 18px rgba(12,57,51,.08);
+}
+
+.mood-card input{
+  position:absolute;
+
+  opacity:0;
+
+  pointer-events:none;
+}
+
+.mood-card .emoji{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  width:48px;
+  height:48px;
+
+  border-radius:50%;
+
+  background:#edf5f2;
+
+  font-size:27px;
+}
+
+.mood-card input:checked + .emoji{
+  background:#e9d49a;
+
+  box-shadow:
+    0 0 0 4px rgba(201,171,93,.18);
+}
+
+.mood-card:has(input:checked){
+  border-color:var(--cmivet-gold);
+
+  background:#fffaf0;
+
+  box-shadow:
+    0 7px 20px rgba(201,171,93,.18);
+}
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+#energia{
+  width:100%;
+
+  min-height:52px;
+
+  padding:12px 15px;
+
+  border:1px solid #d8d8d2;
+
+  border-radius:11px;
+
+  background:#fff;
+
+  color:var(--cmivet-ink);
+
+  outline:none;
+
+  cursor:pointer;
+
+  transition:.18s ease;
+}
+
+#energia:focus{
+  border-color:var(--cmivet-green);
+
+  box-shadow:
+    0 0 0 3px rgba(7,93,84,.10);
+}
+
+/* =========================================================
+   TEXTAREA
+   ========================================================= */
+
+#observacao{
+  display:block;
+
+  width:100%;
+
+  min-height:125px;
+
+  resize:vertical;
+
+  padding:14px 16px;
+
+  border:1px solid #d8d8d2;
+
+  border-radius:11px;
+
+  background:#fff;
+
+  color:var(--cmivet-ink);
+
+  line-height:1.5;
+
+  outline:none;
+
+  transition:.18s ease;
+}
+
+#observacao:focus{
+  border-color:var(--cmivet-green);
+
+  box-shadow:
+    0 0 0 3px rgba(7,93,84,.10);
+}
+
+#observacao::placeholder{
+  color:#9a9f9c;
+}
+
+/* =========================================================
+   AÇÕES DO FORMULÁRIO
+   ========================================================= */
+
+.actions{
+  display:flex;
+
+  align-items:center;
+
+  gap:16px;
+
+  margin-top:32px;
+
+  padding-top:25px;
+
+  border-top:1px solid #eee8db;
+}
+
+#sendThermometer{
+  min-width:210px;
+
+  min-height:48px;
+
+  padding:12px 22px;
+
+  border:0;
+
+  border-radius:11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--cmivet-green),
+      var(--cmivet-green-soft)
+    );
+
+  color:#fff;
+
+  font-size:15px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 7px 18px rgba(7,93,84,.18);
+
+  transition:.18s ease;
+}
+
+#sendThermometer:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 10px 24px rgba(7,93,84,.25);
+}
+
+#sendThermometer:disabled{
+  opacity:.65;
+
+  cursor:not-allowed;
+
+  transform:none;
+}
+
+#thermometerMessage{
+  font-size:14px;
+
+  font-weight:800;
+}
+
+#thermometerMessage.success{
+  color:var(--cmivet-success);
+}
+
+#thermometerMessage.error{
+  color:var(--cmivet-danger);
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  padding:7px 12px;
+
+  border-radius:20px;
+
+  font-size:13px;
+
+  font-weight:800;
+
+  white-space:nowrap;
+}
+
+.badge.success{
+  color:#256344;
+
+  background:#e9f5ed;
+
+  border:1px solid #cde5d5;
+}
+
+.badge.warning{
+  color:#8a6616;
+
+  background:#fff6d9;
+
+  border:1px solid #ecd38b;
+}
+
+.badge.error{
+  color:#9b3f3f;
+
+  background:#fdeaea;
+
+  border:1px solid #edcaca;
+}
 
 /* =========================================================
    MODAL DO TERMÔMETRO
-========================================================= */
+   ========================================================= */
 
-#termometroModal {
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    background:rgba(4,44,40,0.78);
-    backdrop-filter:blur(5px);
-    -webkit-backdrop-filter:blur(5px);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    box-sizing:border-box;
-    z-index:999999;
+/*
+   Essas regras são visuais.
+   Não interferem na API ou no JavaScript.
+*/
+
+.modal,
+.modal-overlay,
+.modal-backdrop{
+  z-index:9999;
 }
 
-#termometroModalBox {
-    width:min(900px,96vw);
-    height:min(760px,94vh);
-    background:#ffffff;
-    border-radius:22px;
-    overflow:hidden;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    box-shadow:0 25px 80px rgba(0,0,0,0.40);
-    border:1px solid rgba(201,171,93,0.55);
+/* Fundo atrás do modal */
+
+.modal-overlay,
+.modal-backdrop{
+  background:
+    rgba(3,42,38,.72) !important;
+
+  backdrop-filter:
+    blur(7px);
 }
 
-#termometroModalHeader {
-    height:66px;
-    min-height:66px;
-    background:#0f6258;
-    color:#ffffff;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    box-sizing:border-box;
-    border-bottom:3px solid #c9ab5d;
+/* Caso o modal utilize position fixed */
+
+.modal{
+  animation:
+    cmivetModalIn .22s ease-out;
 }
 
-#termometroModalHeader strong {
-    font-size:19px;
-    font-weight:700;
+@keyframes cmivetModalIn{
+
+  from{
+    opacity:0;
+    transform:translateY(12px) scale(.98);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+
 }
 
-#termometroModalHeader small {
-    display:block;
-    margin-top:3px;
-    color:#e8dfc6;
-    font-size:12px;
+/* =========================================================
+   CONTEÚDO DO MODAL
+   ========================================================= */
+
+.modal-content,
+.modal-dialog,
+.thermometer-modal,
+#thermometerModal{
+  border-radius:20px !important;
+
+  border:1px solid #d9c98e !important;
+
+  box-shadow:
+    var(--shadow-modal) !important;
+
+  overflow:hidden;
 }
 
-#fecharTermometro {
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,0.35);
-    background:rgba(255,255,255,0.10);
-    color:#ffffff;
-    font-size:24px;
-    line-height:1;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+/* =========================================================
+   CABEÇALHO DO MODAL
+   ========================================================= */
+
+.modal-header,
+.thermometer-modal-header{
+  background:
+    linear-gradient(
+      135deg,
+      var(--cmivet-green),
+      var(--cmivet-green-soft)
+    ) !important;
+
+  color:#fff !important;
+
+  border-bottom:
+    3px solid var(--cmivet-gold) !important;
+
+  padding:17px 22px !important;
 }
 
-#fecharTermometro:hover {
-    background:#c9ab5d;
-    color:#0f6258;
+.modal-header h2,
+.modal-header h3,
+.thermometer-modal-header h2,
+.thermometer-modal-header h3{
+  margin:0;
+
+  color:#fff !important;
+
+  font-family:Georgia,serif;
 }
 
-#termometroFrame {
-    width:100%;
-    height:calc(100% - 66px);
-    flex:1;
-    border:none;
-    background:#ffffff;
+/* =========================================================
+   CORPO DO MODAL
+   ========================================================= */
+
+.modal-body,
+.modal-content-body,
+.thermometer-modal-body{
+  padding:32px 38px !important;
+
+  background:#fff !important;
 }
 
-#termometroLoading {
-    position:absolute;
-    top:66px;
-    left:0;
-    right:0;
-    bottom:0;
-    background:#ffffff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:12px;
-    color:#0f6258;
-    font-weight:600;
-    z-index:3;
+/* =========================================================
+   TERMÔMETRO QUANDO ESTIVER DENTRO DO MODAL
+   ========================================================= */
+
+.modal #thermometerForm,
+.modal-content #thermometerForm,
+.thermometer-modal #thermometerForm{
+  margin-top:8px;
 }
 
-.loading-circle {
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    border:4px solid #e5ecea;
-    border-top-color:#0f6258;
-    animation:girar 0.8s linear infinite;
+.modal #thermometerForm .form-group,
+.modal-content #thermometerForm .form-group,
+.thermometer-modal #thermometerForm .form-group{
+  margin-bottom:34px;
 }
 
-@keyframes girar {
-    from {
-        transform:rotate(0deg);
-    }
-
-    to {
-        transform:rotate(360deg);
-    }
+.modal #thermometerForm .mood-grid,
+.modal-content #thermometerForm .mood-grid,
+.thermometer-modal #thermometerForm .mood-grid{
+  margin-top:18px;
+  margin-bottom:8px;
 }
 
+.modal #thermometerForm .actions,
+.modal-content #thermometerForm .actions,
+.thermometer-modal #thermometerForm .actions{
+  margin-top:35px;
+}
+
+/* =========================================================
+   MODAL — SEPARADORES
+   ========================================================= */
+
+.modal #thermometerForm .form-group + .form-group,
+.modal-content #thermometerForm .form-group + .form-group,
+.thermometer-modal #thermometerForm .form-group + .form-group{
+  padding-top:26px;
+
+  border-top:1px solid #eee8db;
+}
+
+/* =========================================================
+   FECHAR MODAL
+   ========================================================= */
+
+.modal-close,
+.close-modal,
+.modal-header button,
+.thermometer-modal-header button{
+  width:40px;
+  height:40px;
+
+  border-radius:50%;
+
+  border:1px solid rgba(255,255,255,.35);
+
+  background:rgba(255,255,255,.08);
+
+  color:#fff;
+
+  font-size:21px;
+
+  cursor:pointer;
+
+  transition:.18s ease;
+}
+
+.modal-close:hover,
+.close-modal:hover,
+.modal-header button:hover,
+.thermometer-modal-header button:hover{
+  background:rgba(255,255,255,.18);
+
+  transform:scale(1.04);
+}
 
 /* =========================================================
    RESPONSIVO
-========================================================= */
+   ========================================================= */
 
-@media (max-width:1000px) {
+@media(max-width:1100px){
 
-    .hero {
-        grid-template-columns:52% 48% !important;
-        height:270px !important;
-        min-height:270px !important;
-    }
+  .sidebar{
+    width:230px;
+  }
 
-    .hero > img {
-        height:270px !important;
-    }
+  .main{
+    margin-left:230px;
 
-}
+    width:calc(100% - 230px);
 
-@media (max-width:800px) {
+    padding:25px;
+  }
 
-    .hero {
-        grid-template-columns:1fr !important;
-        height:auto !important;
-        min-height:0 !important;
-    }
+  .dashboard-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 
-    .hero > div:first-child {
-        padding:28px 24px !important;
-    }
+  .hero{
+    grid-template-columns:1fr .8fr;
+  }
 
-    .hero > img {
-        height:220px !important;
-        min-height:220px !important;
-    }
+  .hero h2{
+    font-size:34px;
+  }
 
-    #termometroModal {
-        padding:10px;
-    }
-
-    #termometroModalBox {
-        width:100%;
-        height:95vh;
-        border-radius:16px;
-    }
+  .mood-grid{
+    grid-template-columns:
+      repeat(3,1fr);
+  }
 
 }
 
-@media (max-width:600px) {
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
 
-    .sidebar .brand img {
-        width:70px !important;
-        max-height:45px !important;
-    }
+@media(max-width:800px){
 
-    .hero > img {
-        height:190px !important;
-        min-height:190px !important;
-    }
+  .app-shell{
+    display:block;
+  }
 
-    #termometroModalHeader {
-        padding:0 14px;
-    }
+  .sidebar{
+    position:relative;
 
-    #termometroModalHeader strong {
-        font-size:16px;
-    }
+    width:100%;
+
+    height:auto;
+
+    border-right:0;
+
+    border-bottom:
+      3px solid var(--cmivet-gold);
+  }
+
+  .main{
+    margin-left:0;
+
+    width:100%;
+
+    padding:20px;
+  }
+
+  .sidebar nav{
+    display:grid;
+
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .btn.danger{
+    margin-top:16px;
+  }
+
+  .topbar{
+    flex-direction:column;
+  }
+
+  .profile-chip{
+    width:100%;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+  }
+
+  .hero > img{
+    min-height:220px;
+
+    max-height:300px;
+  }
+
+  .hero-cmivet{
+    grid-template-columns:1fr;
+  }
+
+  .hero-cmivet .hero-image{
+    min-height:220px;
+  }
+
+  .hero-cmivet .hero-image img{
+    min-height:220px;
+  }
+
+  .mood-grid{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .modal-body,
+  .modal-content-body,
+  .thermometer-modal-body{
+    padding:25px 22px !important;
+  }
 
 }
 
-</style>
+/* =========================================================
+   CELULAR
+   ========================================================= */
 
-</head>
+@media(max-width:520px){
 
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
 
-<body>
+  .sidebar nav{
+    grid-template-columns:1fr;
+  }
 
+  .hero > div{
+    padding:27px 23px;
+  }
 
-<div class="app-shell">
+  .hero h2{
+    font-size:30px;
+  }
 
+  .topbar h1{
+    font-size:32px;
+  }
 
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
+  .mood-grid{
+    grid-template-columns:1fr;
+  }
 
-<aside class="sidebar">
+  .mood-card{
+    min-height:82px;
 
-    <div class="brand">
+    flex-direction:row;
 
-        <img
-            src="assets/cmivet-logo-oficial.png?v=2"
-            alt="CMIVET"
-        >
+    justify-content:flex-start;
 
-        <div>
+    text-align:left;
 
-            <strong>
-                RH CMIVET
-            </strong>
+    padding:13px 16px;
+  }
 
-            <span id="sideRole">
-                Portal Corporativo
-            </span>
+  .mood-card .emoji{
+    width:42px;
+    height:42px;
 
-        </div>
+    flex-shrink:0;
+  }
 
-    </div>
+  .actions{
+    flex-direction:column;
 
+    align-items:stretch;
+  }
 
-    <nav>
+  #sendThermometer{
+    width:100%;
+  }
 
-        <a
-            class="active"
-            href="portal.html"
-        >
-            🏠 Dashboard
-        </a>
+  .modal-body,
+  .modal-content-body,
+  .thermometer-modal-body{
+    padding:22px 16px !important;
+  }
 
-        <a href="termometro.html">
-            😊 Termômetro
-        </a>
+}
 
-        <a href="comunicados.html">
-            📢 Comunicados
-        </a>
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
-        <a href="cafe-rh.html">
-            ☕ Café RH
-        </a>
+.footer{
+  padding:14px 0 3px;
 
-        <a href="biblioteca.html">
-            📚 Biblioteca RH
-        </a>
+  text-align:center;
 
-        <a href="universidade.html">
-            🎓 Universidade
-        </a>
+  color:#66736f;
 
-        <a href="avaliacoes.html">
-            📋 Avaliações
-        </a>
+  font-size:12px;
 
-        <a href="perfil.html">
-            👤 Meu Perfil
-        </a>
+  line-height:1.5;
+}
 
-        <a
-            id="adminLink"
-            hidden
-            href="admin.html"
-        >
-            🔐 Administração
-        </a>
+.footer strong{
+  color:var(--cmivet-green);
+}
 
-    </nav>
+/* =========================================================
+   ACESSIBILIDADE / FOCO
+   ========================================================= */
 
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:3px solid rgba(201,171,93,.45);
 
-    <button
-        id="logout"
-        class="btn danger"
-    >
-        ↩ Sair
-    </button>
+  outline-offset:2px;
+}
 
-</aside>
-
-
-<!-- =====================================================
-     CONTEÚDO
-===================================================== -->
-
-<main class="main">
-
-
-<section class="hero">
-
-    <div>
-
-        <span class="pill">
-            Portal Corporativo
-        </span>
-
-        <h2>
-            Bem-vindo ao Portal RH CMIVET
-        </h2>
-
-        <p>
-            Centralize comunicados, avaliações,
-            treinamentos, documentos e solicitações
-            em um único ambiente.
-        </p>
-
-    </div>
-
-    <img
-        src="assets/hero-foto-cmivet.jpg?v=2"
-        alt="CMIVET"
-    >
-
-</section>
-
-
-<section class="dashboard-grid">
-
-
-    <a
-        href="termometro.html"
-        class="card card-link"
-    >
-
-        <span>😊</span>
-
-        <h3>
-            Termômetro Emocional
-        </h3>
-
-        <p id="statusTermometro">
-            Verificando...
-        </p>
-
-    </a>
-
-
-    <a
-        href="comunicados.html"
-        class="card card-link"
-    >
-
-        <span>📢</span>
-
-        <h3>
-            Comunicados
-        </h3>
-
-        <p id="statusComunicados">
-            Carregando...
-        </p>
-
-    </a>
-
-
-    <a
-        href="cafe-rh.html"
-        class="card card-link"
-    >
-
-        <span>☕</span>
-
-        <h3>
-            Café com RH
-        </h3>
-
-        <p>
-            Solicite um atendimento confidencial
-        </p>
-
-    </a>
-
-
-    <a
-        href="biblioteca.html"
-        class="card card-link"
-    >
-
-        <span>📚</span>
-
-        <h3>
-            Biblioteca RH
-        </h3>
-
-        <p>
-            Documentos e materiais
-        </p>
-
-    </a>
-
-
-    <a
-        href="universidade.html"
-        class="card card-link"
-    >
-
-        <span>🎓</span>
-
-        <h3>
-            Universidade CMIVET
-        </h3>
-
-        <p>
-            Cursos e treinamentos
-        </p>
-
-    </a>
-
-
-    <a
-        href="avaliacoes.html"
-        class="card card-link"
-    >
-
-        <span>📋</span>
-
-        <h3>
-            Avaliações
-        </h3>
-
-        <p>
-            Desempenho e feedbacks
-        </p>
-
-    </a>
-
-
-    <a
-        href="perfil.html"
-        class="card card-link"
-    >
-
-        <span>👤</span>
-
-        <h3>
-            Meu Perfil
-        </h3>
-
-        <p>
-            Dados pessoais
-        </p>
-
-    </a>
-
-
-    <a
-        href="beneficios.html"
-        class="card card-link"
-    >
-
-        <span>💙</span>
-
-        <h3>
-            Benefícios
-        </h3>
-
-        <p>
-            Convênios e vantagens
-        </p>
-
-    </a>
-
-</section>
-
-
-<section class="panel">
-
-    <div class="panel-head">
-
-        <h2>
-            Comunicados recentes
-        </h2>
-
-        <a
-            href="comunicados.html"
-            class="btn btn-small"
-        >
-            Ver todos
-        </a>
-
-    </div>
-
-    <div
-        id="announcements"
-        class="cards"
-    >
-        Carregando comunicados...
-    </div>
-
-</section>
-
-
-<section class="panel">
-
-    <div class="panel-head">
-
-        <h2>
-            Avisos do Sistema
-        </h2>
-
-    </div>
-
-    <div id="avisos">
-        Tudo funcionando normalmente.
-    </div>
-
-</section>
-
-
-<footer class="footer">
-
-    <strong>
-        Portal RH CMIVET
-    </strong>
-
-    <br>
-
-    Versão Enterprise • Desenvolvido em Google Apps Script
-
-</footer>
-
-
-</main>
-
-</div>
-
-
-<!-- =====================================================
-     MODAL DO TERMÔMETRO
-===================================================== -->
-
-<div
-    id="termometroModal"
-    role="dialog"
-    aria-modal="true"
->
-
-    <div id="termometroModalBox">
-
-
-        <div id="termometroModalHeader">
-
-            <div>
-
-                <strong>
-                    😊 Termômetro Emocional
-                </strong>
-
-                <small>
-                    Sua resposta diária é importante para o RH.
-                </small>
-
-            </div>
-
-
-            <button
-                id="fecharTermometro"
-                type="button"
-                aria-label="Fechar Termômetro"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div id="termometroLoading">
-
-            <div class="loading-circle"></div>
-
-            <div>
-                Carregando seu Termômetro...
-            </div>
-
-        </div>
-
-
-        <iframe
-            id="termometroFrame"
-            title="Termômetro Emocional"
-        ></iframe>
-
-
-    </div>
-
-</div>
-
-
-<script src="js/config.js"></script>
-
-<script src="js/api.js"></script>
-
-<script src="js/auth.js"></script>
-
-<script src="js/session.js"></script>
-
-<script src="portal.js"></script>
-
-
-</body>
-
-</html>
+/* =========================================================
+   FIM DO CSS
+   ========================================================= */
