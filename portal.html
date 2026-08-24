@@ -3,706 +3,415 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Portal RH CMIVET</title>
+    <title>Portal RH CMIVET</title>
 
-<link rel="stylesheet" href="app.css">
-
-<style>
-
-/* =========================================================
-   PORTAL RH CMIVET
-========================================================= */
-
-.sidebar .brand {
-    display:flex !important;
-    align-items:center !important;
-    gap:10px !important;
-    background:transparent !important;
-}
-
-.sidebar .brand img {
-    width:82px !important;
-    height:auto !important;
-    max-height:50px !important;
-    object-fit:contain !important;
-    display:block !important;
-    background:transparent !important;
-    background-color:transparent !important;
-    border:none !important;
-    border-radius:0 !important;
-    box-shadow:none !important;
-    padding:0 !important;
-    margin:0 !important;
-}
-
-.sidebar .brand strong {
-    color:#ffffff !important;
-    font-weight:700 !important;
-}
-
-.sidebar .brand span {
-    color:#c9ab5d !important;
-}
-
-
-/* =========================================================
-   REMOVE TOPO
-========================================================= */
-
-.topbar {
-    display:none !important;
-}
-
-.main {
-    padding-top:24px !important;
-}
-
-
-/* =========================================================
-   BANNER
-========================================================= */
-
-.hero {
-    display:grid !important;
-    grid-template-columns:54% 46% !important;
-    padding:0 !important;
-    margin:0 !important;
-    height:280px !important;
-    min-height:280px !important;
-    overflow:hidden !important;
-    background:#ffffff !important;
-    border-radius:20px !important;
-}
-
-.hero > div:first-child {
-    padding:30px 38px !important;
-    display:flex !important;
-    flex-direction:column !important;
-    justify-content:center !important;
-    box-sizing:border-box !important;
-}
-
-.hero > img {
-    width:100% !important;
-    height:280px !important;
-    min-width:0 !important;
-    min-height:0 !important;
-    display:block !important;
-    object-fit:cover !important;
-    object-position:center center !important;
-    padding:0 !important;
-    margin:0 !important;
-    border:none !important;
-    border-radius:0 !important;
-    background:#003f38 !important;
-}
-
-.hero::before,
-.hero::after {
-    content:none !important;
-    display:none !important;
-}
-
-
-/* =========================================================
-   MODAL DO TERMÔMETRO
-========================================================= */
-
-#termometroModal {
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    background:rgba(4,44,40,0.78);
-    backdrop-filter:blur(5px);
-    -webkit-backdrop-filter:blur(5px);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    box-sizing:border-box;
-    z-index:999999;
-}
-
-#termometroModalBox {
-    width:min(900px,96vw);
-    height:min(760px,94vh);
-    background:#ffffff;
-    border-radius:22px;
-    overflow:hidden;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    box-shadow:0 25px 80px rgba(0,0,0,0.40);
-    border:1px solid rgba(201,171,93,0.55);
-}
-
-#termometroModalHeader {
-    height:66px;
-    min-height:66px;
-    background:#0f6258;
-    color:#ffffff;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    box-sizing:border-box;
-    border-bottom:3px solid #c9ab5d;
-}
-
-#termometroModalHeader strong {
-    font-size:19px;
-    font-weight:700;
-}
-
-#termometroModalHeader small {
-    display:block;
-    margin-top:3px;
-    color:#e8dfc6;
-    font-size:12px;
-}
-
-#fecharTermometro {
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,0.35);
-    background:rgba(255,255,255,0.10);
-    color:#ffffff;
-    font-size:24px;
-    line-height:1;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-#fecharTermometro:hover {
-    background:#c9ab5d;
-    color:#0f6258;
-}
-
-#termometroFrame {
-    width:100%;
-    height:calc(100% - 66px);
-    flex:1;
-    border:none;
-    background:#ffffff;
-}
-
-#termometroLoading {
-    position:absolute;
-    top:66px;
-    left:0;
-    right:0;
-    bottom:0;
-    background:#ffffff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:12px;
-    color:#0f6258;
-    font-weight:600;
-    z-index:3;
-}
-
-.loading-circle {
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    border:4px solid #e5ecea;
-    border-top-color:#0f6258;
-    animation:girar 0.8s linear infinite;
-}
-
-@keyframes girar {
-    from {
-        transform:rotate(0deg);
-    }
-
-    to {
-        transform:rotate(360deg);
-    }
-}
-
-
-/* =========================================================
-   RESPONSIVO
-========================================================= */
-
-@media (max-width:1000px) {
-
-    .hero {
-        grid-template-columns:52% 48% !important;
-        height:270px !important;
-        min-height:270px !important;
-    }
-
-    .hero > img {
-        height:270px !important;
-    }
-
-}
-
-@media (max-width:800px) {
-
-    .hero {
-        grid-template-columns:1fr !important;
-        height:auto !important;
-        min-height:0 !important;
-    }
-
-    .hero > div:first-child {
-        padding:28px 24px !important;
-    }
-
-    .hero > img {
-        height:220px !important;
-        min-height:220px !important;
-    }
-
-    #termometroModal {
-        padding:10px;
-    }
-
-    #termometroModalBox {
-        width:100%;
-        height:95vh;
-        border-radius:16px;
-    }
-
-}
-
-@media (max-width:600px) {
-
-    .sidebar .brand img {
-        width:70px !important;
-        max-height:45px !important;
-    }
-
-    .hero > img {
-        height:190px !important;
-        min-height:190px !important;
-    }
-
-    #termometroModalHeader {
-        padding:0 14px;
-    }
-
-    #termometroModalHeader strong {
-        font-size:16px;
-    }
-
-}
-
-</style>
+    <link
+        rel="stylesheet"
+        href="app.css">
 
 </head>
 
-
 <body>
-
 
 <div class="app-shell">
 
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
 
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
+    <aside class="sidebar">
 
-<aside class="sidebar">
+        <div class="brand">
 
-    <div class="brand">
-
-        <img
-            src="assets/cmivet-logo-oficial.png?v=2"
-            alt="CMIVET"
-        >
-
-        <div>
-
-            <strong>
-                RH CMIVET
-            </strong>
-
-            <span id="sideRole">
-                Portal Corporativo
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <nav>
-
-        <a
-            class="active"
-            href="portal.html"
-        >
-            🏠 Dashboard
-        </a>
-
-        <a href="termometro.html">
-            😊 Termômetro
-        </a>
-
-        <a href="comunicados.html">
-            📢 Comunicados
-        </a>
-
-        <a href="cafe-rh.html">
-            ☕ Café RH
-        </a>
-
-        <a href="biblioteca.html">
-            📚 Biblioteca RH
-        </a>
-
-        <a href="universidade.html">
-            🎓 Universidade
-        </a>
-
-        <a href="avaliacoes.html">
-            📋 Avaliações
-        </a>
-
-        <a href="perfil.html">
-            👤 Meu Perfil
-        </a>
-
-        <a
-            id="adminLink"
-            hidden
-            href="admin.html"
-        >
-            🔐 Administração
-        </a>
-
-    </nav>
-
-
-    <button
-        id="logout"
-        class="btn danger"
-    >
-        ↩ Sair
-    </button>
-
-</aside>
-
-
-<!-- =====================================================
-     CONTEÚDO
-===================================================== -->
-
-<main class="main">
-
-
-<section class="hero">
-
-    <div>
-
-        <span class="pill">
-            Portal Corporativo
-        </span>
-
-        <h2>
-            Bem-vindo ao Portal RH CMIVET
-        </h2>
-
-        <p>
-            Centralize comunicados, avaliações,
-            treinamentos, documentos e solicitações
-            em um único ambiente.
-        </p>
-
-    </div>
-
-    <img
-        src="assets/hero-foto-cmivet.jpg?v=2"
-        alt="CMIVET"
-    >
-
-</section>
-
-
-<section class="dashboard-grid">
-
-
-    <a
-        href="termometro.html"
-        class="card card-link"
-    >
-
-        <span>😊</span>
-
-        <h3>
-            Termômetro Emocional
-        </h3>
-
-        <p id="statusTermometro">
-            Verificando...
-        </p>
-
-    </a>
-
-
-    <a
-        href="comunicados.html"
-        class="card card-link"
-    >
-
-        <span>📢</span>
-
-        <h3>
-            Comunicados
-        </h3>
-
-        <p id="statusComunicados">
-            Carregando...
-        </p>
-
-    </a>
-
-
-    <a
-        href="cafe-rh.html"
-        class="card card-link"
-    >
-
-        <span>☕</span>
-
-        <h3>
-            Café com RH
-        </h3>
-
-        <p>
-            Solicite um atendimento confidencial
-        </p>
-
-    </a>
-
-
-    <a
-        href="biblioteca.html"
-        class="card card-link"
-    >
-
-        <span>📚</span>
-
-        <h3>
-            Biblioteca RH
-        </h3>
-
-        <p>
-            Documentos e materiais
-        </p>
-
-    </a>
-
-
-    <a
-        href="universidade.html"
-        class="card card-link"
-    >
-
-        <span>🎓</span>
-
-        <h3>
-            Universidade CMIVET
-        </h3>
-
-        <p>
-            Cursos e treinamentos
-        </p>
-
-    </a>
-
-
-    <a
-        href="avaliacoes.html"
-        class="card card-link"
-    >
-
-        <span>📋</span>
-
-        <h3>
-            Avaliações
-        </h3>
-
-        <p>
-            Desempenho e feedbacks
-        </p>
-
-    </a>
-
-
-    <a
-        href="perfil.html"
-        class="card card-link"
-    >
-
-        <span>👤</span>
-
-        <h3>
-            Meu Perfil
-        </h3>
-
-        <p>
-            Dados pessoais
-        </p>
-
-    </a>
-
-
-    <a
-        href="beneficios.html"
-        class="card card-link"
-    >
-
-        <span>💙</span>
-
-        <h3>
-            Benefícios
-        </h3>
-
-        <p>
-            Convênios e vantagens
-        </p>
-
-    </a>
-
-</section>
-
-
-<section class="panel">
-
-    <div class="panel-head">
-
-        <h2>
-            Comunicados recentes
-        </h2>
-
-        <a
-            href="comunicados.html"
-            class="btn btn-small"
-        >
-            Ver todos
-        </a>
-
-    </div>
-
-    <div
-        id="announcements"
-        class="cards"
-    >
-        Carregando comunicados...
-    </div>
-
-</section>
-
-
-<section class="panel">
-
-    <div class="panel-head">
-
-        <h2>
-            Avisos do Sistema
-        </h2>
-
-    </div>
-
-    <div id="avisos">
-        Tudo funcionando normalmente.
-    </div>
-
-</section>
-
-
-<footer class="footer">
-
-    <strong>
-        Portal RH CMIVET
-    </strong>
-
-    <br>
-
-    Versão Enterprise • Desenvolvido em Google Apps Script
-
-</footer>
-
-
-</main>
-
-</div>
-
-
-<!-- =====================================================
-     MODAL DO TERMÔMETRO
-===================================================== -->
-
-<div
-    id="termometroModal"
-    role="dialog"
-    aria-modal="true"
->
-
-    <div id="termometroModalBox">
-
-
-        <div id="termometroModalHeader">
+            <img
+                src="ativos/cmivet-logo-oficial.jpeg"
+                alt="CMIVET">
 
             <div>
 
-                <strong>
-                    😊 Termômetro Emocional
-                </strong>
+                <strong>RH CMIVET</strong>
+
+                <span id="sideRole">
+                    Portal Corporativo
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a
+                class="active"
+                href="portal.html">
+
+                🏠 Dashboard
+
+            </a>
+
+            <a href="termometro.html">
+
+                😊 Termômetro
+
+            </a>
+
+            <a href="comunicados.html">
+
+                📢 Comunicados
+
+            </a>
+
+            <a href="cafe-rh.html">
+
+                ☕ Café RH
+
+            </a>
+
+            <a href="biblioteca.html">
+
+                📚 Biblioteca RH
+
+            </a>
+
+            <a href="universidade.html">
+
+                🎓 Universidade
+
+            </a>
+
+            <a href="avaliacoes.html">
+
+                📋 Avaliações
+
+            </a>
+
+            <a href="perfil.html">
+
+                👤 Meu Perfil
+
+            </a>
+
+            <a
+                id="adminLink"
+                hidden
+                href="admin.html">
+
+                🔐 Administração
+
+            </a>
+
+        </nav>
+
+
+        <button
+            id="logout"
+            class="btn danger">
+
+            ↩ Sair
+
+        </button>
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+         ===================================================== -->
+
+    <main class="main">
+
+
+        <!-- =================================================
+             TOPO
+             ================================================= -->
+
+        <header class="topbar">
+
+            <div>
 
                 <small>
-                    Sua resposta diária é importante para o RH.
+                    PORTAL RH CMIVET
                 </small>
 
+                <h1 id="welcome">
+                    Carregando...
+                </h1>
+
             </div>
 
 
-            <button
-                id="fecharTermometro"
-                type="button"
-                aria-label="Fechar Termômetro"
-            >
-                ×
-            </button>
+            <div class="profile-chip">
 
-        </div>
+                <div
+                    id="avatar"
+                    class="avatar">
+
+                    --
+
+                </div>
 
 
-        <div id="termometroLoading">
+                <div>
 
-            <div class="loading-circle"></div>
+                    <strong id="userName">
+                        Carregando...
+                    </strong>
+
+                    <span id="userRole">
+                        ...
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section class="hero">
 
             <div>
-                Carregando seu Termômetro...
+
+                <span class="pill">
+                    Portal Corporativo
+                </span>
+
+
+                <h2>
+                    Bem-vindo ao Portal RH CMIVET
+                </h2>
+
+
+                <p>
+                    Centralize comunicados, avaliações,
+                    treinamentos, documentos e solicitações
+                    em um único ambiente.
+                </p>
+
             </div>
 
-        </div>
+
+            <img
+                src="ativos/hero-foto-cmivet.jpg"
+                alt="CMIVET">
+
+        </section>
 
 
-        <iframe
-            id="termometroFrame"
-            title="Termômetro Emocional"
-        ></iframe>
+        <!-- =================================================
+             CARDS DO PORTAL
+             ================================================= -->
+
+        <section class="dashboard-grid">
 
 
-    </div>
+            <!-- TERMÔMETRO -->
+
+            <a
+                href="termometro.html"
+                class="card card-link">
+
+                <span>
+                    😊
+                </span>
+
+                <h3>
+                    Termômetro Emocional
+                </h3>
+
+                <p id="statusTermometro">
+                    Verificando...
+                </p>
+
+            </a>
+
+
+            <!-- COMUNICADOS -->
+
+            <a
+                href="comunicados.html"
+                class="card card-link">
+
+                <span>
+                    📢
+                </span>
+
+                <h3>
+                    Comunicados
+                </h3>
+
+                <p id="statusComunicados">
+                    Carregando...
+                </p>
+
+            </a>
+
+
+            <!-- CAFÉ RH -->
+
+            <a
+                href="cafe-rh.html"
+                class="card card-link">
+
+                <span>
+                    ☕
+                </span>
+
+                <h3>
+                    Café com RH
+                </h3>
+
+                <p>
+                    Solicite um atendimento confidencial
+                </p>
+
+            </a>
+
+
+            <!-- BIBLIOTECA -->
+
+            <a
+                href="biblioteca.html"
+                class="card card-link">
+
+                <span>
+                    📚
+                </span>
+
+                <h3>
+                    Biblioteca RH
+                </h3>
+
+                <p>
+                    Documentos e materiais
+                </p>
+
+            </a>
+
+
+            <!-- UNIVERSIDADE -->
+
+            <a
+                href="universidade.html"
+                class="card card-link">
+
+                <span>
+                    🎓
+                </span>
+
+                <h3>
+                    Universidade CMIVET
+                </h3>
+
+                <p>
+                    Cursos e treinamentos
+                </p>
+
+            </a>
+
+
+            <!-- AVALIAÇÕES -->
+
+            <a
+                href="avaliacoes.html"
+                class="card card-link">
+
+                <span>
+                    📋
+                </span>
+
+                <h3>
+                    Avaliações
+                </h3>
+
+                <p>
+                    Desempenho e feedbacks
+                </p>
+
+            </a>
+
+
+            <!-- PERFIL -->
+
+            <a
+                href="perfil.html"
+                class="card card-link">
+
+                <span>
+                    👤
+                </span>
+
+                <h3>
+                    Meu Perfil
+                </h3>
+
+                <p>
+                    Dados pessoais
+                </p>
+
+            </a>
+
+
+            <!-- BENEFÍCIOS -->
+
+            <a
+                href="beneficios.html"
+                class="card card-link">
+
+                <span>
+                    💙
+                </span>
+
+                <h3>
+                    Benefícios
+                </h3>
+
+                <p>
+                    Convênios e vantagens
+                </p>
+
+            </a>
+
+
+        </section>
+
+
+        <!-- =================================================
+             RODAPÉ
+             ================================================= -->
+
+        <footer class="footer">
+
+            <strong>
+                Portal RH CMIVET
+            </strong>
+
+            <br>
+
+            Versão Enterprise • Desenvolvido em Google Apps Script
+
+        </footer>
+
+
+    </main>
 
 </div>
 
+
+<!-- =========================================================
+     SCRIPTS
+     ========================================================= -->
 
 <script src="js/config.js"></script>
 
