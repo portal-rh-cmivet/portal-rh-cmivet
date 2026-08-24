@@ -67,7 +67,9 @@ const API = {
 
                 sucesso: false,
 
-                erro: erro.message
+                erro:
+                    erro.message ||
+                    "Erro de comunicação com o servidor."
 
             };
 
@@ -83,14 +85,13 @@ const API = {
     login(email, senha) {
 
         return this.request(
-
             "login",
-
             {
+
                 email,
                 senha
-            }
 
+            }
         );
 
     },
@@ -99,13 +100,12 @@ const API = {
     validarSessao(token) {
 
         return this.request(
-
             "validarSessao",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
@@ -114,13 +114,12 @@ const API = {
     logout(token) {
 
         return this.request(
-
             "logout",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
@@ -133,13 +132,12 @@ const API = {
     listarUsuarios(token) {
 
         return this.request(
-
             "listarUsuarios",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
@@ -148,11 +146,8 @@ const API = {
     criarUsuario(dados) {
 
         return this.request(
-
             "criarUsuario",
-
             dados
-
         );
 
     },
@@ -161,11 +156,8 @@ const API = {
     alterarStatusUsuario(dados) {
 
         return this.request(
-
             "alterarStatusUsuario",
-
             dados
-
         );
 
     },
@@ -175,133 +167,79 @@ const API = {
      * COMUNICADOS
      *************************************************/
 
-
-    /*
-     * BUSCAR COMUNICADOS PARA O COLABORADOR
-     *
-     * Esta função estava faltando no api.js.
-     *
-     * Ela chama:
-     *
-     * getComunicados()
-     *
-     * do arquivo Comunicados.gs
-     */
-
     getComunicados() {
 
         return this.request(
-
             "getComunicados",
-
             {}
-
         );
 
     },
 
-
-    /*
-     * NOVO COMUNICADO
-     */
 
     novoComunicado(dados) {
 
         return this.request(
-
             "novoComunicado",
-
             dados
-
         );
 
     },
 
-
-    /*
-     * LISTAR COMUNICADOS PARA ADMIN
-     */
 
     listarComunicadosAdmin(token) {
 
         return this.request(
-
             "listarComunicadosAdmin",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
 
-
-    /*
-     * COMUNICADOS PENDENTES
-     */
 
     comunicadosPendentes(token) {
 
         return this.request(
-
             "comunicadosPendentes",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
 
-
-    /*
-     * CONFIRMAR LEITURA
-     */
 
     confirmarLeitura(dados) {
 
         return this.request(
-
             "confirmarLeitura",
-
             dados
-
         );
 
     },
 
-
-    /*
-     * ALTERAR STATUS
-     */
 
     alterarStatusComunicado(dados) {
 
         return this.request(
-
             "alterarStatusComunicado",
-
             dados
-
         );
 
     },
 
 
-    /*
-     * EXCLUIR COMUNICADO
-     */
-
     excluirComunicado(dados) {
 
         return this.request(
-
             "excluirComunicado",
-
             dados
-
         );
 
     },
@@ -314,11 +252,8 @@ const API = {
     salvarTermometro(dados) {
 
         return this.request(
-
             "termometro",
-
             dados
-
         );
 
     },
@@ -327,13 +262,12 @@ const API = {
     verificarTermometroHoje(token) {
 
         return this.request(
-
             "verificarTermometroHoje",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
@@ -342,13 +276,12 @@ const API = {
     resumoTermometro90(token) {
 
         return this.request(
-
             "resumoTermometro90",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
@@ -361,11 +294,8 @@ const API = {
     salvarCafeRH(dados) {
 
         return this.request(
-
             "cafeRH",
-
             dados
-
         );
 
     },
@@ -374,13 +304,12 @@ const API = {
     listarCafeRH(token) {
 
         return this.request(
-
             "listarCafeRH",
-
             {
-                token
-            }
 
+                token
+
+            }
         );
 
     },
@@ -389,13 +318,51 @@ const API = {
     alterarStatusCafeRH(dados) {
 
         return this.request(
-
             "alterarStatusCafeRH",
-
             dados
+        );
 
+    },
+
+
+    /*************************************************
+     * BIBLIOTECA RH
+     *************************************************/
+
+    listarBiblioteca(token) {
+
+        return this.request(
+            "biblioteca",
+            {
+
+                token
+
+            }
+        );
+
+    },
+
+
+    /*************************************************
+     * UNIVERSIDADE
+     *************************************************/
+
+    listarTrilhas(token) {
+
+        return this.request(
+            "trilhas",
+            {
+
+                token
+
+            }
         );
 
     }
 
 };
+
+
+/*************************************************
+ * FIM DO ARQUIVO
+ *************************************************/
