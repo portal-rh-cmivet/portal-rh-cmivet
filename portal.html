@@ -9,82 +9,13 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Portal RH CMIVET</title>
+    <title>
+        Portal RH CMIVET
+    </title>
 
     <link
         rel="stylesheet"
         href="app.css">
-
-    <style>
-
-        /* =================================================
-           AJUSTES EXCLUSIVOS DO DASHBOARD
-           ================================================= */
-
-        /* LOGO DA SIDEBAR */
-        .brand > img{
-            width:76px;
-            height:58px;
-            object-fit:contain;
-            background:transparent;
-            border-radius:0;
-            padding:0;
-        }
-
-        /* BANNER */
-        .hero{
-            overflow:hidden;
-        }
-
-        .hero > img{
-            width:100%;
-            height:100%;
-            min-height:0;
-
-            object-fit:contain;
-            object-position:center;
-
-            background:#075d54;
-
-            display:block;
-        }
-
-        /* Mantém a imagem dentro do espaço */
-        .hero{
-            min-height:280px;
-        }
-
-        /* Espaçamento entre os cards */
-        .dashboard-grid{
-            gap:18px;
-        }
-
-        /* Evita qualquer imagem ultrapassar o card */
-        .hero,
-        .hero img{
-            max-width:100%;
-        }
-
-        /* =================================================
-           CELULAR
-           ================================================= */
-
-        @media(max-width:800px){
-
-            .hero{
-                grid-template-columns:1fr;
-                min-height:auto;
-            }
-
-            .hero > img{
-                min-height:220px;
-                max-height:280px;
-                object-fit:contain;
-            }
-
-        }
-
-    </style>
 
 </head>
 
@@ -94,13 +25,15 @@
 <div class="app-shell">
 
 
-    <!-- =================================================
+    <!-- =====================================================
          SIDEBAR
-         ================================================= -->
+         ===================================================== -->
 
     <aside class="sidebar">
 
         <div class="brand">
+
+            <!-- LOGO TRANSPARENTE COM ESCRITA BRANCA -->
 
             <img
                 src="assets/cmivet-logo-oficial.png"
@@ -132,49 +65,56 @@
             </a>
 
 
-            <a href="termometro.html">
+            <a
+                href="termometro.html">
 
                 😊 Termômetro
 
             </a>
 
 
-            <a href="comunicados.html">
+            <a
+                href="comunicados.html">
 
                 📢 Comunicados
 
             </a>
 
 
-            <a href="cafe-rh.html">
+            <a
+                href="cafe-rh.html">
 
                 ☕ Café RH
 
             </a>
 
 
-            <a href="biblioteca.html">
+            <a
+                href="biblioteca.html">
 
                 📚 Biblioteca RH
 
             </a>
 
 
-            <a href="universidade.html">
+            <a
+                href="universidade.html">
 
                 🎓 Universidade
 
             </a>
 
 
-            <a href="avaliacoes.html">
+            <a
+                href="avaliacoes.html">
 
                 📋 Avaliações
 
             </a>
 
 
-            <a href="perfil.html">
+            <a
+                href="perfil.html">
 
                 👤 Meu Perfil
 
@@ -205,18 +145,22 @@
 
 
 
-    <!-- =================================================
+    <!-- =====================================================
          CONTEÚDO PRINCIPAL
-         ================================================= -->
+         ===================================================== -->
 
     <main class="main">
 
 
         <!-- =================================================
              BANNER PRINCIPAL
+             TAMANHO ORIGINAL DO PORTAL
              ================================================= -->
 
         <section class="hero">
+
+
+            <!-- TEXTO -->
 
             <div>
 
@@ -245,6 +189,9 @@
             </div>
 
 
+
+            <!-- FOTO DO BANNER -->
+
             <img
                 src="assets/hero-foto-cmivet.jpg"
                 alt="CMIVET">
@@ -254,7 +201,7 @@
 
 
         <!-- =================================================
-             CARDS DO DASHBOARD
+             CARDS
              ================================================= -->
 
         <section class="dashboard-grid">
@@ -264,7 +211,7 @@
 
             <a
                 href="termometro.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     😊
@@ -286,7 +233,7 @@
 
             <a
                 href="comunicados.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     📢
@@ -308,7 +255,7 @@
 
             <a
                 href="cafe-rh.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     ☕
@@ -330,7 +277,7 @@
 
             <a
                 href="biblioteca.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     📚
@@ -352,7 +299,7 @@
 
             <a
                 href="universidade.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     🎓
@@ -374,7 +321,7 @@
 
             <a
                 href="avaliacoes.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     📋
@@ -396,7 +343,7 @@
 
             <a
                 href="perfil.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     👤
@@ -418,7 +365,7 @@
 
             <a
                 href="beneficios.html"
-                class="card card-link">
+                class="card">
 
                 <span>
                     💙
@@ -462,9 +409,9 @@
 
 
 
-<!-- =================================================
+<!-- =====================================================
      SCRIPTS
-     ================================================= -->
+     ===================================================== -->
 
 <script src="js/config.js"></script>
 
