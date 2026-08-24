@@ -1,47 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Portal RH CMIVET</title>
-<link rel="stylesheet" href="app.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Portal RH CMIVET</title>
+
+    <!--
+        O index agora é somente a porta de entrada.
+        Ele envia diretamente para o Portal.
+    -->
+
+    <meta
+        http-equiv="refresh"
+        content="0; url=portal.html">
+
 </head>
+
 <body>
-<header class="public-header">
-  <div class="brand"><img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET"><div><strong>RH CMIVET</strong><span>Portal do Colaborador</span></div></div>
-  <a class="btn primary" href="login.html">Entrar</a>
-</header>
-<main class="container">
-  <section class="hero">
-    <div><span class="pill">Portal Corporativo</span><h1>Bem-vinda ao Portal do RH</h1><p>Acesse comunicados, cursos, avaliações, documentos e benefícios em um único ambiente.</p></div>
-    <img src="assets/cmivet-animais-hero.png" alt="">
-  </section>
-  <section class="quick-grid">
-    <button data-login>📢<b>Comunicados</b><span>Avisos oficiais</span></button>
-    <button data-login>📚<b>Biblioteca RH</b><span>POPs e documentos</span></button>
-    <button data-login>🎓<b>Universidade</b><span>Cursos e trilhas</span></button>
-    <button data-login>📋<b>Avaliações</b><span>Experiência e desempenho</span></button>
-    <button data-login>☕<b>Café com RH</b><span>Conversa individual</span></button>
-    <button data-login>👤<b>Meu Perfil</b><span>Dados e histórico</span></button>
-  </section>
-</main>
-<div id="thermometerOverlay" class="overlay" hidden>
-  <div class="modal">
-    <img src="assets/cmivet-logo-oficial.jpeg" alt="CMIVET">
-    <span class="pill gold">Resposta diária obrigatória</span>
-    <h2>Como você está se sentindo hoje?</h2>
-    <form id="thermometerForm">
-      <div class="moods">
-        <label><input type="radio" name="humor" value="1" required><span>😣<b>Estressado</b></span></label>
-        <label><input type="radio" name="humor" value="2"><span>😴<b>Cansado</b></span></label>
-        <label><input type="radio" name="humor" value="3"><span>🙂<b>Neutro</b></span></label>
-        <label><input type="radio" name="humor" value="4"><span>😄<b>Ótimo</b></span></label>
-      </div>
-      <label>Energia<select name="energia" required><option value="">Selecione</option><option>Baixa</option><option>Moderada</option><option>Alta</option></select></label>
-      <label>Observação<textarea name="observacao" rows="3"></textarea></label>
-      <button class="btn primary" type="submit">Enviar resposta</button>
-      <div id="thermometerMessage" class="message"></div>
-    </form>
-  </div>
-</div>
-<script src="public.js"></script>
-</body></html>
+
+    <script>
+
+        /*
+         * Redirecionamento imediato
+         * para o Portal RH CMIVET.
+         */
+
+        window.location.replace(
+            "portal.html"
+        );
+
+    </script>
+
+
+    <noscript>
+
+        <p>
+            Abrindo o Portal RH CMIVET...
+        </p>
+
+        <p>
+
+            <a href="portal.html">
+                Clique aqui para entrar no Portal
+            </a>
+
+        </p>
+
+    </noscript>
+
+</body>
+
+</html>
