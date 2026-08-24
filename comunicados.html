@@ -1,65 +1,602 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Comunicados - Portal RH CMIVET</title>
-<link rel="stylesheet" href="enterprise.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Comunicados | Portal RH CMIVET
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="app.css">
+
+    <style>
+
+        /* =====================================================
+           COMUNICADOS — LAYOUT
+           ===================================================== */
+
+        .announcements-list {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(320px, 1fr)
+                );
+
+            gap: 22px;
+
+            margin-top: 20px;
+
+        }
+
+
+        .announcement-card {
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                var(--cmivet-line);
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 7px 22px
+                rgba(32,57,52,.07);
+
+            transition:
+                transform .18s ease,
+                box-shadow .18s ease,
+                border-color .18s ease;
+
+        }
+
+
+        .announcement-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            border-color:
+                var(--cmivet-gold);
+
+            box-shadow:
+                0 12px 28px
+                rgba(32,57,52,.11);
+
+        }
+
+
+        .announcement-image {
+
+            width: 100%;
+
+            background:
+                #f3f0e8;
+
+            overflow: hidden;
+
+        }
+
+
+        .announcement-image img {
+
+            display: block;
+
+            width: 100%;
+
+            height: auto;
+
+            max-height: 420px;
+
+            object-fit: contain;
+
+            object-position: center;
+
+        }
+
+
+        .announcement-content {
+
+            padding:
+                20px 21px 22px;
+
+        }
+
+
+        .announcement-date {
+
+            color:
+                #a7812e;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        .announcement-content h3 {
+
+            margin:
+                0 0 9px;
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size:
+                22px;
+
+            line-height:
+                1.2;
+
+            color:
+                var(--cmivet-ink);
+
+        }
+
+
+        .announcement-content p {
+
+            margin:
+                0 0 18px;
+
+            color:
+                var(--cmivet-muted);
+
+            font-size:
+                14px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .announcement-actions {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+        }
+
+
+        .announcement-read {
+
+            padding:
+                9px 14px;
+
+            border:
+                1px solid
+                var(--cmivet-gold);
+
+            border-radius:
+                9px;
+
+            background:
+                #fffdf6;
+
+            color:
+                #71591e;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+
+            transition:
+                .18s ease;
+
+        }
+
+
+        .announcement-read:hover {
+
+            background:
+                var(--cmivet-gold);
+
+            color:
+                #ffffff;
+
+        }
+
+
+        .loading-card,
+        .empty-card,
+        .error-card {
+
+            padding:
+                28px;
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid
+                var(--cmivet-line);
+
+            border-radius:
+                15px;
+
+            color:
+                var(--cmivet-muted);
+
+            text-align:
+                center;
+
+        }
+
+
+        .error-card {
+
+            color:
+                #9a3f3f;
+
+            background:
+                #fff5f5;
+
+            border-color:
+                #edcccc;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVO
+           ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .announcements-list {
+
+                grid-template-columns:
+                    1fr;
+
+                gap:
+                    18px;
+
+            }
+
+
+            .announcement-image img {
+
+                max-height:
+                    none;
+
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body>
-<div class="layout">
-<aside class="sidebar">
-<div class="logo"><h2>Portal RH</h2><small>CMIVET Enterprise</small></div>
-<nav>
-<a href="dashboard.html"><span class="material-symbols-rounded">dashboard</span><span>Dashboard</span></a>
-<a href="termometro.html"><span class="material-symbols-rounded">mood</span><span>Termômetro</span></a>
-<a class="active" href="comunicados.html"><span class="material-symbols-rounded">campaign</span><span>Comunicados</span></a>
-<a href="biblioteca.html"><span class="material-symbols-rounded">menu_book</span><span>Biblioteca</span></a>
-<a href="universidade.html"><span class="material-symbols-rounded">school</span><span>Universidade</span></a>
-</nav>
-</aside>
 
-<main class="content">
-<header class="topbar">
-<div>
-<h1>Comunicados</h1>
-<p>Central de avisos da CMIVET</p>
+<div class="app-shell">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="brand">
+
+            <img
+                src="ativos/cmivet-logo-oficial.jpeg"
+                alt="CMIVET">
+
+
+            <div>
+
+                <strong>
+                    RH CMIVET
+                </strong>
+
+                <span>
+                    Portal Corporativo
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="portal.html">
+                🏠 Dashboard
+            </a>
+
+
+            <a href="termometro.html">
+                😊 Termômetro
+            </a>
+
+
+            <a
+                class="active"
+                href="comunicados.html">
+
+                📢 Comunicados
+
+            </a>
+
+
+            <a href="cafe-rh.html">
+                ☕ Café RH
+            </a>
+
+
+            <a href="biblioteca.html">
+                📚 Biblioteca
+            </a>
+
+
+            <a href="universidade.html">
+                🎓 Universidade
+            </a>
+
+
+            <a href="avaliacoes.html">
+                📋 Avaliações
+            </a>
+
+
+            <a href="perfil.html">
+                👤 Meu Perfil
+            </a>
+
+
+            <a
+                id="adminLink"
+                hidden
+                href="admin.html">
+
+                🔐 Administração
+
+            </a>
+
+        </nav>
+
+
+        <button
+            id="logout"
+            class="btn danger">
+
+            ↩ Sair
+
+        </button>
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+         ===================================================== -->
+
+    <main class="main">
+
+
+        <!-- =================================================
+             TOPO
+             ================================================= -->
+
+        <header class="topbar">
+
+
+            <div>
+
+                <small>
+                    PORTAL RH CMIVET
+                </small>
+
+
+                <h1>
+                    Comunicados
+                </h1>
+
+            </div>
+
+
+            <div class="profile-chip">
+
+
+                <div
+                    id="avatar"
+                    class="avatar">
+
+                    --
+
+                </div>
+
+
+                <div>
+
+                    <strong
+                        id="userName">
+
+                        Carregando...
+
+                    </strong>
+
+
+                    <span
+                        id="userRole">
+
+                        ...
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section class="hero">
+
+
+            <div>
+
+                <span class="pill">
+
+                    Comunicação Interna
+
+                </span>
+
+
+                <h2>
+
+                    Comunicados CMIVET
+
+                </h2>
+
+
+                <p>
+
+                    Acompanhe os comunicados,
+                    informações e novidades
+                    importantes do RH e da CMIVET.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PAINEL DE COMUNICADOS
+             ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="panel-head">
+
+
+                <h2>
+
+                    📢 Comunicados recentes
+
+                </h2>
+
+
+                <span
+                    id="statusComunicados"
+                    class="badge">
+
+                    Carregando...
+
+                </span>
+
+            </div>
+
+
+            <!--
+                O JavaScript irá preencher
+                esta área automaticamente.
+            -->
+
+            <div
+                id="announcements"
+                class="announcements-list">
+
+                <div class="loading-card">
+
+                    Carregando comunicados...
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             RODAPÉ
+             ================================================= -->
+
+        <footer class="footer">
+
+
+            <strong>
+                Portal RH CMIVET
+            </strong>
+
+
+            <br>
+
+
+            Versão Enterprise •
+            Desenvolvido em Google Apps Script
+
+
+        </footer>
+
+
+    </main>
+
 </div>
-</header>
 
-<section class="card">
-<div class="card-header">
-<h2>Últimos Comunicados</h2>
-</div>
 
-<div class="news">
+<!-- =========================================================
+     SCRIPTS
+     ========================================================= -->
 
-<div class="card" style="margin-bottom:18px">
-<h3>Reunião Geral</h3>
-<p>Conteúdo carregado futuramente pela API.</p>
-</div>
+<script src="js/config.js"></script>
 
-<div class="card" style="margin-bottom:18px">
-<h3>Atualização de POP</h3>
-<p>Conteúdo carregado futuramente pela API.</p>
-</div>
+<script src="js/api.js"></script>
 
-<div class="card">
-<h3>Treinamentos</h3>
-<p>Conteúdo carregado futuramente pela API.</p>
-</div>
+<script src="js/auth.js"></script>
 
-</div>
+<script src="js/session.js"></script>
 
-</section>
+<script src="js/comunicados.js"></script>
 
-<footer class="footer">
-Portal RH CMIVET Enterprise
-</footer>
 
-</main>
-</div>
 </body>
+
 </html>
