@@ -1,29 +1,23 @@
 /*************************************************
  * PORTAL RH CMIVET
  * portal.js
- * Versão 8.0
- * Termômetro integrado ao Portal
+ * Fluxo:
+ *
+ * Portal
+ * ↓
+ * Login
+ * ↓
+ * Termômetro
+ * ↓
+ * Dashboard
  *************************************************/
 
-
-/*************************************************
- * CONFIGURAÇÃO
- *************************************************/
 
 const TOKEN = Auth.getToken();
 
-const USER = Auth.getUser() || {};
+let USER = Auth.getUser() || {};
 
-
-/*************************************************
- * SEM LOGIN
- *************************************************/
-
-if (!TOKEN) {
-
-    window.location.href = "login.html";
-
-}
+let loginLiberado = false;
 
 
 /*************************************************
@@ -40,25 +34,60 @@ async function iniciarPortal() {
 
     try {
 
-        await Auth.protegerPagina();
-
-        carregarUsuario();
-
-        configurarMenu();
-
-        configurarLogout();
+        configurarModalLogin();
 
         configurarModalTermometro();
 
-        await carregarDashboard();
+        configurarLogout();
+
+        /*
+         * Primeiro verificamos se existe sessão.
+         */
+
+        if (Session.isLogged()) {
+
+            const ok =
+                await Auth.validarSessao();
+
+            if (ok) {
+
+                loginLiberado = true;
+
+                USER =
+                    Auth.getUser() || {};
+
+                carregarUsuario();
+
+                configurarMenu();
+
+                fecharModalLogin();
+
+                await verificarTermometroHoje();
+
+                return;
+            }
+
+        }
+
+
+        /*
+         * Sem sessão:
+         * mostra o login.
+         */
+
+        abrirModalLogin();
+
 
     }
 
     catch (erro) {
 
-        console.error(erro);
+        console.error(
+            "Erro ao iniciar Portal:",
+            erro
+        );
 
-        Auth.logout();
+        abrirModalLogin();
 
     }
 
@@ -66,18 +95,179 @@ async function iniciarPortal() {
 
 
 /*************************************************
- * DASHBOARD
+ * CONFIGURA LOGIN
  *************************************************/
 
-async function carregarDashboard() {
+function configurarModalLogin() {
 
-    await Promise.all([
+    const form =
+        document.getElementById(
+            "portalLoginForm"
+        );
 
-        carregarComunicados(),
 
-        verificarTermometroHoje()
+    if (!form) return;
 
-    ]);
+
+    form.addEventListener(
+        "submit",
+        efetuarLoginPortal
+    );
+
+}
+
+
+/*************************************************
+ * LOGIN
+ *************************************************/
+
+async function efetuarLoginPortal(event) {
+
+    event.preventDefault();
+
+
+    const email =
+        document.getElementById(
+            "portalEmail"
+        ).value.trim();
+
+
+    const senha =
+        document.getElementById(
+            "portalSenha"
+        ).value;
+
+
+    const botao =
+        document.getElementById(
+            "portalLoginButton"
+        );
+
+
+    const mensagem =
+        document.getElementById(
+            "portalLoginMessage"
+        );
+
+
+    mensagem.textContent = "";
+
+    mensagem.className =
+        "portal-login-message";
+
+
+    botao.disabled = true;
+
+    botao.textContent =
+        "Entrando...";
+
+
+    try {
+
+
+        /*
+         * USA A MESMA AUTENTICAÇÃO
+         * QUE JÁ EXISTE NO SITE.
+         */
+
+        const resposta =
+            await Auth.login(
+                email,
+                senha
+            );
+
+
+        if (
+            !resposta ||
+            !resposta.sucesso
+        ) {
+
+            throw new Error(
+                resposta?.erro ||
+                "Não foi possível realizar o login."
+            );
+
+        }
+
+
+        /*
+         * Atualiza os dados locais.
+         */
+
+        USER =
+            resposta.usuario ||
+            Auth.getUser() ||
+            {};
+
+
+        loginLiberado = true;
+
+
+        carregarUsuario();
+
+        configurarMenu();
+
+
+        mensagem.textContent =
+            "Login realizado com sucesso.";
+
+
+        mensagem.classList.add(
+            "success"
+        );
+
+
+        /*
+         * Fecha o login.
+         */
+
+        setTimeout(
+            async function () {
+
+                fecharModalLogin();
+
+                /*
+                 * Agora verifica o Termômetro.
+                 */
+
+                await verificarTermometroHoje();
+
+            },
+
+            350
+        );
+
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro no login:",
+            erro
+        );
+
+
+        mensagem.textContent =
+            erro.message ||
+            "Falha no login.";
+
+
+        mensagem.classList.add(
+            "error"
+        );
+
+    }
+
+
+    finally {
+
+        botao.disabled = false;
+
+        botao.textContent =
+            "Entrar no Portal";
+
+    }
 
 }
 
@@ -88,9 +278,6 @@ async function carregarDashboard() {
 
 function carregarUsuario() {
 
-    if (!USER) return;
-
-
     const primeiroNome =
         (USER.nome || "")
             .split(" ")[0];
@@ -100,26 +287,34 @@ function carregarUsuario() {
         (USER.nome || "")
             .split(" ")
             .filter(Boolean)
-            .slice(0, 2)
-            .map(p => p[0])
+            .slice(0,2)
+            .map(nome => nome[0])
             .join("")
             .toUpperCase();
 
 
     const welcome =
-        document.getElementById("welcome");
+        document.getElementById(
+            "welcome"
+        );
 
 
     const userName =
-        document.getElementById("userName");
+        document.getElementById(
+            "userName"
+        );
 
 
     const userRole =
-        document.getElementById("userRole");
+        document.getElementById(
+            "userRole"
+        );
 
 
     const avatar =
-        document.getElementById("avatar");
+        document.getElementById(
+            "avatar"
+        );
 
 
     if (welcome) {
@@ -165,7 +360,9 @@ function carregarUsuario() {
 function configurarMenu() {
 
     const adminLink =
-        document.getElementById("adminLink");
+        document.getElementById(
+            "adminLink"
+        );
 
 
     if (!adminLink) return;
@@ -173,7 +370,8 @@ function configurarMenu() {
 
     adminLink.hidden =
         String(USER.perfil)
-            .toLowerCase() !== "admin";
+            .toLowerCase() !==
+        "admin";
 
 }
 
@@ -184,229 +382,29 @@ function configurarMenu() {
 
 function configurarLogout() {
 
-    const btn =
-        document.getElementById("logout");
-
-
-    if (!btn) return;
-
-
-    btn.addEventListener(
-        "click",
-        () => Auth.logout()
-    );
-
-}
-
-
-/*************************************************
- * COMUNICAÇÃO COM API
- *************************************************/
-
-async function post(dados) {
-
-    try {
-
-        const resposta = await fetch(
-
-            CONFIG.API_URL,
-
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json"
-
-                },
-
-                body:
-                    JSON.stringify(dados)
-
-            }
-
+    const botao =
+        document.getElementById(
+            "logout"
         );
 
 
-        if (!resposta.ok) {
+    if (!botao) return;
 
-            throw new Error(
-                "Erro HTTP " +
-                resposta.status
-            );
+
+    botao.addEventListener(
+        "click",
+        function () {
+
+            Auth.logout();
 
         }
-
-
-        return await resposta.json();
-
-    }
-
-    catch (erro) {
-
-        console.error(
-            "Erro na API:",
-            erro
-        );
-
-        throw erro;
-
-    }
-
-}
-
-
-/*************************************************
- * COMUNICADOS
- *************************************************/
-
-async function carregarComunicados() {
-
-    try {
-
-        const resposta =
-            await fetch(
-                `${CONFIG.API_URL}?action=comunicados&t=${Date.now()}`
-            );
-
-
-        const dados =
-            await resposta.json();
-
-
-        const lista =
-            Array.isArray(dados)
-                ? dados
-                : [];
-
-
-        renderizarComunicados(lista);
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-        renderizarComunicados([]);
-
-    }
-
-}
-
-
-/*************************************************
- * RENDERIZA COMUNICADOS
- *************************************************/
-
-function renderizarComunicados(lista) {
-
-    const container =
-        document.getElementById(
-            "announcements"
-        );
-
-
-    if (!container) return;
-
-
-    if (!lista.length) {
-
-        container.innerHTML = `
-
-            <div class="empty">
-
-                Nenhum comunicado disponível.
-
-            </div>
-
-        `;
-
-
-        atualizarStatusComunicados(0);
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        lista
-            .slice(0, 6)
-            .map(item => `
-
-                <article class="card">
-
-                    <h3>
-                        ${escapeHtml(
-                            item.titulo || ""
-                        )}
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            item.descricao || ""
-                        )}
-                    </p>
-
-                </article>
-
-            `)
-            .join("");
-
-
-    atualizarStatusComunicados(
-        lista.length
     );
 
 }
 
 
 /*************************************************
- * STATUS DOS COMUNICADOS
- *************************************************/
-
-function atualizarStatusComunicados(total) {
-
-    const status =
-        document.getElementById(
-            "statusComunicados"
-        );
-
-
-    if (!status) return;
-
-
-    if (total === 0) {
-
-        status.textContent =
-            "Nenhum comunicado";
-
-        return;
-
-    }
-
-
-    if (total === 1) {
-
-        status.textContent =
-            "1 comunicado";
-
-        return;
-
-    }
-
-
-    status.textContent =
-        `${total} comunicados`;
-
-}
-
-
-/*************************************************
- * TERMÔMETRO
+ * VERIFICA TERMÔMETRO
  *************************************************/
 
 async function verificarTermometroHoje() {
@@ -417,40 +415,55 @@ async function verificarTermometroHoje() {
         );
 
 
-    if (!status) return;
+    if (!loginLiberado) {
+
+        return;
+
+    }
 
 
     try {
 
         const resposta =
             await API.verificarTermometroHoje(
-                TOKEN
+                Auth.getToken()
             );
 
 
         console.log(
-            "Verificação do Termômetro:",
+            "Verificação Termômetro:",
             resposta
         );
 
 
         if (!resposta.sucesso) {
 
-            status.textContent =
-                "Indisponível";
+            if (status) {
+
+                status.textContent =
+                    "⚠ Indisponível";
+
+            }
 
             return;
 
         }
 
 
-        if (resposta.respondeu === true) {
+        if (
+            resposta.respondeu === true
+        ) {
 
-            status.textContent =
-                "✅ Respondido hoje";
+            if (status) {
 
-            status.className =
-                "badge success";
+                status.textContent =
+                    "✅ Respondido hoje";
+
+                status.className =
+                    "badge success";
+
+            }
+
 
             fecharModalTermometro();
 
@@ -458,17 +471,16 @@ async function verificarTermometroHoje() {
 
         else {
 
-            status.textContent =
-                "🟡 Pendente";
+            if (status) {
 
-            status.className =
-                "badge warning";
+                status.textContent =
+                    "🟡 Pendente";
 
+                status.className =
+                    "badge warning";
 
-            /*
-             * O funcionário ainda não respondeu.
-             * Abre automaticamente o Termômetro.
-             */
+            }
+
 
             abrirModalTermometro();
 
@@ -483,26 +495,16 @@ async function verificarTermometroHoje() {
             erro
         );
 
-
-        status.textContent =
-            "⚠ Indisponível";
-
     }
 
 }
 
 
 /*************************************************
- * MODAL DO TERMÔMETRO
+ * CONFIGURA MODAL TERMÔMETRO
  *************************************************/
 
 function configurarModalTermometro() {
-
-    const modal =
-        document.getElementById(
-            "termometroModal"
-        );
-
 
     const fechar =
         document.getElementById(
@@ -522,30 +524,19 @@ function configurarModalTermometro() {
         );
 
 
-    if (!modal) return;
-
-
-    /*
-     * Botão X
-     */
-
     if (fechar) {
 
         fechar.addEventListener(
             "click",
-            function () {
+            async function () {
 
-                fecharModalTermometro();
+                await verificarPodeFechar();
 
             }
         );
 
     }
 
-
-    /*
-     * Quando o Termômetro carregar
-     */
 
     if (frame) {
 
@@ -567,16 +558,17 @@ function configurarModalTermometro() {
 
 
     /*
-     * Mensagem enviada pelo termometro.js
+     * Recebe aviso do termometro.js
      */
 
     window.addEventListener(
         "message",
-        function (event) {
+        async function (event) {
 
             if (
                 !frame ||
-                event.source !== frame.contentWindow
+                event.source !==
+                    frame.contentWindow
             ) {
 
                 return;
@@ -595,34 +587,7 @@ function configurarModalTermometro() {
                 );
 
 
-                atualizarStatusDepoisDaResposta();
-
-            }
-
-        }
-    );
-
-
-    /*
-     * ESC
-     */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Escape" &&
-                modal.style.display === "flex"
-            ) {
-
-                /*
-                 * Permite fechar somente se
-                 * a resposta já tiver sido
-                 * registrada.
-                 */
-
-                verificarPodeFechar();
+                await atualizarStatusDepoisDaResposta();
 
             }
 
@@ -633,7 +598,7 @@ function configurarModalTermometro() {
 
 
 /*************************************************
- * ABRIR MODAL
+ * ABRE TERMÔMETRO
  *************************************************/
 
 function abrirModalTermometro() {
@@ -656,17 +621,18 @@ function abrirModalTermometro() {
         );
 
 
-    if (!modal || !frame) return;
+    if (!modal || !frame) {
 
+        return;
 
-    /*
-     * Evita recarregar o iframe
-     * se ele já estiver aberto.
-     */
+    }
+
 
     if (
         !frame.src ||
-        !frame.src.includes("termometro.html")
+        !frame.src.includes(
+            "termometro.html"
+        )
     ) {
 
         frame.src =
@@ -694,7 +660,7 @@ function abrirModalTermometro() {
 
 
 /*************************************************
- * FECHAR MODAL
+ * FECHA TERMÔMETRO
  *************************************************/
 
 function fecharModalTermometro() {
@@ -715,23 +681,11 @@ function fecharModalTermometro() {
     document.body.style.overflow =
         "";
 
-
-    const frame =
-        document.getElementById(
-            "termometroFrame"
-        );
-
-
-    /*
-     * Não removemos o iframe.
-     * Assim a sessão continua intacta.
-     */
-
 }
 
 
 /*************************************************
- * VERIFICA SE PODE FECHAR
+ * NÃO PERMITE FECHAR ANTES DA RESPOSTA
  *************************************************/
 
 async function verificarPodeFechar() {
@@ -740,7 +694,7 @@ async function verificarPodeFechar() {
 
         const resposta =
             await API.verificarTermometroHoje(
-                TOKEN
+                Auth.getToken()
             );
 
 
@@ -757,7 +711,9 @@ async function verificarPodeFechar() {
 
     catch (erro) {
 
-        console.error(erro);
+        console.error(
+            erro
+        );
 
     }
 
@@ -780,7 +736,7 @@ async function atualizarStatusDepoisDaResposta() {
 
         const resposta =
             await API.verificarTermometroHoje(
-                TOKEN
+                Auth.getToken()
             );
 
 
@@ -809,7 +765,7 @@ async function atualizarStatusDepoisDaResposta() {
     catch (erro) {
 
         console.error(
-            "Erro após resposta:",
+            "Erro após Termômetro:",
             erro
         );
 
@@ -819,62 +775,68 @@ async function atualizarStatusDepoisDaResposta() {
 
 
 /*************************************************
- * ATUALIZA STATUS
+ * MODAL LOGIN
  *************************************************/
 
-async function atualizarStatusTermometro() {
+function abrirModalLogin() {
 
-    await verificarTermometroHoje();
+    const modal =
+        document.getElementById(
+            "loginModal"
+        );
+
+
+    if (!modal) return;
+
+
+    modal.style.display =
+        "flex";
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    setTimeout(
+        function () {
+
+            const email =
+                document.getElementById(
+                    "portalEmail"
+                );
+
+
+            if (email) {
+
+                email.focus();
+
+            }
+
+        },
+
+        100
+    );
 
 }
 
 
-/*************************************************
- * RESUMO 90 DIAS
- *************************************************/
+function fecharModalLogin() {
 
-async function carregarResumoTermometro() {
-
-    if (
-        String(USER.perfil)
-            .toLowerCase() !== "admin"
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const resposta =
-            await API.resumoTermometro90(
-                TOKEN
-            );
-
-
-        if (!resposta.sucesso) {
-
-            return;
-
-        }
-
-
-        console.log(
-            "Resumo Termômetro:",
-            resposta
+    const modal =
+        document.getElementById(
+            "loginModal"
         );
 
-    }
 
-    catch (erro) {
+    if (!modal) return;
 
-        console.error(
-            "Erro ao carregar resumo:",
-            erro
-        );
 
-    }
+    modal.style.display =
+        "none";
+
+
+    document.body.style.overflow =
+        "";
 
 }
 
@@ -885,373 +847,15 @@ async function carregarResumoTermometro() {
 
 function $(id) {
 
-    return document.getElementById(id);
-
-}
-
-
-function showMessage(id, texto) {
-
-    const elemento = $(id);
-
-    if (!elemento) return;
-
-    elemento.textContent = texto;
-
-}
-
-
-function setLoading(id, ativo = true) {
-
-    const elemento = $(id);
-
-    if (!elemento) return;
-
-    if (ativo) {
-
-        elemento.classList.add(
-            "loading"
-        );
-
-    }
-
-    else {
-
-        elemento.classList.remove(
-            "loading"
-        );
-
-    }
-
-}
-
-
-function formatDate(data) {
-
-    if (!data) return "";
-
-    return new Intl.DateTimeFormat(
-        "pt-BR",
-        {
-            dateStyle:"short",
-            timeStyle:"short"
-        }
-    ).format(
-        new Date(data)
+    return document.getElementById(
+        id
     );
 
 }
 
 
-function escapeHtml(texto) {
-
-    if (!texto) return "";
-
-    return String(texto)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-function capitalize(texto) {
-
-    if (!texto) return "";
-
-    return texto.charAt(0).toUpperCase() +
-        texto.slice(1).toLowerCase();
-
-}
-
-
-function primeiroNome(nome) {
-
-    if (!nome) return "";
-
-    return nome
-        .trim()
-        .split(" ")[0];
-
-}
-
-
-function obterIniciais(nome) {
-
-    if (!nome) return "--";
-
-    return nome
-        .trim()
-        .split(" ")
-        .filter(Boolean)
-        .slice(0,2)
-        .map(p => p[0])
-        .join("")
-        .toUpperCase();
-
-}
-
-
-function hoje() {
-
-    return new Date()
-        .toLocaleDateString("pt-BR");
-
-}
-
-
-function agora() {
-
-    return new Date()
-        .toLocaleString("pt-BR");
-
-}
-
-
-function log(...dados) {
-
-    if (CONFIG.DEBUG) {
-
-        console.log(...dados);
-
-    }
-
-}
-
-
 /*************************************************
- * MÓDULOS
- *************************************************/
-
-async function carregarCafeRH() {
-
-    try {
-
-        log(
-            "Carregando Café com RH..."
-        );
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-async function carregarBiblioteca() {
-
-    try {
-
-        log(
-            "Carregando Biblioteca..."
-        );
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-async function carregarUniversidade() {
-
-    try {
-
-        log(
-            "Carregando Universidade..."
-        );
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-async function carregarAvaliacoes() {
-
-    try {
-
-        log(
-            "Carregando Avaliações..."
-        );
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-async function carregarBeneficios() {
-
-    try {
-
-        log(
-            "Carregando Benefícios..."
-        );
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-async function carregarPerfil() {
-
-    try {
-
-        log(
-            "Carregando Perfil..."
-        );
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-async function carregarAdministracao() {
-
-    if (
-        String(USER.perfil)
-            .toLowerCase() !== "admin"
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        log(
-            "Carregando Administração..."
-        );
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-/*************************************************
- * NAVEGAÇÃO
- *************************************************/
-
-function abrirPagina(pagina) {
-
-    if (!pagina) return;
-
-    window.location.href =
-        pagina;
-
-}
-
-
-/*************************************************
- * DASHBOARD
- *************************************************/
-
-async function atualizarDashboard() {
-
-    try {
-
-        await carregarDashboard();
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-/*************************************************
- * USUÁRIO
- *************************************************/
-
-async function atualizarUsuario() {
-
-    try {
-
-        carregarUsuario();
-
-    }
-
-    catch (erro) {
-
-        console.error(erro);
-
-    }
-
-}
-
-
-/*************************************************
- * ATALHOS
- *************************************************/
-
-function configurarAtalhos() {
-
-    document
-        .querySelectorAll("[data-link]")
-        .forEach(botao => {
-
-            botao.addEventListener(
-                "click",
-                function () {
-
-                    abrirPagina(
-                        this.dataset.link
-                    );
-
-                }
-            );
-
-        });
-
-}
-
-
-/*************************************************
- * ERROS GLOBAIS
+ * ERROS
  *************************************************/
 
 window.addEventListener(
@@ -1259,7 +863,7 @@ window.addEventListener(
     function (event) {
 
         console.error(
-            "Erro:",
+            "Erro JavaScript:",
             event.error
         );
 
