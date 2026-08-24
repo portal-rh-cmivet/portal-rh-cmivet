@@ -9,13 +9,115 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Portal RH CMIVET
-    </title>
+    <title>Portal RH CMIVET</title>
 
     <link
         rel="stylesheet"
         href="app.css">
+
+    <!-- =================================================
+         AJUSTE EXCLUSIVO DO BANNER
+         NÃO ALTERA O TAMANHO DO PORTAL
+         ================================================= -->
+
+    <style>
+
+        /*
+         * Mantém exatamente a estrutura original
+         * do banner.
+         */
+
+        .hero{
+            min-height:300px;
+            overflow:hidden;
+        }
+
+
+        /*
+         * A imagem permanece dentro da área direita
+         * do banner.
+         *
+         * "fill" faz a arte ocupar exatamente o
+         * espaço disponível sem cortar nenhuma parte.
+         */
+
+        .hero > img{
+
+            width:100%;
+
+            height:100%;
+
+            min-height:300px;
+
+            max-height:300px;
+
+            object-fit:fill;
+
+            object-position:center;
+
+            display:block;
+
+            background:#075d54;
+        }
+
+
+        /*
+         * Garante que nada do banner ultrapasse
+         * os limites do card.
+         */
+
+        .hero,
+        .hero > img{
+
+            max-width:100%;
+
+        }
+
+
+        /*
+         * Celular
+         */
+
+        @media(max-width:800px){
+
+            .hero{
+
+                min-height:auto;
+
+            }
+
+            .hero > img{
+
+                width:100%;
+
+                height:240px;
+
+                min-height:240px;
+
+                max-height:240px;
+
+                object-fit:fill;
+
+            }
+
+        }
+
+
+        @media(max-width:520px){
+
+            .hero > img{
+
+                height:220px;
+
+                min-height:220px;
+
+                max-height:220px;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -25,15 +127,13 @@
 <div class="app-shell">
 
 
-    <!-- =====================================================
+    <!-- =================================================
          SIDEBAR
-         ===================================================== -->
+         ================================================= -->
 
     <aside class="sidebar">
 
         <div class="brand">
-
-            <!-- LOGO TRANSPARENTE COM ESCRITA BRANCA -->
 
             <img
                 src="assets/cmivet-logo-oficial.png"
@@ -65,56 +165,49 @@
             </a>
 
 
-            <a
-                href="termometro.html">
+            <a href="termometro.html">
 
                 😊 Termômetro
 
             </a>
 
 
-            <a
-                href="comunicados.html">
+            <a href="comunicados.html">
 
                 📢 Comunicados
 
             </a>
 
 
-            <a
-                href="cafe-rh.html">
+            <a href="cafe-rh.html">
 
                 ☕ Café RH
 
             </a>
 
 
-            <a
-                href="biblioteca.html">
+            <a href="biblioteca.html">
 
                 📚 Biblioteca RH
 
             </a>
 
 
-            <a
-                href="universidade.html">
+            <a href="universidade.html">
 
                 🎓 Universidade
 
             </a>
 
 
-            <a
-                href="avaliacoes.html">
+            <a href="avaliacoes.html">
 
                 📋 Avaliações
 
             </a>
 
 
-            <a
-                href="perfil.html">
+            <a href="perfil.html">
 
                 👤 Meu Perfil
 
@@ -145,22 +238,19 @@
 
 
 
-    <!-- =====================================================
-         CONTEÚDO PRINCIPAL
-         ===================================================== -->
+    <!-- =================================================
+         CONTEÚDO
+         ================================================= -->
 
     <main class="main">
 
 
         <!-- =================================================
-             BANNER PRINCIPAL
-             TAMANHO ORIGINAL DO PORTAL
+             BANNER
              ================================================= -->
 
         <section class="hero">
 
-
-            <!-- TEXTO -->
 
             <div>
 
@@ -189,8 +279,10 @@
             </div>
 
 
-
-            <!-- FOTO DO BANNER -->
+            <!--
+                IMPORTANTE:
+                Mantido o arquivo original do banner.
+            -->
 
             <img
                 src="assets/hero-foto-cmivet.jpg"
@@ -206,8 +298,6 @@
 
         <section class="dashboard-grid">
 
-
-            <!-- TERMÔMETRO -->
 
             <a
                 href="termometro.html"
@@ -228,9 +318,6 @@
             </a>
 
 
-
-            <!-- COMUNICADOS -->
-
             <a
                 href="comunicados.html"
                 class="card">
@@ -249,9 +336,6 @@
 
             </a>
 
-
-
-            <!-- CAFÉ RH -->
 
             <a
                 href="cafe-rh.html"
@@ -272,9 +356,6 @@
             </a>
 
 
-
-            <!-- BIBLIOTECA -->
-
             <a
                 href="biblioteca.html"
                 class="card">
@@ -293,9 +374,6 @@
 
             </a>
 
-
-
-            <!-- UNIVERSIDADE -->
 
             <a
                 href="universidade.html"
@@ -316,9 +394,6 @@
             </a>
 
 
-
-            <!-- AVALIAÇÕES -->
-
             <a
                 href="avaliacoes.html"
                 class="card">
@@ -338,9 +413,6 @@
             </a>
 
 
-
-            <!-- PERFIL -->
-
             <a
                 href="perfil.html"
                 class="card">
@@ -359,9 +431,6 @@
 
             </a>
 
-
-
-            <!-- BENEFÍCIOS -->
 
             <a
                 href="beneficios.html"
@@ -409,9 +478,9 @@
 
 
 
-<!-- =====================================================
+<!-- =================================================
      SCRIPTS
-     ===================================================== -->
+     ================================================= -->
 
 <script src="js/config.js"></script>
 
