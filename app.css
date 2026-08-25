@@ -1989,7 +1989,351 @@ textarea:focus-visible{
   outline-offset:2px;
 }
 
+/* =========================================================
+   LOGIN — PORTAL RH CMIVET
+   NÃO ALTERA O DASHBOARD
+   ========================================================= */
 
+.login-body{
+    min-height:100vh;
+    margin:0;
+    padding:0;
+    background:
+        linear-gradient(
+            135deg,
+            #034b44 0%,
+            #075d54 48%,
+            #0b7166 100%
+        );
+    overflow:hidden;
+}
+
+
+/* LAYOUT PRINCIPAL */
+
+.login-layout{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+}
+
+
+/* LADO ESQUERDO */
+
+.login-visual{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:60px;
+    overflow:hidden;
+    color:#fff;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(201,171,93,.16),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #034b44,
+            #075d54
+        );
+}
+
+
+/* detalhes decorativos */
+
+.login-visual::before{
+    content:"";
+    position:absolute;
+    width:520px;
+    height:520px;
+    border-radius:50%;
+    border:1px solid rgba(201,171,93,.22);
+    right:-220px;
+    top:-180px;
+}
+
+.login-visual::after{
+    content:"";
+    position:absolute;
+    width:380px;
+    height:380px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.08);
+    left:-180px;
+    bottom:-160px;
+}
+
+
+.login-visual > div{
+    position:relative;
+    z-index:2;
+    max-width:650px;
+}
+
+
+/* PILL */
+
+.login-visual .pill{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:25px;
+    background:#c9ab5d;
+    color:#fff;
+    font-size:13px;
+    font-weight:900;
+}
+
+
+/* TITULO */
+
+.login-visual h1{
+    margin:25px 0 0;
+    color:#fff;
+    font-family:Georgia,serif;
+    font-size:54px;
+    line-height:1.08;
+}
+
+
+/* LADO DIREITO */
+
+.login-panel{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+    background:#f7f4ec;
+}
+
+
+/* CARD */
+
+.login-card{
+    width:min(440px,100%);
+    padding:38px 40px;
+    background:#fff;
+    border:1px solid #e5ddca;
+    border-radius:24px;
+    box-shadow:
+        0 20px 55px
+        rgba(12,57,51,.15);
+}
+
+
+/* LOGO */
+
+.login-card > img{
+    display:block;
+    width:auto;
+    height:72px;
+    max-width:220px;
+    object-fit:contain;
+    margin:0 auto 25px;
+}
+
+
+/* TITULO */
+
+.login-card h2{
+    margin:0 0 8px;
+    color:#0b3f3a;
+    font-family:Georgia,serif;
+    font-size:30px;
+    text-align:center;
+}
+
+
+/* SUBTEXTO */
+
+.login-card::before{
+    content:"Acesse o Portal RH CMIVET";
+    display:block;
+    margin:-2px 0 25px;
+    color:#657370;
+    font-size:14px;
+    text-align:center;
+}
+
+
+/* LABEL */
+
+.login-card label{
+    display:block;
+    margin-bottom:18px;
+    color:#0b3f3a;
+    font-size:13px;
+    font-weight:800;
+}
+
+
+/* INPUT */
+
+.login-card input{
+    display:block;
+    width:100%;
+    height:50px;
+    margin-top:7px;
+    padding:0 15px;
+    border:1px solid #d8dedb;
+    border-radius:11px;
+    outline:none;
+    background:#fbfcfb;
+    color:#0b3f3a;
+    font-family:inherit;
+    font-size:14px;
+    transition:.18s ease;
+}
+
+
+.login-card input:focus{
+    border-color:#075d54;
+    box-shadow:
+        0 0 0 3px
+        rgba(7,93,84,.10);
+    background:#fff;
+}
+
+
+/* BOTÃO */
+
+.login-card .btn.primary{
+    width:100%;
+    min-height:50px;
+    margin-top:5px;
+    border:0;
+    border-radius:11px;
+    background:
+        linear-gradient(
+            135deg,
+            #075d54,
+            #2d746a
+        );
+    color:#fff;
+    font-size:15px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:
+        0 8px 20px
+        rgba(7,93,84,.20);
+    transition:.18s ease;
+}
+
+
+.login-card .btn.primary:hover{
+    transform:translateY(-1px);
+    box-shadow:
+        0 12px 25px
+        rgba(7,93,84,.25);
+}
+
+
+.login-card .btn.primary:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+    transform:none;
+}
+
+
+/* MENSAGEM */
+
+.login-card .message{
+    min-height:20px;
+    margin-top:14px;
+    text-align:center;
+    font-size:13px;
+    font-weight:700;
+}
+
+
+.login-card .message.success{
+    color:#28734d;
+}
+
+
+.login-card .message.error{
+    color:#b23b3b;
+}
+
+
+/* VOLTAR */
+
+.login-card > a{
+    display:block;
+    margin-top:20px;
+    color:#075d54;
+    font-size:13px;
+    font-weight:700;
+    text-align:center;
+}
+
+
+.login-card > a:hover{
+    color:#a8863c;
+}
+
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+
+@media(max-width:900px){
+
+    .login-layout{
+        grid-template-columns:1fr;
+    }
+
+
+    .login-visual{
+        min-height:260px;
+        padding:35px 25px;
+    }
+
+
+    .login-visual h1{
+        font-size:38px;
+    }
+
+
+    .login-panel{
+        min-height:calc(100vh - 260px);
+        padding:25px;
+    }
+
+}
+
+
+@media(max-width:520px){
+
+    .login-body{
+        overflow:auto;
+    }
+
+
+    .login-visual{
+        min-height:220px;
+    }
+
+
+    .login-visual h1{
+        font-size:32px;
+    }
+
+
+    .login-panel{
+        padding:20px 15px;
+    }
+
+
+    .login-card{
+        padding:30px 24px;
+        border-radius:18px;
+    }
+
+}
 /* =========================================================
    FIM DO APP.CSS
    ========================================================= */
