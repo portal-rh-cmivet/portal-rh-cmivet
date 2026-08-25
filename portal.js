@@ -2,591 +2,1433 @@
  * =====================================================
  * PORTAL RH CMIVET
  * portal.js
- *
- * FLUXO:
- *
- * Dashboard
- *     ↓
- * Login por cima do Dashboard
- *     ↓
- * Login realizado
- *     ↓
- * Verifica Termômetro
- *     ↓
- * Termômetro pendente?
- *     ↓ SIM
- * Termômetro por cima do Dashboard
- *     ↓
- * Responde
- *     ↓
- * Fecha Termômetro
- *     ↓
- * Continua no Dashboard
+ * Dashboard + Login Modal + Termômetro Modal
  * =====================================================
  */
 
+(function () {
 
-/* =====================================================
-   CONFIGURAÇÕES
-   ===================================================== */
-
-const PORTAL = {
-
-    TOKEN_KEYS: [
-        "cmivet_token",
-        "portal_token",
-        "token",
-        "auth_token",
-        "session_token"
-    ],
-
-    USER_KEYS: [
-        "cmivet_usuario",
-        "portal_usuario",
-        "usuario"
-    ]
-
-};
+    "use strict";
 
 
-/* =====================================================
-   ELEMENTOS
-   ===================================================== */
+    /* =====================================================
+       CONFIGURAÇÃO
+       ===================================================== */
 
-let loginOverlay;
-let thermometerOverlay;
-
-let loginForm;
-let thermometerForm;
-
-let loginMessage;
-let thermometerMessage;
-
-let loginButton;
-let thermometerButton;
-
-let statusTermometro;
-let statusComunicados;
+    const LOGIN_EMAIL = "rh@cmivet.com.br";
 
 
-/* =====================================================
-   INICIALIZAÇÃO
-   ===================================================== */
+    /* =====================================================
+       UTILITÁRIOS
+       ===================================================== */
 
-document.addEventListener("DOMContentLoaded", function () {
+    function getToken() {
 
-    inicializarElementos();
-
-    configurarLogin();
-
-    configurarTermometro();
-
-    configurarNavegacao();
-
-    configurarLogout();
-
-    iniciarPortal();
-
-});
-
-
-/* =====================================================
-   LOCALIZAR ELEMENTOS
-   ===================================================== */
-
-function inicializarElementos() {
-
-    loginOverlay =
-        document.getElementById("loginOverlay");
-
-    thermometerOverlay =
-        document.getElementById("thermometerOverlay");
-
-    loginForm =
-        document.getElementById("portalLoginForm");
-
-    thermometerForm =
-        document.getElementById("portalThermometerForm");
-
-    loginMessage =
-        document.getElementById("portalLoginMessage");
-
-    thermometerMessage =
-        document.getElementById("portalThermometerMessage");
-
-    loginButton =
-        document.getElementById("portalLoginButton");
-
-    thermometerButton =
-        document.getElementById("portalThermometerButton");
-
-    statusTermometro =
-        document.getElementById("statusTermometro");
-
-    statusComunicados =
-        document.getElementById("statusComunicados");
-
-}
-
-
-/* =====================================================
-   INICIAR PORTAL
-   ===================================================== */
-
-async function iniciarPortal() {
-
-    const token = obterToken();
-
-    /*
-     * Se não existe token:
-     * mostra Login por cima do Dashboard.
-     */
-
-    if (!token) {
-
-        abrirLogin();
-
-        atualizarStatusComunicados();
-
-        return;
+        return (
+            localStorage.getItem("portal_token") ||
+            localStorage.getItem("token") ||
+            sessionStorage.getItem("portal_token") ||
+            sessionStorage.getItem("token") ||
+            ""
+        );
 
     }
 
 
-    /*
-     * Existe token.
-     * Vamos validar a sessão antes de continuar.
-     */
+    function salvarToken(token) {
 
-    try {
+        if (!token) return;
 
-        const resposta =
-            await API.validarSessao(token);
+        localStorage.setItem("portal_token", token);
+        localStorage.setItem("token", token);
+
+    }
 
 
-        if (
-            resposta &&
-            resposta.sucesso === true
-        ) {
+    function limparSessao() {
 
-            esconderLogin();
+        localStorage.removeItem("portal_token");
+        localStorage.removeItem("token");
 
-            atualizarStatusComunicados();
+        sessionStorage.removeItem("portal_token");
+        sessionStorage.removeItem("token");
 
-            await verificarTermometro();
+    }
+
+
+    function criarElemento(tag, classe, conteudo) {
+
+        const el = document.createElement(tag);
+
+        if (classe) {
+            el.className = classe;
+        }
+
+        if (conteudo !== undefined) {
+            el.innerHTML = conteudo;
+        }
+
+        return el;
+
+    }
+
+
+    /* =====================================================
+       CSS DOS MODAIS
+       ===================================================== */
+
+    function inserirEstilosModais() {
+
+        if (document.getElementById("portalModalStyles")) {
+            return;
+        }
+
+        const style = document.createElement("style");
+
+        style.id = "portalModalStyles";
+
+        style.textContent = `
+
+        /* =================================================
+           OVERLAY
+           ================================================= */
+
+        .portal-overlay{
+
+            position:fixed;
+
+            inset:0;
+
+            z-index:99999;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            padding:20px;
+
+            /*
+             * FUNDO VERDE ESCURO SÓLIDO
+             * SEM TRANSPARÊNCIA
+             */
+
+            background:#083f39;
+
+            backdrop-filter:none;
+
+            -webkit-backdrop-filter:none;
+
+        }
+
+
+        .portal-overlay[hidden]{
+
+            display:none !important;
+
+        }
+
+
+        /* =================================================
+           CARD LOGIN
+           ================================================= */
+
+        .portal-login-card{
+
+            width:min(520px,100%);
+
+            max-height:94vh;
+
+            overflow-y:auto;
+
+            background:#0f6258;
+
+            color:#fff;
+
+            border-radius:22px;
+
+            border:1px solid #c9ab5d;
+
+            box-shadow:0 30px 90px rgba(0,0,0,.35);
+
+            padding:34px;
+
+            position:relative;
+
+        }
+
+
+        .portal-login-card .portal-modal-logo{
+
+            width:150px;
+
+            height:75px;
+
+            object-fit:contain;
+
+            display:block;
+
+            margin:0 auto 20px;
+
+        }
+
+
+        .portal-login-card h2{
+
+            margin:10px 0 8px;
+
+            color:#fff;
+
+            font-size:2rem;
+
+            line-height:1.1;
+
+            text-align:left;
+
+        }
+
+
+        .portal-login-card p{
+
+            margin:0 0 24px;
+
+            color:rgba(255,255,255,.82);
+
+        }
+
+
+        .portal-login-card label{
+
+            display:grid;
+
+            gap:7px;
+
+            margin-bottom:16px;
+
+            color:#fff;
+
+            font-weight:800;
+
+        }
+
+
+        .portal-login-card input{
+
+            width:100%;
+
+            min-height:50px;
+
+            padding:0 14px;
+
+            border:1px solid rgba(255,255,255,.25);
+
+            border-radius:10px;
+
+            background:#eaf1fb;
+
+            color:#153a36;
+
+            outline:none;
+
+        }
+
+
+        .portal-login-card input:focus{
+
+            border-color:#c9ab5d;
+
+            box-shadow:0 0 0 3px rgba(201,171,93,.2);
+
+        }
+
+
+        .portal-login-card button{
+
+            width:100%;
+
+            min-height:50px;
+
+            margin-top:8px;
+
+            border:1px solid #c9ab5d;
+
+            border-radius:10px;
+
+            background:#c9ab5d;
+
+            color:#083f39;
+
+            font-weight:900;
+
+            cursor:pointer;
+
+        }
+
+
+        .portal-login-card button:hover{
+
+            background:#e4ca82;
+
+        }
+
+
+        .portal-login-message{
+
+            min-height:22px;
+
+            margin-top:12px;
+
+            text-align:center;
+
+            color:#ffe4a1;
+
+            font-weight:800;
+
+        }
+
+
+        .portal-login-footer{
+
+            margin-top:24px;
+
+            padding-top:16px;
+
+            border-top:1px solid rgba(255,255,255,.15);
+
+            text-align:center;
+
+            font-size:.78rem;
+
+            color:rgba(255,255,255,.7);
+
+        }
+
+
+        /* =================================================
+           TERMÔMETRO
+           ================================================= */
+
+        .portal-thermometer-card{
+
+            width:min(720px,100%);
+
+            max-height:94vh;
+
+            overflow-y:auto;
+
+            background:#0f6258;
+
+            color:#fff;
+
+            border-radius:22px;
+
+            border:1px solid #c9ab5d;
+
+            box-shadow:0 30px 90px rgba(0,0,0,.38);
+
+            padding:30px;
+
+            position:relative;
+
+        }
+
+
+        .portal-thermometer-card .portal-modal-logo{
+
+            width:150px;
+
+            height:70px;
+
+            object-fit:contain;
+
+            display:block;
+
+            margin:0 auto 14px;
+
+        }
+
+
+        .portal-thermometer-card .portal-modal-pill{
+
+            display:table;
+
+            margin:0 auto 12px;
+
+            padding:7px 12px;
+
+            border-radius:999px;
+
+            background:#c9ab5d;
+
+            color:#083f39;
+
+            font-size:.76rem;
+
+            font-weight:900;
+
+        }
+
+
+        .portal-thermometer-card h2{
+
+            margin:8px 0;
+
+            text-align:center;
+
+            color:#fff;
+
+            font-size:2rem;
+
+        }
+
+
+        .portal-thermometer-card>p{
+
+            margin:0 auto 24px;
+
+            max-width:620px;
+
+            text-align:center;
+
+            color:rgba(255,255,255,.82);
+
+        }
+
+
+        .portal-thermometer-form{
+
+            display:grid;
+
+            gap:18px;
+
+        }
+
+
+        .portal-thermometer-form>label{
+
+            display:grid;
+
+            gap:8px;
+
+            color:#fff;
+
+            font-weight:800;
+
+        }
+
+
+        .portal-thermometer-form select,
+
+        .portal-thermometer-form textarea{
+
+            width:100%;
+
+            border:1px solid rgba(255,255,255,.22);
+
+            border-radius:10px;
+
+            background:#fff;
+
+            color:#153a36;
+
+            padding:12px;
+
+            outline:none;
+
+        }
+
+
+        .portal-thermometer-form select{
+
+            min-height:48px;
+
+        }
+
+
+        .portal-thermometer-form textarea{
+
+            resize:vertical;
+
+            min-height:100px;
+
+        }
+
+
+        .portal-moods{
+
+            display:grid;
+
+            grid-template-columns:repeat(5,1fr);
+
+            gap:10px;
+
+        }
+
+
+        .portal-mood{
+
+            position:relative;
+
+        }
+
+
+        .portal-mood input{
+
+            position:absolute;
+
+            opacity:0;
+
+            pointer-events:none;
+
+        }
+
+
+        .portal-mood label{
+
+            min-height:120px;
+
+            padding:12px 7px;
+
+            border:1px solid rgba(255,255,255,.25);
+
+            border-radius:12px;
+
+            background:rgba(255,255,255,.08);
+
+            display:grid;
+
+            place-items:center;
+
+            align-content:center;
+
+            gap:8px;
+
+            cursor:pointer;
+
+            text-align:center;
+
+        }
+
+
+        .portal-mood label span{
+
+            font-size:2.1rem;
+
+            line-height:1;
+
+        }
+
+
+        .portal-mood label strong{
+
+            color:#fff;
+
+            font-size:.78rem;
+
+        }
+
+
+        .portal-mood input:checked+label{
+
+            background:#e8f3ef;
+
+            border-color:#c9ab5d;
+
+            box-shadow:
+
+                inset 0 0 0 2px #c9ab5d,
+
+                0 6px 20px rgba(0,0,0,.18);
+
+        }
+
+
+        .portal-mood input:checked+label strong{
+
+            color:#083f39;
+
+        }
+
+
+        .portal-thermometer-form button{
+
+            min-height:50px;
+
+            border:1px solid #c9ab5d;
+
+            border-radius:10px;
+
+            background:#c9ab5d;
+
+            color:#083f39;
+
+            font-weight:900;
+
+            cursor:pointer;
+
+        }
+
+
+        .portal-thermometer-form button:hover{
+
+            background:#e4ca82;
+
+        }
+
+
+        .portal-thermometer-message{
+
+            min-height:22px;
+
+            text-align:center;
+
+            color:#ffe4a1;
+
+            font-weight:800;
+
+        }
+
+
+        /* =================================================
+           RESPONSIVO
+           ================================================= */
+
+        @media(max-width:700px){
+
+            .portal-overlay{
+
+                padding:10px;
+
+            }
+
+            .portal-login-card,
+
+            .portal-thermometer-card{
+
+                padding:22px;
+
+                max-height:96vh;
+
+            }
+
+            .portal-moods{
+
+                grid-template-columns:repeat(2,1fr);
+
+            }
+
+            .portal-thermometer-card h2{
+
+                font-size:1.65rem;
+
+            }
+
+        }
+
+
+        @media(max-width:430px){
+
+            .portal-moods{
+
+                grid-template-columns:1fr 1fr;
+
+            }
+
+            .portal-mood label{
+
+                min-height:105px;
+
+            }
+
+        }
+
+        `;
+
+        document.head.appendChild(style);
+
+    }
+
+
+    /* =====================================================
+       CRIAR OVERLAY
+       ===================================================== */
+
+    function criarOverlay() {
+
+        let overlay = document.getElementById("portalOverlay");
+
+        if (overlay) {
+            return overlay;
+        }
+
+        overlay = document.createElement("div");
+
+        overlay.id = "portalOverlay";
+
+        overlay.className = "portal-overlay";
+
+        overlay.hidden = true;
+
+        document.body.appendChild(overlay);
+
+        return overlay;
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    function abrirLoginModal() {
+
+        const overlay = criarOverlay();
+
+        overlay.innerHTML = `
+
+            <div
+                class="portal-login-card"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="portalLoginTitle">
+
+                <img
+                    class="portal-modal-logo"
+                    src="assets/cmivet-logo-oficial.png"
+                    alt="CMIVET">
+
+                <span class="portal-modal-pill">
+                    Portal RH CMIVET
+                </span>
+
+                <h2 id="portalLoginTitle">
+                    Entrar no Portal RH
+                </h2>
+
+                <p>
+                    Entre com seus dados para acessar o Portal RH.
+                </p>
+
+                <form id="portalLoginForm">
+
+                    <label>
+                        E-mail
+
+                        <input
+                            type="email"
+                            id="portalLoginEmail"
+                            name="email"
+                            value=""
+                            autocomplete="username"
+                            required>
+                    </label>
+
+                    <label>
+                        Senha
+
+                        <input
+                            type="password"
+                            id="portalLoginSenha"
+                            name="senha"
+                            autocomplete="current-password"
+                            required>
+                    </label>
+
+                    <button type="submit">
+                        Entrar no Portal
+                    </button>
+
+                    <div
+                        id="portalLoginMessage"
+                        class="portal-login-message">
+                    </div>
+
+                </form>
+
+                <div class="portal-login-footer">
+                    🔒 Acesso seguro e exclusivo aos colaboradores CMIVET.
+                </div>
+
+            </div>
+
+        `;
+
+        overlay.hidden = false;
+
+        document.body.style.overflow = "hidden";
+
+        const form = document.getElementById("portalLoginForm");
+
+        const email = document.getElementById("portalLoginEmail");
+
+        if (form) {
+
+            form.addEventListener("submit", async function (event) {
+
+                event.preventDefault();
+
+                const mensagem =
+                    document.getElementById("portalLoginMessage");
+
+                const btn = form.querySelector("button");
+
+                const emailValue =
+                    email.value.trim();
+
+                const senhaValue =
+                    document.getElementById("portalLoginSenha").value;
+
+                if (!emailValue || !senhaValue) {
+
+                    mensagem.textContent =
+                        "Informe seu e-mail e sua senha.";
+
+                    return;
+
+                }
+
+                btn.disabled = true;
+
+                btn.textContent = "Entrando...";
+
+                mensagem.textContent = "";
+
+                try {
+
+                    const resultado =
+                        await API.login(
+                            emailValue,
+                            senhaValue
+                        );
+
+                    if (
+                        resultado &&
+                        resultado.sucesso
+                    ) {
+
+                        const token =
+                            resultado.token ||
+                            resultado.data?.token;
+
+                        if (token) {
+
+                            salvarToken(token);
+
+                        }
+
+                        fecharModal();
+
+                        await inicializarDashboard();
+
+                        await verificarTermometro();
+
+                        return;
+
+                    }
+
+                    mensagem.textContent =
+                        resultado?.erro ||
+                        "E-mail ou senha inválidos.";
+
+                }
+
+                catch (erro) {
+
+                    console.error(
+                        "Erro no login:",
+                        erro
+                    );
+
+                    mensagem.textContent =
+                        "Não foi possível realizar o login.";
+
+                }
+
+                finally {
+
+                    btn.disabled = false;
+
+                    btn.textContent =
+                        "Entrar no Portal";
+
+                }
+
+            });
+
+        }
+
+        setTimeout(function () {
+
+            if (email) {
+                email.focus();
+            }
+
+        }, 100);
+
+    }
+
+
+    /* =====================================================
+       TERMÔMETRO
+       ===================================================== */
+
+    function abrirTermometroModal() {
+
+        const overlay = criarOverlay();
+
+        overlay.innerHTML = `
+
+            <div
+                class="portal-thermometer-card"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="portalThermometerTitle">
+
+                <img
+                    class="portal-modal-logo"
+                    src="assets/cmivet-logo-oficial.png"
+                    alt="CMIVET">
+
+                <span class="portal-modal-pill">
+                    Resposta diária obrigatória
+                </span>
+
+                <h2 id="portalThermometerTitle">
+                    Como você está se sentindo hoje?
+                </h2>
+
+                <p>
+                    Sua resposta ajuda o RH a acompanhar
+                    o clima organizacional da CMIVET.
+                </p>
+
+                <form
+                    id="portalThermometerForm"
+                    class="portal-thermometer-form">
+
+                    <div>
+
+                        <label
+                            style="
+                                display:block;
+                                margin-bottom:10px;
+                                font-weight:900;
+                            ">
+
+                            Como você está hoje?
+
+                        </label>
+
+                        <div class="portal-moods">
+
+                            <div class="portal-mood">
+
+                                <input
+                                    type="radio"
+                                    id="mood1"
+                                    name="humor"
+                                    value="5"
+                                    required>
+
+                                <label for="mood1">
+
+                                    <span>😄</span>
+
+                                    <strong>
+                                        Muito Feliz
+                                    </strong>
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="portal-mood">
+
+                                <input
+                                    type="radio"
+                                    id="mood2"
+                                    name="humor"
+                                    value="4">
+
+                                <label for="mood2">
+
+                                    <span>🙂</span>
+
+                                    <strong>
+                                        Bem
+                                    </strong>
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="portal-mood">
+
+                                <input
+                                    type="radio"
+                                    id="mood3"
+                                    name="humor"
+                                    value="3">
+
+                                <label for="mood3">
+
+                                    <span>😐</span>
+
+                                    <strong>
+                                        Normal
+                                    </strong>
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="portal-mood">
+
+                                <input
+                                    type="radio"
+                                    id="mood4"
+                                    name="humor"
+                                    value="2">
+
+                                <label for="mood4">
+
+                                    <span>😴</span>
+
+                                    <strong>
+                                        Cansado
+                                    </strong>
+
+                                </label>
+
+                            </div>
+
+
+                            <div class="portal-mood">
+
+                                <input
+                                    type="radio"
+                                    id="mood5"
+                                    name="humor"
+                                    value="1">
+
+                                <label for="mood5">
+
+                                    <span>😢</span>
+
+                                    <strong>
+                                        Muito Mal
+                                    </strong>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <label>
+
+                        Como está seu nível de energia?
+
+                        <select
+                            name="energia"
+                            required>
+
+                            <option value="">
+                                Selecione
+                            </option>
+
+                            <option value="Baixa">
+                                Baixa
+                            </option>
+
+                            <option value="Moderada">
+                                Moderada
+                            </option>
+
+                            <option value="Alta">
+                                Alta
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+                    <label>
+
+                        Observação
+
+                        <textarea
+                            name="observacao"
+                            rows="4"
+                            placeholder="Se quiser, conte um pouco mais sobre como você está hoje.">
+                        </textarea>
+
+                    </label>
+
+
+                    <button type="submit">
+                        Enviar resposta
+                    </button>
+
+
+                    <div
+                        id="portalThermometerMessage"
+                        class="portal-thermometer-message">
+                    </div>
+
+                </form>
+
+            </div>
+
+        `;
+
+        overlay.hidden = false;
+
+        document.body.style.overflow = "hidden";
+
+
+        const form =
+            document.getElementById(
+                "portalThermometerForm"
+            );
+
+
+        if (!form) {
+            return;
+        }
+
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+                const mensagem =
+                    document.getElementById(
+                        "portalThermometerMessage"
+                    );
+
+                const btn =
+                    form.querySelector("button");
+
+                const token =
+                    getToken();
+
+                if (!token) {
+
+                    mensagem.textContent =
+                        "Sua sessão expirou. Faça login novamente.";
+
+                    return;
+
+                }
+
+
+                const humor =
+                    form.querySelector(
+                        'input[name="humor"]:checked'
+                    );
+
+
+                const energia =
+                    form.querySelector(
+                        '[name="energia"]'
+                    );
+
+
+                const observacao =
+                    form.querySelector(
+                        '[name="observacao"]'
+                    );
+
+
+                if (!humor) {
+
+                    mensagem.textContent =
+                        "Selecione como você está hoje.";
+
+                    return;
+
+                }
+
+
+                if (!energia.value) {
+
+                    mensagem.textContent =
+                        "Selecione seu nível de energia.";
+
+                    return;
+
+                }
+
+
+                btn.disabled = true;
+
+                btn.textContent =
+                    "Enviando...";
+
+                mensagem.textContent = "";
+
+
+                try {
+
+                    const resultado =
+                        await API.salvarTermometro({
+
+                            token: token,
+
+                            humor: humor.value,
+
+                            energia: energia.value,
+
+                            observacao:
+                                observacao.value.trim()
+
+                        });
+
+
+                    if (
+                        resultado &&
+                        resultado.sucesso
+                    ) {
+
+                        mensagem.textContent =
+                            "Resposta registrada com sucesso!";
+
+                        atualizarStatusTermometro(
+                            false
+                        );
+
+
+                        setTimeout(
+                            function () {
+
+                                fecharModal();
+
+                            },
+                            700
+                        );
+
+                        return;
+
+                    }
+
+
+                    mensagem.textContent =
+                        resultado?.erro ||
+                        "Não foi possível registrar sua resposta.";
+
+                }
+
+                catch (erro) {
+
+                    console.error(
+                        "Erro ao salvar termômetro:",
+                        erro
+                    );
+
+                    mensagem.textContent =
+                        "Erro ao registrar sua resposta.";
+
+                }
+
+                finally {
+
+                    btn.disabled = false;
+
+                    btn.textContent =
+                        "Enviar resposta";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       FECHAR MODAL
+       ===================================================== */
+
+    function fecharModal() {
+
+        const overlay =
+            document.getElementById(
+                "portalOverlay"
+            );
+
+        if (!overlay) {
+            return;
+        }
+
+        overlay.hidden = true;
+
+        overlay.innerHTML = "";
+
+        document.body.style.overflow = "";
+
+    }
+
+
+    /* =====================================================
+       STATUS DO TERMÔMETRO
+       ===================================================== */
+
+    function atualizarStatusTermometro(pendente) {
+
+        const elemento =
+            document.getElementById(
+                "statusTermometro"
+            );
+
+        if (!elemento) {
+            return;
+        }
+
+        if (pendente) {
+
+            elemento.innerHTML =
+                '<span class="badge">🟡 Pendente</span>';
+
+        } else {
+
+            elemento.innerHTML =
+                '<span class="status-on">✓ Respondido hoje</span>';
+
+        }
+
+    }
+
+
+    /* =====================================================
+       STATUS DOS COMUNICADOS
+       ===================================================== */
+
+    async function atualizarStatusComunicados() {
+
+        const elemento =
+            document.getElementById(
+                "statusComunicados"
+            );
+
+        if (!elemento) {
+            return;
+        }
+
+        const token =
+            getToken();
+
+        if (!token) {
+
+            elemento.textContent =
+                "Faça login para consultar.";
 
             return;
 
         }
 
+        try {
 
-        /*
-         * Sessão inválida.
-         */
-
-        limparSessao();
-
-        abrirLogin();
-
-        atualizarStatusComunicados();
-
-    }
-
-    catch (erro) {
-
-        console.error(
-            "Erro ao validar sessão:",
-            erro
-        );
-
-        /*
-         * Mesmo que a validação dê problema,
-         * não mandamos o usuário para outra página.
-         *
-         * Mantemos o Login sobre o Dashboard.
-         */
-
-        abrirLogin();
-
-    }
-
-}
-
-
-/* =====================================================
-   LOGIN
-   ===================================================== */
-
-function configurarLogin() {
-
-    if (!loginForm) {
-        return;
-    }
-
-
-    loginForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-
-            limparMensagemLogin();
-
-
-            const formData =
-                new FormData(loginForm);
-
-
-            const email =
-                String(
-                    formData.get("email") || ""
-                ).trim();
-
-
-            const senha =
-                String(
-                    formData.get("senha") || ""
+            const resultado =
+                await API.comunicadosPendentes(
+                    token
                 );
 
+            if (
+                resultado &&
+                resultado.sucesso
+            ) {
 
-            if (!email || !senha) {
+                const quantidade =
+                    Number(
+                        resultado.quantidade || 0
+                    );
 
-                mostrarMensagemLogin(
-                    "Informe o e-mail e a senha."
-                );
+                if (quantidade > 0) {
+
+                    elemento.innerHTML =
+                        `<span class="status-on">
+                            ${quantidade}
+                            comunicado(s) pendente(s)
+                        </span>`;
+
+                } else {
+
+                    elemento.textContent =
+                        "Nenhum comunicado pendente";
+
+                }
 
                 return;
 
             }
 
-
-            definirLoginCarregando(true);
-
-
-            try {
-
-                const resposta =
-                    await API.login(
-                        email,
-                        senha
-                    );
-
-
-                console.log(
-                    "Resposta login:",
-                    resposta
-                );
-
-
-                if (
-                    !resposta ||
-                    resposta.sucesso !== true
-                ) {
-
-                    mostrarMensagemLogin(
-                        resposta?.erro ||
-                        resposta?.mensagem ||
-                        "E-mail ou senha inválidos."
-                    );
-
-                    definirLoginCarregando(false);
-
-                    return;
-
-                }
-
-
-                /*
-                 * Localiza o token independentemente
-                 * do nome utilizado pelo backend.
-                 */
-
-                const token =
-                    localizarToken(resposta);
-
-
-                if (!token) {
-
-                    console.error(
-                        "Login retornou sucesso, mas não retornou token.",
-                        resposta
-                    );
-
-
-                    mostrarMensagemLogin(
-                        "Login realizado, mas a sessão não foi criada. Verifique a configuração da API."
-                    );
-
-
-                    definirLoginCarregando(false);
-
-                    return;
-
-                }
-
-
-                salvarToken(token);
-
-
-                /*
-                 * Guarda também os dados do usuário,
-                 * caso o backend envie.
-                 */
-
-                salvarUsuario(
-                    resposta.usuario ||
-                    resposta.user ||
-                    resposta.dados ||
-                    null
-                );
-
-
-                /*
-                 * Login concluído.
-                 *
-                 * IMPORTANTE:
-                 * NÃO redireciona para login.html.
-                 */
-
-                esconderLogin();
-
-
-                loginForm.reset();
-
-
-                definirLoginCarregando(false);
-
-
-                /*
-                 * Agora verifica automaticamente
-                 * o Termômetro.
-                 */
-
-                await verificarTermometro();
-
-
-                /*
-                 * Atualiza o card de Comunicados.
-                 */
-
-                await atualizarStatusComunicados();
-
-            }
-
-            catch (erro) {
-
-                console.error(
-                    "Erro no login:",
-                    erro
-                );
-
-
-                mostrarMensagemLogin(
-                    "Não foi possível conectar ao Portal RH."
-                );
-
-
-                definirLoginCarregando(false);
-
-            }
+            elemento.textContent =
+                "Nenhum comunicado pendente";
 
         }
-    );
 
-}
+        catch (erro) {
 
-
-/* =====================================================
-   ABRIR LOGIN
-   ===================================================== */
-
-function abrirLogin() {
-
-    if (!loginOverlay) {
-        return;
-    }
-
-
-    loginOverlay.hidden = false;
-
-
-    /*
-     * O login fica por cima do Dashboard.
-     */
-
-    document.body.classList.add(
-        "portal-modal-open"
-    );
-
-
-    setTimeout(
-        function () {
-
-            const emailInput =
-                loginForm?.querySelector(
-                    'input[name="email"]'
-                );
-
-            if (emailInput) {
-                emailInput.focus();
-            }
-
-        },
-        100
-    );
-
-}
-
-
-/* =====================================================
-   FECHAR LOGIN
-   ===================================================== */
-
-function esconderLogin() {
-
-    if (!loginOverlay) {
-        return;
-    }
-
-
-    loginOverlay.hidden = true;
-
-
-    document.body.classList.remove(
-        "portal-modal-open"
-    );
-
-}
-
-
-/* =====================================================
-   CONFIGURAR TERMÔMETRO
-   ===================================================== */
-
-function configurarTermometro() {
-
-    if (!thermometerForm) {
-        return;
-    }
-
-
-    thermometerForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-
-            limparMensagemTermometro();
-
-
-            const token =
-                obterToken();
-
-
-            if (!token) {
-
-                mostrarMensagemTermometro(
-                    "Sua sessão expirou. Faça login novamente."
-                );
-
-                fecharTermometro();
-
-                abrirLogin();
-
-                return;
-
-            }
-
-
-            const formData =
-                new FormData(
-                    thermometerForm
-                );
-
-
-            const humor =
-                formData.get("humor");
-
-
-            const energia =
-                formData.get("energia");
-
-
-            const observacao =
-                String(
-                    formData.get("observacao") || ""
-                ).trim();
-
-
-            if (!humor) {
-
-                mostrarMensagemTermometro(
-                    "Selecione como você está hoje."
-                );
-
-                return;
-
-            }
-
-
-            if (!energia) {
-
-                mostrarMensagemTermometro(
-                    "Selecione seu nível de energia."
-                );
-
-                return;
-
-            }
-
-
-            definirTermometroCarregando(
-                true
+            console.error(
+                "Erro ao carregar comunicados:",
+                erro
             );
 
+            elemento.textContent =
+                "Nenhum comunicado pendente";
 
-            try {
+        }
 
-                const dados = {
-
-                    token: token,
-
-                    humor: humor,
-
-                    energia: energia,
-
-                    observacao: observacao
-
-                };
+    }
 
 
-                const resposta =
-                    await API.salvarTermometro(
-                        dados
-                    );
+    /* =====================================================
+       VERIFICAR TERMÔMETRO DO DIA
+       ===================================================== */
 
+    async function verificarTermometro() {
 
-                console.log(
-                    "Resposta termômetro:",
-                    resposta
+        const token =
+            getToken();
+
+        if (!token) {
+            return;
+        }
+
+        try {
+
+            const resultado =
+                await API.verificarTermometroHoje(
+                    token
                 );
 
+            if (
+                resultado &&
+                resultado.sucesso
+            ) {
 
-                if (
-                    !resposta ||
-                    resposta.sucesso !== true
-                ) {
-
-                    mostrarMensagemTermometro(
-                        resposta?.erro ||
-                        resposta?.mensagem ||
-                        "Não foi possível registrar sua resposta."
+                const respondido =
+                    Boolean(
+                        resultado.respondido ??
+                        resultado.respondeu ??
+                        resultado.jaRespondeu ??
+                        resultado.data?.respondido
                     );
 
+                if (respondido) {
 
-                    definirTermometroCarregando(
+                    atualizarStatusTermometro(
                         false
                     );
 
@@ -594,931 +1436,201 @@ function configurarTermometro() {
 
                 }
 
-
-                /*
-                 * Resposta salva.
-                 */
-
-                mostrarMensagemTermometro(
-                    "Resposta registrada com sucesso!"
+                atualizarStatusTermometro(
+                    true
                 );
 
+                abrirTermometroModal();
 
-                if (statusTermometro) {
+                return;
 
-                    statusTermometro.textContent =
-                        "Respondido hoje";
+            }
 
-                    statusTermometro.className =
-                        "status-on";
+            /*
+             * Caso a API antiga não retorne
+             * explicitamente o campo respondido,
+             * mantemos o termômetro como pendente.
+             */
+
+            atualizarStatusTermometro(
+                true
+            );
+
+            abrirTermometroModal();
+
+        }
+
+        catch (erro) {
+
+            console.error(
+                "Erro ao verificar termômetro:",
+                erro
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       INICIALIZAR DASHBOARD
+       ===================================================== */
+
+    async function inicializarDashboard() {
+
+        try {
+
+            await atualizarStatusComunicados();
+
+        }
+
+        catch (erro) {
+
+            console.error(
+                "Erro ao inicializar Dashboard:",
+                erro
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    function configurarLogout() {
+
+        const btn =
+            document.getElementById(
+                "logout"
+            );
+
+        if (!btn) {
+            return;
+        }
+
+        btn.addEventListener(
+            "click",
+            async function () {
+
+                const token =
+                    getToken();
+
+                try {
+
+                    if (
+                        token &&
+                        API.logout
+                    ) {
+
+                        await API.logout(
+                            token
+                        );
+
+                    }
 
                 }
 
-
-                /*
-                 * Pequena pausa para o usuário
-                 * visualizar a confirmação.
-                 */
-
-                setTimeout(
-                    function () {
-
-                        fecharTermometro();
-
-                        thermometerForm.reset();
-
-                        limparMensagemTermometro();
-
-                        definirTermometroCarregando(
-                            false
-                        );
-
-                    },
-                    900
-                );
-
-            }
-
-            catch (erro) {
-
-                console.error(
-                    "Erro ao salvar termômetro:",
-                    erro
-                );
-
-
-                mostrarMensagemTermometro(
-                    "Não foi possível registrar sua resposta."
-                );
-
-
-                definirTermometroCarregando(
-                    false
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   VERIFICAR TERMÔMETRO DO DIA
-   ===================================================== */
-
-async function verificarTermometro() {
-
-    const token =
-        obterToken();
-
-
-    if (!token) {
-
-        abrirLogin();
-
-        return;
-
-    }
-
-
-    if (statusTermometro) {
-
-        statusTermometro.textContent =
-            "Verificando...";
-
-        statusTermometro.className = "";
-
-    }
-
-
-    try {
-
-        const resposta =
-            await API.verificarTermometroHoje(
-                token
-            );
-
-
-        console.log(
-            "Verificação termômetro:",
-            resposta
-        );
-
-
-        if (
-            !resposta ||
-            resposta.sucesso !== true
-        ) {
-
-            /*
-             * Não força outra página.
-             */
-
-            if (statusTermometro) {
-
-                statusTermometro.textContent =
-                    "Não foi possível verificar";
-
-            }
-
-            return;
-
-        }
-
-
-        const respondido =
-            identificarSeTermometroFoiRespondido(
-                resposta
-            );
-
-
-        if (respondido) {
-
-            /*
-             * Já respondeu hoje.
-             */
-
-            if (statusTermometro) {
-
-                statusTermometro.textContent =
-                    "Respondido hoje";
-
-                statusTermometro.className =
-                    "status-on";
-
-            }
-
-
-            fecharTermometro();
-
-            return;
-
-        }
-
-
-        /*
-         * PENDENTE
-         *
-         * Abre automaticamente sobre o Dashboard.
-         */
-
-        if (statusTermometro) {
-
-            statusTermometro.textContent =
-                "Pendente";
-
-        }
-
-
-        abrirTermometro();
-
-    }
-
-    catch (erro) {
-
-        console.error(
-            "Erro ao verificar termômetro:",
-            erro
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   IDENTIFICAR RESPOSTA DO TERMÔMETRO
-   ===================================================== */
-
-function identificarSeTermometroFoiRespondido(
-    resposta
-) {
-
-    /*
-     * Aceita diferentes nomes de propriedades
-     * para evitar incompatibilidade entre versões
-     * do backend.
-     */
-
-    const valores = [
-
-        resposta.respondido,
-
-        resposta.respondidoHoje,
-
-        resposta.jaRespondido,
-
-        resposta.ja_respondido,
-
-        resposta.respondeu,
-
-        resposta.pendente === false,
-
-        resposta.status === "respondido",
-
-        resposta.status === "Respondido",
-
-        resposta.data?.respondido,
-
-        resposta.dados?.respondido
-
-    ];
-
-
-    for (
-        let i = 0;
-        i < valores.length;
-        i++
-    ) {
-
-        if (
-            valores[i] === true
-        ) {
-
-            return true;
-
-        }
-
-    }
-
-
-    return false;
-
-}
-
-
-/* =====================================================
-   ABRIR TERMÔMETRO
-   ===================================================== */
-
-function abrirTermometro() {
-
-    if (!thermometerOverlay) {
-        return;
-    }
-
-
-    thermometerOverlay.hidden = false;
-
-
-    document.body.classList.add(
-        "portal-modal-open"
-    );
-
-
-    /*
-     * Coloca o primeiro humor em foco
-     * somente visualmente.
-     */
-
-    setTimeout(
-        function () {
-
-            const primeiroHumor =
-                thermometerForm?.querySelector(
-                    'input[name="humor"]'
-                );
-
-            if (primeiroHumor) {
-
-                /*
-                 * Não selecionamos automaticamente.
-                 * Apenas mantemos o formulário pronto.
-                 */
-
-            }
-
-        },
-        100
-    );
-
-}
-
-
-/* =====================================================
-   FECHAR TERMÔMETRO
-   ===================================================== */
-
-function fecharTermometro() {
-
-    if (!thermometerOverlay) {
-        return;
-    }
-
-
-    thermometerOverlay.hidden = true;
-
-
-    /*
-     * Só remove a classe se o Login também
-     * estiver fechado.
-     */
-
-    if (
-        !loginOverlay ||
-        loginOverlay.hidden
-    ) {
-
-        document.body.classList.remove(
-            "portal-modal-open"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   CONFIGURAR NAVEGAÇÃO
-   ===================================================== */
-
-function configurarNavegacao() {
-
-    const links =
-        document.querySelectorAll(
-            ".sidebar nav a"
-        );
-
-
-    links.forEach(
-        function (link) {
-
-            const href =
-                link.getAttribute("href");
-
-
-            /*
-             * Termômetro:
-             *
-             * NÃO abre termometro.html.
-             * Abre o card por cima do Dashboard.
-             */
-
-            if (
-                href === "termometro.html"
-            ) {
-
-                link.addEventListener(
-                    "click",
-                    async function (event) {
-
-                        event.preventDefault();
-
-
-                        const token =
-                            obterToken();
-
-
-                        if (!token) {
-
-                            abrirLogin();
-
-                            return;
-
-                        }
-
-
-                        abrirTermometro();
-
-                    }
-                );
-
-            }
-
-
-            /*
-             * Dashboard:
-             *
-             * permanece no Dashboard.
-             */
-
-            if (
-                href === "portal.html"
-            ) {
-
-                link.addEventListener(
-                    "click",
-                    function (event) {
-
-                        event.preventDefault();
-
-                    }
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   LOGOUT
-   ===================================================== */
-
-function configurarLogout() {
-
-    const logout =
-        document.getElementById(
-            "logout"
-        );
-
-
-    if (!logout) {
-        return;
-    }
-
-
-    logout.addEventListener(
-        "click",
-        async function () {
-
-            const token =
-                obterToken();
-
-
-            try {
-
-                if (
-                    token &&
-                    API.logout
-                ) {
-
-                    await API.logout(
-                        token
+                catch (erro) {
+
+                    console.error(
+                        "Erro ao sair:",
+                        erro
                     );
 
                 }
 
-            }
+                finally {
 
-            catch (erro) {
+                    limparSessao();
 
-                console.warn(
-                    "Erro ao encerrar sessão no servidor:",
-                    erro
-                );
+                    window.location.href =
+                        "index.html";
 
-            }
-
-
-            limparSessao();
-
-
-            /*
-             * Resetamos os cards.
-             */
-
-            if (statusTermometro) {
-
-                statusTermometro.textContent =
-                    "Verificando...";
-
-                statusTermometro.className = "";
+                }
 
             }
-
-
-            if (statusComunicados) {
-
-                statusComunicados.textContent =
-                    "Faça login para consultar";
-
-            }
-
-
-            /*
-             * NÃO vai para login.html.
-             *
-             * O login aparece sobre o Dashboard.
-             */
-
-            abrirLogin();
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   ATUALIZAR COMUNICADOS
-   ===================================================== */
-
-async function atualizarStatusComunicados() {
-
-    if (!statusComunicados) {
-        return;
-    }
-
-
-    const token =
-        obterToken();
-
-
-    if (!token) {
-
-        statusComunicados.textContent =
-            "Faça login para consultar";
-
-        return;
+        );
 
     }
 
 
-    statusComunicados.textContent =
-        "Carregando...";
+    /* =====================================================
+       LINKS DO MENU
+       ===================================================== */
 
+    function configurarNavegacao() {
 
-    try {
+        /*
+         * O Dashboard permanece como página principal.
+         *
+         * Não alteramos os links das demais páginas.
+         */
 
-        const resposta =
-            await API.comunicadosPendentes(
-                token
+        const links =
+            document.querySelectorAll(
+                ".sidebar a"
             );
 
+        links.forEach(function (link) {
 
-        console.log(
-            "Comunicados:",
-            resposta
-        );
+            link.addEventListener(
+                "click",
+                function (event) {
 
+                    const href =
+                        link.getAttribute(
+                            "href"
+                        );
 
-        if (
-            !resposta ||
-            resposta.sucesso !== true
-        ) {
+                    if (!href) {
+                        return;
+                    }
 
-            statusComunicados.textContent =
-                "Não foi possível carregar";
+                    /*
+                     * Biblioteca e Universidade
+                     * já foram removidas do portal.
+                     */
 
-            return;
-
-        }
-
-
-        const lista =
-            Array.isArray(
-                resposta.comunicados
-            )
-                ? resposta.comunicados
-                : [];
-
-
-        const quantidade =
-            Number(
-                resposta.quantidade ??
-                lista.length
+                }
             );
 
-
-        if (quantidade > 0) {
-
-            statusComunicados.textContent =
-                quantidade === 1
-                    ? "1 comunicado pendente"
-                    : quantidade +
-                      " comunicados pendentes";
-
-            return;
-
-        }
-
-
-        statusComunicados.textContent =
-            "Nenhum comunicado pendente";
-
-    }
-
-    catch (erro) {
-
-        console.error(
-            "Erro ao carregar comunicados:",
-            erro
-        );
-
-
-        statusComunicados.textContent =
-            "Não foi possível carregar";
-
-    }
-
-}
-
-
-/* =====================================================
-   TOKEN
-   ===================================================== */
-
-function obterToken() {
-
-    for (
-        let i = 0;
-        i < PORTAL.TOKEN_KEYS.length;
-        i++
-    ) {
-
-        const valor =
-            localStorage.getItem(
-                PORTAL.TOKEN_KEYS[i]
-            );
-
-
-        if (
-            valor &&
-            valor !== "null" &&
-            valor !== "undefined"
-        ) {
-
-            return valor;
-
-        }
+        });
 
     }
 
 
-    return null;
+    /* =====================================================
+       INICIALIZAÇÃO
+       ===================================================== */
 
-}
+    async function iniciar() {
 
+        inserirEstilosModais();
 
-/* =====================================================
-   SALVAR TOKEN
-   ===================================================== */
+        criarOverlay();
 
-function salvarToken(token) {
+        configurarLogout();
 
-    if (!token) {
-        return;
-    }
+        configurarNavegacao();
 
+        await inicializarDashboard();
 
-    /*
-     * Usamos uma chave principal.
-     */
 
-    localStorage.setItem(
-        "cmivet_token",
-        String(token)
-    );
+        /*
+         * Se não houver sessão, abre o LOGIN
+         * por cima do Dashboard.
+         */
 
+        const token =
+            getToken();
 
-    /*
-     * Também mantemos "token" para
-     * compatibilidade com versões anteriores.
-     */
 
-    localStorage.setItem(
-        "token",
-        String(token)
-    );
+        if (!token) {
 
-}
-
-
-/* =====================================================
-   LOCALIZAR TOKEN NA RESPOSTA
-   ===================================================== */
-
-function localizarToken(resposta) {
-
-    if (!resposta) {
-        return null;
-    }
-
-
-    const possibilidades = [
-
-        resposta.token,
-
-        resposta.accessToken,
-
-        resposta.access_token,
-
-        resposta.sessionToken,
-
-        resposta.session_token,
-
-        resposta.dados?.token,
-
-        resposta.usuario?.token,
-
-        resposta.user?.token
-
-    ];
-
-
-    for (
-        let i = 0;
-        i < possibilidades.length;
-        i++
-    ) {
-
-        if (
-            possibilidades[i] !== undefined &&
-            possibilidades[i] !== null &&
-            String(possibilidades[i]).trim() !== ""
-        ) {
-
-            return possibilidades[i];
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =====================================================
-   USUÁRIO
-   ===================================================== */
-
-function salvarUsuario(usuario) {
-
-    if (!usuario) {
-        return;
-    }
-
-
-    try {
-
-        localStorage.setItem(
-            "cmivet_usuario",
-            JSON.stringify(usuario)
-        );
-
-    }
-
-    catch (erro) {
-
-        console.warn(
-            "Não foi possível salvar usuário:",
-            erro
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   LIMPAR SESSÃO
-   ===================================================== */
-
-function limparSessao() {
-
-    PORTAL.TOKEN_KEYS.forEach(
-        function (key) {
-
-            localStorage.removeItem(key);
-
-        }
-    );
-
-
-    PORTAL.USER_KEYS.forEach(
-        function (key) {
-
-            localStorage.removeItem(key);
-
-        }
-    );
-
-
-    /*
-     * Chaves adicionais de versões antigas.
-     */
-
-    localStorage.removeItem(
-        "cmivet_usuario"
-    );
-
-    localStorage.removeItem(
-        "portal_usuario"
-    );
-
-}
-
-
-/* =====================================================
-   MENSAGEM LOGIN
-   ===================================================== */
-
-function mostrarMensagemLogin(
-    mensagem
-) {
-
-    if (!loginMessage) {
-        return;
-    }
-
-
-    loginMessage.textContent =
-        mensagem || "";
-
-}
-
-
-function limparMensagemLogin() {
-
-    mostrarMensagemLogin("");
-
-}
-
-
-/* =====================================================
-   MENSAGEM TERMÔMETRO
-   ===================================================== */
-
-function mostrarMensagemTermometro(
-    mensagem
-) {
-
-    if (!thermometerMessage) {
-        return;
-    }
-
-
-    thermometerMessage.textContent =
-        mensagem || "";
-
-}
-
-
-function limparMensagemTermometro() {
-
-    mostrarMensagemTermometro("");
-
-}
-
-
-/* =====================================================
-   BOTÃO LOGIN — CARREGANDO
-   ===================================================== */
-
-function definirLoginCarregando(
-    carregando
-) {
-
-    if (!loginButton) {
-        return;
-    }
-
-
-    loginButton.disabled =
-        carregando;
-
-
-    loginButton.textContent =
-        carregando
-            ? "Entrando..."
-            : "Entrar";
-
-}
-
-
-/* =====================================================
-   BOTÃO TERMÔMETRO — CARREGANDO
-   ===================================================== */
-
-function definirTermometroCarregando(
-    carregando
-) {
-
-    if (!thermometerButton) {
-        return;
-    }
-
-
-    thermometerButton.disabled =
-        carregando;
-
-
-    thermometerButton.textContent =
-        carregando
-            ? "Salvando..."
-            : "Enviar resposta";
-
-}
-
-
-/* =====================================================
-   ESC — NÃO FECHA TERMÔMETRO OBRIGATÓRIO
-   ===================================================== */
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key !== "Escape"
-        ) {
+            abrirLoginModal();
 
             return;
 
@@ -1526,84 +1638,52 @@ document.addEventListener(
 
 
         /*
-         * O Login não fecha com ESC.
+         * Se houver sessão, verifica o
+         * Termômetro obrigatório.
          */
 
-        if (
-            loginOverlay &&
-            !loginOverlay.hidden
-        ) {
-
-            event.preventDefault();
-
-            return;
-
-        }
-
-
-        /*
-         * O Termômetro também não fecha
-         * enquanto estiver pendente.
-         */
-
-        if (
-            thermometerOverlay &&
-            !thermometerOverlay.hidden
-        ) {
-
-            event.preventDefault();
-
-            return;
-
-        }
+        await verificarTermometro();
 
     }
-);
 
 
-/* =====================================================
-   EVITAR CLIQUE FORA FECHAR
-   ===================================================== */
+    /* =====================================================
+       EXPOR FUNÇÕES
+       ===================================================== */
 
-if (typeof document !== "undefined") {
+    window.PortalRH = {
 
-    document.addEventListener(
-        "click",
-        function (event) {
+        abrirLogin: abrirLoginModal,
 
-            /*
-             * Se clicar no fundo escuro do Login,
-             * não fecha.
-             */
+        abrirTermometro: abrirTermometroModal,
 
-            if (
-                event.target === loginOverlay
-            ) {
+        fecharModal: fecharModal,
 
-                event.preventDefault();
+        verificarTermometro: verificarTermometro,
 
-            }
+        atualizarComunicados:
+            atualizarStatusComunicados
+
+    };
 
 
-            /*
-             * Se clicar no fundo escuro do Termômetro,
-             * também não fecha.
-             */
+    /* =====================================================
+       START
+       ===================================================== */
 
-            if (
-                event.target === thermometerOverlay
-            ) {
+    if (
+        document.readyState === "loading"
+    ) {
 
-                event.preventDefault();
+        document.addEventListener(
+            "DOMContentLoaded",
+            iniciar
+        );
 
-            }
+    } else {
 
-        }
-    );
+        iniciar();
 
-}
+    }
 
-
-/* =====================================================
-   FIM
-   ===================================================== */
+})();
