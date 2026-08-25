@@ -1387,18 +1387,6 @@
             );
 
 
-        /*
-         * IMPORTANTE:
-         * O formulário é interceptado aqui.
-         *
-         * Assim o navegador NÃO:
-         *
-         * portal.html?humor=3...
-         *
-         * e a API continua recebendo
-         * os mesmos dados.
-         */
-
         form.addEventListener(
             "submit",
             enviarTermometro
@@ -1411,197 +1399,119 @@
        ENVIAR TERMÔMETRO
        ===================================================== */
 
-    async function enviarTermometro(
-        event
-    ) {
+    async function enviarTermometro(event) {
 
         /*
-         * ESSENCIAL
-         *
-         * Impede o navegador de recarregar
-         * o portal.html.
+         * Impede o formulário de recarregar o portal
+         * e colocar os dados na URL.
          */
-
         if (event) {
-
             event.preventDefault();
-
             event.stopPropagation();
-
         }
-
 
         const form =
             document.getElementById(
                 "portalThermometerForm"
             );
 
-
         if (!form) {
-
+            console.error(
+                "Formulário do Termômetro não encontrado."
+            );
             return false;
-
         }
-
-
-        const token =
-            getToken();
-
 
         const mensagem =
             document.getElementById(
                 "portalThermometerMessage"
             );
 
-
-        const btn =
+        const botao =
             document.getElementById(
                 "portalThermometerButton"
             );
 
-
+        /*
+         * IDs reais existentes no formulário.
+         */
         const humor =
             form.querySelector(
                 'input[name="humor"]:checked'
             );
-
 
         const energia =
             document.getElementById(
                 "portalEnergia"
             );
 
-
         const observacao =
             document.getElementById(
                 "portalObservacao"
             );
 
-
-        /* =================================================
-           TOKEN
-           ================================================= */
+        const token = getToken();
 
         if (!token) {
-
             mensagem.textContent =
                 "Sua sessão expirou. Faça login novamente.";
-
-            setTimeout(
-                function () {
-
-                    fecharModal();
-
-                    abrirLoginModal();
-
-                },
-                1000
-            );
-
             return false;
-
         }
-
-
-        /* =================================================
-           HUMOR
-           ================================================= */
 
         if (!humor) {
-
             mensagem.textContent =
-                "Selecione como você está hoje.";
-
+                "Selecione como você está se sentindo.";
             return false;
-
         }
 
-
-        /* =================================================
-           ENERGIA
-           ================================================= */
-
-        if (!energia.value) {
-
+        if (!energia || !energia.value) {
             mensagem.textContent =
                 "Selecione seu nível de energia.";
-
             return false;
-
         }
 
-
-        /* =================================================
-           IMPEDIR DUPLO ENVIO
-           ================================================= */
-
-        if (btn.disabled) {
-
+        if (botao && botao.disabled) {
             return false;
-
         }
 
-
-        btn.disabled = true;
-
-        btn.textContent =
-            "Enviando...";
-
+        if (botao) {
+            botao.disabled = true;
+            botao.textContent = "Salvando...";
+        }
 
         mensagem.textContent =
-            "";
+            "Registrando sua resposta...";
 
-
-        /* =================================================
-           DADOS
-           ================================================= */
-
+        /*
+         * Mantemos exatamente a chamada da API
+         * que já funcionava no projeto.
+         */
         const dados = {
-
             token: token,
-
             humor: humor.value,
-
-            energia:
-                energia.value,
-
+            energia: energia.value,
             observacao:
-                observacao.value.trim()
-
+                observacao
+                    ? observacao.value.trim()
+                    : ""
         };
-
 
         console.log(
             "Enviando termômetro:",
             dados
         );
 
-
         try {
-
-            /*
-             * NÃO ALTERAMOS A API.
-             *
-             * Continua usando:
-             *
-             * API.salvarTermometro()
-             */
 
             const resultado =
                 await API.salvarTermometro(
                     dados
                 );
 
-
             console.log(
                 "Resposta API termômetro:",
                 resultado
             );
-
-
-            /* =================================================
-               SUCESSO
-               ================================================= */
 
             if (
                 resultado &&
@@ -1612,87 +1522,60 @@
                     false
                 );
 
-
                 mensagem.textContent =
                     "✓ Resposta registrada com sucesso!";
 
-
-                btn.textContent =
-                    "Resposta enviada";
-
-
-                /*
-                 * Aguarda a confirmação visual
-                 * e fecha SOMENTE o modal.
-                 *
-                 * Não recarrega.
-                 * Não redireciona.
-                 * Não faz logout.
-                 */
+                if (botao) {
+                    botao.textContent =
+                        "Resposta enviada";
+                }
 
                 setTimeout(
                     function () {
-
                         fecharModal();
-
                     },
                     700
                 );
 
-
                 return false;
-
             }
 
-
-            /* =================================================
-               ERRO DEVOLVIDO PELA API
-               ================================================= */
-
             console.error(
-                "API não confirmou gravação:",
+                "API não confirmou a gravação:",
                 resultado
             );
-
 
             mensagem.textContent =
                 resultado?.erro ||
                 resultado?.mensagem ||
                 "A resposta não foi gravada.";
 
-
-            btn.disabled = false;
-
-            btn.textContent =
-                "Enviar resposta";
-
+            if (botao) {
+                botao.disabled = false;
+                botao.textContent =
+                    "Enviar resposta";
+            }
 
             return false;
 
-        }
-
-        catch (erro) {
+        } catch (erro) {
 
             console.error(
                 "Erro ao gravar termômetro:",
                 erro
             );
 
-
             mensagem.textContent =
                 "Erro ao gravar a resposta. Tente novamente.";
 
-
-            btn.disabled = false;
-
-            btn.textContent =
-                "Enviar resposta";
-
+            if (botao) {
+                botao.disabled = false;
+                botao.textContent =
+                    "Enviar resposta";
+            }
 
             return false;
-
         }
-
     }
 
 
