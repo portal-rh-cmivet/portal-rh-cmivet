@@ -11,48 +11,24 @@
 
     <title>Portal RH CMIVET</title>
 
-    <!--
-        O index agora é somente a porta de entrada.
-        Ele envia diretamente para o Portal.
-    -->
+    <script>
 
-    <meta
-        http-equiv="refresh"
-        content="0; url=portal.html">
+        /*
+         * O Portal RH agora começa diretamente
+         * pela tela de login.
+         */
+
+        window.location.replace("login.html");
+
+    </script>
 
 </head>
 
 <body>
 
-    <script>
-
-        /*
-         * Redirecionamento imediato
-         * para o Portal RH CMIVET.
-         */
-
-        window.location.replace(
-            "portal.html"
-        );
-
-    </script>
-
-
-    <noscript>
-
-        <p>
-            Abrindo o Portal RH CMIVET...
-        </p>
-
-        <p>
-
-            <a href="portal.html">
-                Clique aqui para entrar no Portal
-            </a>
-
-        </p>
-
-    </noscript>
+    <p>
+        Redirecionando para o Portal RH CMIVET...
+    </p>
 
 </body>
 
