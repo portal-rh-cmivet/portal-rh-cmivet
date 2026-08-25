@@ -18,6 +18,7 @@
 
     <!-- =================================================
          AJUSTE DO BANNER
+         NÃO ALTERAR O TAMANHO DO DASHBOARD
          ================================================= -->
 
     <style>
@@ -31,6 +32,7 @@
 
             width:100%;
             height:100%;
+
             min-height:300px;
             max-height:300px;
 
@@ -59,6 +61,7 @@
                 width:100%;
 
                 height:240px;
+
                 min-height:240px;
                 max-height:240px;
 
@@ -73,6 +76,7 @@
             .hero > img{
 
                 height:220px;
+
                 min-height:220px;
                 max-height:220px;
 
@@ -83,7 +87,7 @@
 
 
         /* =================================================
-           OVERLAYS
+           MODAL GERAL
            ================================================= */
 
         .portal-overlay{
@@ -92,7 +96,7 @@
 
             inset:0;
 
-            z-index:9999;
+            z-index:99999;
 
             display:flex;
 
@@ -102,7 +106,7 @@
 
             padding:20px;
 
-            background:rgba(5,31,28,.72);
+            background:rgba(5,31,28,.78);
 
             backdrop-filter:blur(7px);
 
@@ -116,36 +120,38 @@
         }
 
 
+
         /* =================================================
-           CARD DE LOGIN
+           LOGIN
            ================================================= */
 
         .portal-login-card{
 
             width:min(480px,100%);
 
-            background:#fff;
+            background:var(--green);
 
-            border:1px solid var(--line);
+            border:1px solid var(--gold);
 
             border-radius:22px;
 
             overflow:hidden;
 
-            box-shadow:0 30px 90px rgba(0,0,0,.35);
+            box-shadow:
+                0 30px 90px rgba(0,0,0,.40);
 
         }
 
 
         .portal-login-header{
 
-            background:var(--green);
+            background:var(--green-dark);
 
             padding:28px;
 
             text-align:center;
 
-            border-bottom:4px solid var(--gold);
+            border-bottom:3px solid var(--gold);
 
         }
 
@@ -169,6 +175,10 @@
 
             padding:30px;
 
+            background:var(--green);
+
+            color:#fff;
+
         }
 
 
@@ -183,7 +193,7 @@
 
             margin:5px 0 8px;
 
-            color:var(--ink);
+            color:#fff;
 
             font-size:2rem;
 
@@ -194,7 +204,7 @@
 
             margin:0 0 22px;
 
-            color:var(--muted);
+            color:rgba(255,255,255,.82);
 
         }
 
@@ -216,7 +226,7 @@
 
             font-weight:800;
 
-            color:var(--ink);
+            color:#fff;
 
         }
 
@@ -227,7 +237,7 @@
 
             padding:13px 14px;
 
-            border:1px solid #d8dfdc;
+            border:1px solid rgba(255,255,255,.25);
 
             border-radius:10px;
 
@@ -242,9 +252,10 @@
 
         .portal-login-form input:focus{
 
-            border-color:var(--green);
+            border-color:var(--gold);
 
-            box-shadow:0 0 0 3px var(--green-soft);
+            box-shadow:
+                0 0 0 3px rgba(201,171,93,.20);
 
         }
 
@@ -261,7 +272,7 @@
 
             border-radius:10px;
 
-            background:var(--green);
+            background:var(--gold);
 
             color:#fff;
 
@@ -274,7 +285,7 @@
 
         .portal-login-form button:hover{
 
-            background:var(--green-dark);
+            background:#b99543;
 
         }
 
@@ -294,9 +305,9 @@
 
             text-align:center;
 
-            font-weight:800;
+            color:#ffe7e0;
 
-            color:var(--danger);
+            font-weight:800;
 
         }
 
@@ -307,9 +318,11 @@
 
             text-align:center;
 
-            border-top:1px solid var(--line);
+            background:var(--green-dark);
 
-            color:var(--muted);
+            border-top:1px solid rgba(255,255,255,.12);
+
+            color:rgba(255,255,255,.75);
 
             font-size:.78rem;
 
@@ -318,7 +331,7 @@
 
 
         /* =================================================
-           CARD DO TERMÔMETRO
+           TERMÔMETRO
            ================================================= */
 
         .portal-thermometer-card{
@@ -329,15 +342,18 @@
 
             overflow:auto;
 
-            background:#fff;
+            background:var(--green);
 
             border-radius:22px;
 
-            border:1px solid var(--line);
+            border:1px solid var(--gold);
 
-            box-shadow:0 30px 90px rgba(0,0,0,.38);
+            box-shadow:
+                0 30px 90px rgba(0,0,0,.40);
 
             padding:30px;
+
+            color:#fff;
 
         }
 
@@ -368,7 +384,7 @@
 
             margin:8px 0;
 
-            color:var(--ink);
+            color:#fff;
 
             font-size:2rem;
 
@@ -379,7 +395,7 @@
 
             margin:0;
 
-            color:var(--muted);
+            color:rgba(255,255,255,.82);
 
         }
 
@@ -401,6 +417,8 @@
 
             font-weight:800;
 
+            color:#fff;
+
         }
 
 
@@ -412,22 +430,44 @@
 
             padding:12px;
 
-            border:1px solid var(--line);
+            border:1px solid rgba(255,255,255,.30);
 
             border-radius:10px;
 
             background:#fff;
 
+            color:var(--ink);
+
             resize:vertical;
+
+            outline:none;
 
         }
 
+
+        .portal-thermometer-form select:focus,
+
+        .portal-thermometer-form textarea:focus{
+
+            border-color:var(--gold);
+
+            box-shadow:
+                0 0 0 3px rgba(201,171,93,.20);
+
+        }
+
+
+
+        /* =================================================
+           HUMORES
+           ================================================= */
 
         .portal-moods{
 
             display:grid;
 
-            grid-template-columns:repeat(5,1fr);
+            grid-template-columns:
+                repeat(5,1fr);
 
             gap:10px;
 
@@ -476,6 +516,17 @@
 
             cursor:pointer;
 
+            transition:.15s ease;
+
+        }
+
+
+        .portal-mood span:hover{
+
+            transform:translateY(-2px);
+
+            border-color:var(--gold);
+
         }
 
 
@@ -499,16 +550,20 @@
 
         .portal-mood input:checked + span{
 
-            border-color:var(--green);
+            border-color:var(--gold);
 
             background:var(--green-soft);
 
             box-shadow:
-
-                inset 0 0 0 2px var(--green);
+                inset 0 0 0 2px var(--gold);
 
         }
 
+
+
+        /* =================================================
+           BOTÃO TERMÔMETRO
+           ================================================= */
 
         .portal-thermometer-form button{
 
@@ -518,13 +573,20 @@
 
             border-radius:10px;
 
-            background:var(--green);
+            background:var(--gold);
 
             color:#fff;
 
             font-weight:900;
 
             cursor:pointer;
+
+        }
+
+
+        .portal-thermometer-form button:hover{
+
+            background:#b99543;
 
         }
 
@@ -544,16 +606,24 @@
 
             text-align:center;
 
+            color:#fff;
+
             font-weight:800;
 
         }
 
 
+
+        /* =================================================
+           RESPONSIVO
+           ================================================= */
+
         @media(max-width:650px){
 
             .portal-moods{
 
-                grid-template-columns:repeat(2,1fr);
+                grid-template-columns:
+                    repeat(2,1fr);
 
             }
 
@@ -572,7 +642,8 @@
 
             .portal-moods{
 
-                grid-template-columns:1fr 1fr;
+                grid-template-columns:
+                    repeat(2,1fr);
 
             }
 
@@ -581,6 +652,7 @@
     </style>
 
 </head>
+
 
 
 <body>
@@ -617,8 +689,11 @@
         </div>
 
 
+
         <nav>
 
+
+            <!-- DASHBOARD -->
 
             <a
                 class="active"
@@ -629,47 +704,74 @@
             </a>
 
 
-            <a href="termometro.html">
+
+            <!-- TERMÔMETRO -->
+
+            <a
+                href="termometro.html">
 
                 😊 Termômetro
 
             </a>
 
 
-            <a href="comunicados.html">
+
+            <!-- COMUNICADOS -->
+
+            <a
+                href="comunicados.html">
 
                 📢 Comunicados
 
             </a>
 
 
-            <a href="cafe-rh.html">
+
+            <!-- CAFÉ RH -->
+
+            <a
+                href="cafe-rh.html">
 
                 ☕ Café RH
 
             </a>
 
 
-            <a href="avaliacoes.html">
+
+            <!-- AVALIAÇÕES -->
+
+            <a
+                href="avaliacoes.html">
 
                 📋 Avaliações
 
             </a>
 
 
-            <a href="perfil.html">
+
+            <!-- PERFIL -->
+
+            <a
+                href="perfil.html">
 
                 👤 Meu Perfil
 
             </a>
 
 
-            <a href="beneficios.html">
+
+            <!-- BENEFÍCIOS -->
+
+            <a
+                href="beneficios.html">
 
                 💙 Benefícios
 
             </a>
 
+
+
+            <!-- ADMIN -->
 
             <a
                 id="adminLink"
@@ -683,6 +785,9 @@
 
         </nav>
 
+
+
+        <!-- SAIR -->
 
         <button
             id="logout"
@@ -698,7 +803,7 @@
 
 
     <!-- =================================================
-         CONTEÚDO DO DASHBOARD
+         CONTEÚDO
          ================================================= -->
 
     <main class="main">
@@ -713,14 +818,21 @@
 
             <div>
 
+
                 <span class="pill">
+
                     Portal Corporativo
+
                 </span>
 
 
+
                 <h2>
+
                     Bem-vindo ao Portal RH CMIVET
+
                 </h2>
+
 
 
                 <p>
@@ -732,134 +844,191 @@
 
                 </p>
 
+
             </div>
+
 
 
             <img
                 src="assets/hero-foto-cmivet.jpg"
                 alt="CMIVET">
 
+
         </section>
 
 
 
         <!-- =================================================
-             CARDS
+             CARDS DO DASHBOARD
              ================================================= -->
 
         <section class="dashboard-grid">
 
 
+            <!-- TERMÔMETRO -->
+
             <a
                 href="termometro.html"
                 class="card">
+
 
                 <span>
                     😊
                 </span>
 
+
                 <h3>
                     Termômetro Emocional
                 </h3>
 
+
                 <p id="statusTermometro">
+
                     Verificando...
+
                 </p>
+
 
             </a>
 
+
+
+            <!-- COMUNICADOS -->
 
             <a
                 href="comunicados.html"
                 class="card">
 
+
                 <span>
                     📢
                 </span>
+
 
                 <h3>
                     Comunicados
                 </h3>
 
+
                 <p id="statusComunicados">
+
                     Carregando...
+
                 </p>
+
 
             </a>
 
+
+
+            <!-- CAFÉ RH -->
 
             <a
                 href="cafe-rh.html"
                 class="card">
 
+
                 <span>
                     ☕
                 </span>
+
 
                 <h3>
                     Café com RH
                 </h3>
 
+
                 <p>
-                    Solicite um atendimento confidencial
+
+                    Solicite um atendimento
+                    confidencial
+
                 </p>
+
 
             </a>
 
+
+
+            <!-- AVALIAÇÕES -->
 
             <a
                 href="avaliacoes.html"
                 class="card">
 
+
                 <span>
                     📋
                 </span>
+
 
                 <h3>
                     Avaliações
                 </h3>
 
+
                 <p>
+
                     Desempenho e feedbacks
+
                 </p>
+
 
             </a>
 
+
+
+            <!-- PERFIL -->
 
             <a
                 href="perfil.html"
                 class="card">
 
+
                 <span>
                     👤
                 </span>
+
 
                 <h3>
                     Meu Perfil
                 </h3>
 
+
                 <p>
+
                     Dados pessoais
+
                 </p>
+
 
             </a>
 
+
+
+            <!-- BENEFÍCIOS -->
 
             <a
                 href="beneficios.html"
                 class="card">
 
+
                 <span>
                     💙
                 </span>
+
 
                 <h3>
                     Benefícios
                 </h3>
 
+
                 <p>
+
                     Convênios e vantagens
+
                 </p>
+
 
             </a>
 
@@ -874,13 +1043,17 @@
 
         <footer class="footer">
 
+
             <strong>
                 Portal RH CMIVET
             </strong>
 
+
             <br>
 
+
             Versão Enterprise • Desenvolvido em Google Apps Script
+
 
         </footer>
 
@@ -892,7 +1065,8 @@
 
 
 <!-- =====================================================
-     LOGIN SOBRE O DASHBOARD
+     LOGIN
+     FICA SOBRE O DASHBOARD
      ===================================================== -->
 
 <div
@@ -903,14 +1077,21 @@
     <div class="portal-login-card">
 
 
+        <!-- CABEÇALHO VERDE ESCURO -->
+
         <div class="portal-login-header">
+
 
             <img
                 src="assets/cmivet-logo-oficial.png"
                 alt="CMIVET">
 
+
         </div>
 
+
+
+        <!-- CORPO VERDE -->
 
         <div class="portal-login-body">
 
@@ -922,9 +1103,13 @@
             </span>
 
 
+
             <h2>
+
                 Entrar no Portal RH
+
             </h2>
+
 
 
             <p>
@@ -933,6 +1118,7 @@
                 acessar o Portal RH.
 
             </p>
+
 
 
             <form
@@ -944,18 +1130,22 @@
 
                     E-mail
 
+
                     <input
                         type="email"
                         name="email"
                         autocomplete="username"
                         required>
 
+
                 </label>
+
 
 
                 <label>
 
                     Senha
+
 
                     <input
                         type="password"
@@ -963,7 +1153,9 @@
                         autocomplete="current-password"
                         required>
 
+
                 </label>
+
 
 
                 <button
@@ -973,6 +1165,7 @@
                     Entrar
 
                 </button>
+
 
 
                 <div
@@ -988,6 +1181,9 @@
         </div>
 
 
+
+        <!-- RODAPÉ -->
+
         <div class="portal-login-footer">
 
             🔒 Acesso seguro e exclusivo aos colaboradores CMIVET.
@@ -1002,7 +1198,8 @@
 
 
 <!-- =====================================================
-     TERMÔMETRO SOBRE O DASHBOARD
+     TERMÔMETRO
+     FICA SOBRE O DASHBOARD
      ===================================================== -->
 
 <div
@@ -1013,6 +1210,8 @@
 
     <div class="portal-thermometer-card">
 
+
+        <!-- CABEÇALHO -->
 
         <div class="portal-thermometer-header">
 
@@ -1030,7 +1229,9 @@
 
 
             <h2>
+
                 Como você está hoje?
+
             </h2>
 
 
@@ -1046,10 +1247,14 @@
 
 
 
+        <!-- FORMULÁRIO -->
+
         <form
             id="portalThermometerForm"
             class="portal-thermometer-form">
 
+
+            <!-- HUMOR -->
 
             <label>
 
@@ -1059,7 +1264,11 @@
                 <div class="portal-moods">
 
 
-                    <label class="portal-mood">
+                    <!-- MUITO FELIZ -->
+
+                    <label
+                        class="portal-mood">
+
 
                         <input
                             type="radio"
@@ -1067,9 +1276,12 @@
                             value="1"
                             required>
 
+
                         <span>
 
-                            <em>😄</em>
+                            <em>
+                                😄
+                            </em>
 
                             <strong>
                                 Muito Feliz
@@ -1077,19 +1289,28 @@
 
                         </span>
 
+
                     </label>
 
 
-                    <label class="portal-mood">
+
+                    <!-- BEM -->
+
+                    <label
+                        class="portal-mood">
+
 
                         <input
                             type="radio"
                             name="humor"
                             value="2">
 
+
                         <span>
 
-                            <em>🙂</em>
+                            <em>
+                                🙂
+                            </em>
 
                             <strong>
                                 Bem
@@ -1097,19 +1318,28 @@
 
                         </span>
 
+
                     </label>
 
 
-                    <label class="portal-mood">
+
+                    <!-- NORMAL -->
+
+                    <label
+                        class="portal-mood">
+
 
                         <input
                             type="radio"
                             name="humor"
                             value="3">
 
+
                         <span>
 
-                            <em>😐</em>
+                            <em>
+                                😐
+                            </em>
 
                             <strong>
                                 Normal
@@ -1117,19 +1347,28 @@
 
                         </span>
 
+
                     </label>
 
 
-                    <label class="portal-mood">
+
+                    <!-- CANSADO -->
+
+                    <label
+                        class="portal-mood">
+
 
                         <input
                             type="radio"
                             name="humor"
                             value="4">
 
+
                         <span>
 
-                            <em>😴</em>
+                            <em>
+                                😴
+                            </em>
 
                             <strong>
                                 Cansado
@@ -1137,25 +1376,35 @@
 
                         </span>
 
+
                     </label>
 
 
-                    <label class="portal-mood">
+
+                    <!-- MUITO MAL -->
+
+                    <label
+                        class="portal-mood">
+
 
                         <input
                             type="radio"
                             name="humor"
                             value="5">
 
+
                         <span>
 
-                            <em>😢</em>
+                            <em>
+                                😢
+                            </em>
 
                             <strong>
                                 Muito Mal
                             </strong>
 
                         </span>
+
 
                     </label>
 
@@ -1166,6 +1415,8 @@
 
 
 
+            <!-- ENERGIA -->
+
             <label>
 
                 Como está seu nível de energia?
@@ -1175,41 +1426,60 @@
                     name="energia"
                     required>
 
+
                     <option value="">
+
                         Selecione
+
                     </option>
+
 
                     <option value="Baixa">
+
                         Baixa
+
                     </option>
+
 
                     <option value="Moderada">
+
                         Moderada
+
                     </option>
+
 
                     <option value="Alta">
+
                         Alta
+
                     </option>
 
+
                 </select>
+
 
             </label>
 
 
+
+            <!-- OBSERVAÇÃO -->
 
             <label>
 
                 Observação
 
+
                 <textarea
                     name="observacao"
                     rows="3"
-                    placeholder="Se quiser, conte um pouco mais sobre como você está hoje.">
-                </textarea>
+                    placeholder="Se quiser, conte um pouco mais sobre como você está hoje."></textarea>
+
 
             </label>
 
 
+
+            <!-- ENVIAR -->
 
             <button
                 type="submit"
@@ -1218,6 +1488,7 @@
                 Enviar resposta
 
             </button>
+
 
 
             <div
