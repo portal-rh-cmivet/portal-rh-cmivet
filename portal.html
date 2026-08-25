@@ -15,6 +15,7 @@
         rel="stylesheet"
         href="app.css">
 
+
     <!-- =================================================
          AJUSTE EXCLUSIVO DO BANNER
          NÃO ALTERA O TAMANHO DO PORTAL
@@ -22,24 +23,14 @@
 
     <style>
 
-        /*
-         * Mantém exatamente a estrutura original
-         * do banner.
-         */
-
         .hero{
+
             min-height:300px;
+
             overflow:hidden;
+
         }
 
-
-        /*
-         * A imagem permanece dentro da área direita
-         * do banner.
-         *
-         * "fill" faz a arte ocupar exatamente o
-         * espaço disponível sem cortar nenhuma parte.
-         */
 
         .hero > img{
 
@@ -58,13 +49,9 @@
             display:block;
 
             background:#075d54;
+
         }
 
-
-        /*
-         * Garante que nada do banner ultrapasse
-         * os limites do card.
-         */
 
         .hero,
         .hero > img{
@@ -73,10 +60,6 @@
 
         }
 
-
-        /*
-         * Celular
-         */
 
         @media(max-width:800px){
 
@@ -112,6 +95,205 @@
                 min-height:220px;
 
                 max-height:220px;
+
+            }
+
+        }
+
+
+        /* =================================================
+           MODAL DO TERMÔMETRO
+           ================================================= */
+
+        #termometroModal{
+
+            position:fixed;
+
+            inset:0;
+
+            z-index:9999;
+
+            display:none;
+
+            align-items:center;
+
+            justify-content:center;
+
+            padding:20px;
+
+            background:rgba(3,43,39,.72);
+
+            backdrop-filter:blur(5px);
+
+        }
+
+
+        #termometroModal .termometro-container{
+
+            position:relative;
+
+            width:min(900px, 96vw);
+
+            height:min(720px, 92vh);
+
+            background:#fff;
+
+            border:1px solid #c9ab5d;
+
+            border-radius:22px;
+
+            overflow:hidden;
+
+            box-shadow:
+                0 25px 70px
+                rgba(0,0,0,.28);
+
+        }
+
+
+        #termometroFrame{
+
+            width:100%;
+
+            height:100%;
+
+            border:0;
+
+            display:block;
+
+            background:#fff;
+
+        }
+
+
+        #fecharTermometro{
+
+            position:absolute;
+
+            top:14px;
+
+            right:14px;
+
+            z-index:10;
+
+            width:42px;
+
+            height:42px;
+
+            border-radius:50%;
+
+            border:1px solid
+                rgba(255,255,255,.65);
+
+            background:
+                rgba(3,75,68,.90);
+
+            color:#fff;
+
+            font-size:24px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            transition:.18s ease;
+
+        }
+
+
+        #fecharTermometro:hover{
+
+            transform:scale(1.05);
+
+            background:#075d54;
+
+        }
+
+
+        #termometroLoading{
+
+            position:absolute;
+
+            inset:0;
+
+            z-index:5;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            flex-direction:column;
+
+            gap:12px;
+
+            background:#fff;
+
+            color:#075d54;
+
+            font-weight:700;
+
+        }
+
+
+        #termometroLoading .loading-icon{
+
+            font-size:36px;
+
+        }
+
+
+        /*
+         * Enquanto o Termômetro estiver pendente,
+         * o usuário não consegue rolar o Dashboard.
+         */
+
+        body.modal-open{
+
+            overflow:hidden !important;
+
+        }
+
+
+        @media(max-width:700px){
+
+            #termometroModal{
+
+                padding:8px;
+
+            }
+
+
+            #termometroModal
+            .termometro-container{
+
+                width:100%;
+
+                height:94vh;
+
+                border-radius:16px;
+
+            }
+
+
+            #fecharTermometro{
+
+                width:38px;
+
+                height:38px;
+
+                font-size:21px;
+
+                top:10px;
+
+                right:10px;
 
             }
 
@@ -279,11 +461,6 @@
             </div>
 
 
-            <!--
-                IMPORTANTE:
-                Mantido o arquivo original do banner.
-            -->
-
             <img
                 src="assets/hero-foto-cmivet.jpg"
                 alt="CMIVET">
@@ -312,7 +489,9 @@
                 </h3>
 
                 <p id="statusTermometro">
+
                     Verificando...
+
                 </p>
 
             </a>
@@ -331,7 +510,9 @@
                 </h3>
 
                 <p id="statusComunicados">
+
                     Carregando...
+
                 </p>
 
             </a>
@@ -473,6 +654,70 @@
 
 
     </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL AUTOMÁTICO DO TERMÔMETRO
+     
+     Este bloco é aberto pelo portal.js quando:
+     
+     resposta.respondeu === false
+     
+     O modal não possui botão de fechar livre.
+     O portal.js verifica se a resposta foi feita
+     antes de permitir o fechamento.
+     ===================================================== -->
+
+<div
+    id="termometroModal"
+    aria-modal="true"
+    role="dialog">
+
+
+    <div class="termometro-container">
+
+
+        <!-- BOTÃO FECHAR -->
+
+        <button
+            id="fecharTermometro"
+            type="button"
+            aria-label="Fechar">
+
+            ×
+
+        </button>
+
+
+        <!-- LOADING -->
+
+        <div
+            id="termometroLoading">
+
+            <div class="loading-icon">
+                😊
+            </div>
+
+            <div>
+                Carregando seu Termômetro Emocional...
+            </div>
+
+        </div>
+
+
+        <!-- TERMÔMETRO -->
+
+        <iframe
+            id="termometroFrame"
+            title="Termômetro Emocional"
+            src="about:blank">
+        </iframe>
+
+
+    </div>
 
 </div>
 
