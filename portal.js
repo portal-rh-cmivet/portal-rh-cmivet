@@ -1,19 +1,30 @@
 /*************************************************
  * PORTAL RH CMIVET
  * portal.js
- * Fluxo:
  *
- * Portal
- * ↓
- * Login
- * ↓
- * Termômetro
- * ↓
+ * FLUXO:
+ *
+ * index.html
+ *      ↓
+ * login.html
+ *      ↓
+ * portal.html
+ *      ↓
+ * verifica sessão
+ *      ↓
+ * verifica Termômetro
+ *      ↓
+ * se pendente → abre automaticamente
+ *      ↓
+ * responde
+ *      ↓
  * Dashboard
  *************************************************/
 
 
-const TOKEN = Auth.getToken();
+/*************************************************
+ * DADOS DA SESSÃO
+ *************************************************/
 
 let USER = Auth.getUser() || {};
 
@@ -30,55 +41,91 @@ document.addEventListener(
 );
 
 
+/*************************************************
+ * INICIAR PORTAL
+ *************************************************/
+
 async function iniciarPortal() {
 
     try {
 
-        configurarModalLogin();
-
-        configurarModalTermometro();
-
-        configurarLogout();
-
         /*
-         * Primeiro verificamos se existe sessão.
+         * PRIMEIRO:
+         * verifica se existe sessão local.
          */
 
-        if (Session.isLogged()) {
+        if (!Session.isLogged()) {
 
-            const ok =
-                await Auth.validarSessao();
+            console.log(
+                "Usuário sem sessão."
+            );
 
-            if (ok) {
+            window.location.href =
+                "login.html";
 
-                loginLiberado = true;
-
-                USER =
-                    Auth.getUser() || {};
-
-                carregarUsuario();
-
-                configurarMenu();
-
-                fecharModalLogin();
-
-                await verificarTermometroHoje();
-
-                return;
-            }
+            return;
 
         }
 
 
         /*
-         * Sem sessão:
-         * mostra o login.
+         * SEGUNDO:
+         * valida a sessão no Apps Script.
          */
 
-        abrirModalLogin();
+        const sessaoValida =
+            await Auth.validarSessao();
 
+
+        if (!sessaoValida) {
+
+            console.log(
+                "Sessão inválida."
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        /*
+         * LOGIN CONFIRMADO
+         */
+
+        loginLiberado = true;
+
+
+        USER =
+            Auth.getUser() || {};
+
+
+        /*
+         * CARREGA DADOS
+         */
+
+        carregarUsuario();
+
+        configurarMenu();
+
+        configurarLogout();
+
+
+        /*
+         * VERIFICA TERMÔMETRO
+         */
+
+        await verificarTermometroHoje();
+
+
+        console.log(
+            "Portal iniciado com sucesso."
+        );
 
     }
+
 
     catch (erro) {
 
@@ -87,185 +134,9 @@ async function iniciarPortal() {
             erro
         );
 
-        abrirModalLogin();
 
-    }
-
-}
-
-
-/*************************************************
- * CONFIGURA LOGIN
- *************************************************/
-
-function configurarModalLogin() {
-
-    const form =
-        document.getElementById(
-            "portalLoginForm"
-        );
-
-
-    if (!form) return;
-
-
-    form.addEventListener(
-        "submit",
-        efetuarLoginPortal
-    );
-
-}
-
-
-/*************************************************
- * LOGIN
- *************************************************/
-
-async function efetuarLoginPortal(event) {
-
-    event.preventDefault();
-
-
-    const email =
-        document.getElementById(
-            "portalEmail"
-        ).value.trim();
-
-
-    const senha =
-        document.getElementById(
-            "portalSenha"
-        ).value;
-
-
-    const botao =
-        document.getElementById(
-            "portalLoginButton"
-        );
-
-
-    const mensagem =
-        document.getElementById(
-            "portalLoginMessage"
-        );
-
-
-    mensagem.textContent = "";
-
-    mensagem.className =
-        "portal-login-message";
-
-
-    botao.disabled = true;
-
-    botao.textContent =
-        "Entrando...";
-
-
-    try {
-
-
-        /*
-         * USA A MESMA AUTENTICAÇÃO
-         * QUE JÁ EXISTE NO SITE.
-         */
-
-        const resposta =
-            await Auth.login(
-                email,
-                senha
-            );
-
-
-        if (
-            !resposta ||
-            !resposta.sucesso
-        ) {
-
-            throw new Error(
-                resposta?.erro ||
-                "Não foi possível realizar o login."
-            );
-
-        }
-
-
-        /*
-         * Atualiza os dados locais.
-         */
-
-        USER =
-            resposta.usuario ||
-            Auth.getUser() ||
-            {};
-
-
-        loginLiberado = true;
-
-
-        carregarUsuario();
-
-        configurarMenu();
-
-
-        mensagem.textContent =
-            "Login realizado com sucesso.";
-
-
-        mensagem.classList.add(
-            "success"
-        );
-
-
-        /*
-         * Fecha o login.
-         */
-
-        setTimeout(
-            async function () {
-
-                fecharModalLogin();
-
-                /*
-                 * Agora verifica o Termômetro.
-                 */
-
-                await verificarTermometroHoje();
-
-            },
-
-            350
-        );
-
-
-    }
-
-    catch (erro) {
-
-        console.error(
-            "Erro no login:",
-            erro
-        );
-
-
-        mensagem.textContent =
-            erro.message ||
-            "Falha no login.";
-
-
-        mensagem.classList.add(
-            "error"
-        );
-
-    }
-
-
-    finally {
-
-        botao.disabled = false;
-
-        botao.textContent =
-            "Entrar no Portal";
+        window.location.href =
+            "login.html";
 
     }
 
@@ -287,8 +158,10 @@ function carregarUsuario() {
         (USER.nome || "")
             .split(" ")
             .filter(Boolean)
-            .slice(0,2)
-            .map(nome => nome[0])
+            .slice(0, 2)
+            .map(
+                nome => nome[0]
+            )
             .join("")
             .toUpperCase();
 
@@ -404,16 +277,10 @@ function configurarLogout() {
 
 
 /*************************************************
- * VERIFICA TERMÔMETRO
+ * VERIFICAR TERMÔMETRO
  *************************************************/
 
 async function verificarTermometroHoje() {
-
-    const status =
-        document.getElementById(
-            "statusTermometro"
-        );
-
 
     if (!loginLiberado) {
 
@@ -422,7 +289,18 @@ async function verificarTermometroHoje() {
     }
 
 
+    const status =
+        document.getElementById(
+            "statusTermometro"
+        );
+
+
     try {
+
+        console.log(
+            "Consultando Termômetro..."
+        );
+
 
         const resposta =
             await API.verificarTermometroHoje(
@@ -431,28 +309,54 @@ async function verificarTermometroHoje() {
 
 
         console.log(
-            "Verificação Termômetro:",
+            "Resposta Termômetro:",
             resposta
         );
 
 
-        if (!resposta.sucesso) {
+        /*
+         * ERRO NA API
+         */
+
+        if (
+            !resposta ||
+            !resposta.sucesso
+        ) {
+
+            console.error(
+                "Erro na consulta:",
+                resposta
+            );
+
 
             if (status) {
 
                 status.textContent =
                     "⚠ Indisponível";
 
+                status.className =
+                    "badge error";
+
             }
+
 
             return;
 
         }
 
 
+        /*
+         * JÁ RESPONDEU
+         */
+
         if (
             resposta.respondeu === true
         ) {
+
+            console.log(
+                "Termômetro já respondido hoje."
+            );
+
 
             if (status) {
 
@@ -467,26 +371,39 @@ async function verificarTermometroHoje() {
 
             fecharModalTermometro();
 
-        }
-
-        else {
-
-            if (status) {
-
-                status.textContent =
-                    "🟡 Pendente";
-
-                status.className =
-                    "badge warning";
-
-            }
-
-
-            abrirModalTermometro();
+            return;
 
         }
+
+
+        /*
+         * AINDA NÃO RESPONDEU
+         */
+
+        console.log(
+            "Termômetro pendente."
+        );
+
+
+        if (status) {
+
+            status.textContent =
+                "🟡 Pendente";
+
+            status.className =
+                "badge warning";
+
+        }
+
+
+        /*
+         * ABRE AUTOMATICAMENTE
+         */
+
+        abrirModalTermometro();
 
     }
+
 
     catch (erro) {
 
@@ -524,6 +441,10 @@ function configurarModalTermometro() {
         );
 
 
+    /*
+     * BOTÃO FECHAR
+     */
+
     if (fechar) {
 
         fechar.addEventListener(
@@ -537,6 +458,10 @@ function configurarModalTermometro() {
 
     }
 
+
+    /*
+     * CARREGAMENTO DO IFRAME
+     */
 
     if (frame) {
 
@@ -558,7 +483,7 @@ function configurarModalTermometro() {
 
 
     /*
-     * Recebe aviso do termometro.js
+     * RECEBE AVISO DO TERMÔMETRO
      */
 
     window.addEventListener(
@@ -598,7 +523,7 @@ function configurarModalTermometro() {
 
 
 /*************************************************
- * ABRE TERMÔMETRO
+ * ABRIR MODAL TERMÔMETRO
  *************************************************/
 
 function abrirModalTermometro() {
@@ -621,12 +546,24 @@ function abrirModalTermometro() {
         );
 
 
+    /*
+     * SE O MODAL NÃO EXISTIR
+     */
+
     if (!modal || !frame) {
+
+        console.error(
+            "Modal do Termômetro não encontrado."
+        );
 
         return;
 
     }
 
+
+    /*
+     * CARREGA TERMOMETRO
+     */
 
     if (
         !frame.src ||
@@ -641,6 +578,10 @@ function abrirModalTermometro() {
     }
 
 
+    /*
+     * MOSTRA LOADING
+     */
+
     if (loading) {
 
         loading.style.display =
@@ -649,9 +590,17 @@ function abrirModalTermometro() {
     }
 
 
+    /*
+     * ABRE MODAL
+     */
+
     modal.style.display =
         "flex";
 
+
+    /*
+     * BLOQUEIA ROLAGEM DO DASHBOARD
+     */
 
     document.body.style.overflow =
         "hidden";
@@ -660,7 +609,7 @@ function abrirModalTermometro() {
 
 
 /*************************************************
- * FECHA TERMÔMETRO
+ * FECHAR MODAL
  *************************************************/
 
 function fecharModalTermometro() {
@@ -685,7 +634,7 @@ function fecharModalTermometro() {
 
 
 /*************************************************
- * NÃO PERMITE FECHAR ANTES DA RESPOSTA
+ * NÃO PERMITE FECHAR SEM RESPONDER
  *************************************************/
 
 async function verificarPodeFechar() {
@@ -699,6 +648,7 @@ async function verificarPodeFechar() {
 
 
         if (
+            resposta &&
             resposta.sucesso &&
             resposta.respondeu === true
         ) {
@@ -707,11 +657,21 @@ async function verificarPodeFechar() {
 
         }
 
+        else {
+
+            console.log(
+                "Termômetro ainda pendente."
+            );
+
+        }
+
     }
+
 
     catch (erro) {
 
         console.error(
+            "Erro ao verificar fechamento:",
             erro
         );
 
@@ -721,7 +681,7 @@ async function verificarPodeFechar() {
 
 
 /*************************************************
- * APÓS RESPOSTA
+ * ATUALIZAR STATUS DEPOIS DA RESPOSTA
  *************************************************/
 
 async function atualizarStatusDepoisDaResposta() {
@@ -741,6 +701,7 @@ async function atualizarStatusDepoisDaResposta() {
 
 
         if (
+            resposta &&
             resposta.sucesso &&
             resposta.respondeu === true
         ) {
@@ -762,6 +723,7 @@ async function atualizarStatusDepoisDaResposta() {
 
     }
 
+
     catch (erro) {
 
         console.error(
@@ -770,73 +732,6 @@ async function atualizarStatusDepoisDaResposta() {
         );
 
     }
-
-}
-
-
-/*************************************************
- * MODAL LOGIN
- *************************************************/
-
-function abrirModalLogin() {
-
-    const modal =
-        document.getElementById(
-            "loginModal"
-        );
-
-
-    if (!modal) return;
-
-
-    modal.style.display =
-        "flex";
-
-
-    document.body.style.overflow =
-        "hidden";
-
-
-    setTimeout(
-        function () {
-
-            const email =
-                document.getElementById(
-                    "portalEmail"
-                );
-
-
-            if (email) {
-
-                email.focus();
-
-            }
-
-        },
-
-        100
-    );
-
-}
-
-
-function fecharModalLogin() {
-
-    const modal =
-        document.getElementById(
-            "loginModal"
-        );
-
-
-    if (!modal) return;
-
-
-    modal.style.display =
-        "none";
-
-
-    document.body.style.overflow =
-        "";
 
 }
 
@@ -855,7 +750,7 @@ function $(id) {
 
 
 /*************************************************
- * ERROS
+ * ERROS GLOBAIS
  *************************************************/
 
 window.addEventListener(
