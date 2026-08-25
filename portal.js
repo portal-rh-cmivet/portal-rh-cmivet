@@ -16,7 +16,7 @@
 
 
     /* =====================================================
-       TOKEN
+       TOKEN / SESSÃO
        ===================================================== */
 
     function getToken() {
@@ -51,11 +51,21 @@
 
     function limparSessao() {
 
-        localStorage.removeItem("portal_token");
-        localStorage.removeItem("token");
+        localStorage.removeItem(
+            "portal_token"
+        );
 
-        sessionStorage.removeItem("portal_token");
-        sessionStorage.removeItem("token");
+        localStorage.removeItem(
+            "token"
+        );
+
+        sessionStorage.removeItem(
+            "portal_token"
+        );
+
+        sessionStorage.removeItem(
+            "token"
+        );
 
     }
 
@@ -71,7 +81,9 @@
                 "portalModalStyles"
             )
         ) {
+
             return;
+
         }
 
 
@@ -86,7 +98,7 @@
         style.textContent = `
 
         /* =================================================
-           FUNDO DO MODAL
+           FUNDO
            ================================================= */
 
         .portal-overlay{
@@ -129,8 +141,6 @@
                 450px,
                 calc(100vw - 24px)
             );
-
-            height:auto;
 
             max-height:
                 calc(100vh - 35px);
@@ -326,8 +336,6 @@
                 600px,
                 calc(100vw - 24px)
             );
-
-            height:auto;
 
             max-height:
                 calc(100vh - 35px);
@@ -595,7 +603,7 @@
 
 
         /* =================================================
-           OBSERVAÇÃO
+           TEXTAREA
            ================================================= */
 
         .portal-thermometer-form
@@ -633,6 +641,8 @@
         .portal-thermometer-form
         button{
 
+            width:100%;
+
             height:42px;
 
             border:
@@ -660,6 +670,16 @@
         }
 
 
+        .portal-thermometer-form
+        button:disabled{
+
+            opacity:.65;
+
+            cursor:not-allowed;
+
+        }
+
+
         .portal-thermometer-message{
 
             min-height:16px;
@@ -676,7 +696,7 @@
 
 
         /* =================================================
-           TELAS PEQUENAS
+           CELULAR
            ================================================= */
 
         @media(max-width:700px){
@@ -785,7 +805,9 @@
 
 
         if (overlay) {
+
             return overlay;
+
         }
 
 
@@ -810,6 +832,36 @@
 
 
         return overlay;
+
+    }
+
+
+    /* =====================================================
+       FECHAR MODAL
+       ===================================================== */
+
+    function fecharModal() {
+
+        const overlay =
+            document.getElementById(
+                "portalOverlay"
+            );
+
+
+        if (!overlay) {
+
+            return;
+
+        }
+
+
+        overlay.hidden = true;
+
+        overlay.innerHTML = "";
+
+
+        document.body.style.overflow =
+            "";
 
     }
 
@@ -862,7 +914,8 @@
 
 
                 <form
-                    id="portalLoginForm">
+                    id="portalLoginForm"
+                    onsubmit="return false;">
 
 
                     <label>
@@ -893,7 +946,9 @@
                     </label>
 
 
-                    <button type="submit">
+                    <button
+                        type="button"
+                        id="portalLoginButton">
 
                         Entrar no Portal
 
@@ -929,28 +984,19 @@
             "hidden";
 
 
-        const form =
+        const btn =
             document.getElementById(
-                "portalLoginForm"
+                "portalLoginButton"
             );
 
 
-        form.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
-
+        btn.addEventListener(
+            "click",
+            async function () {
 
                 const mensagem =
                     document.getElementById(
                         "portalLoginMessage"
-                    );
-
-
-                const btn =
-                    form.querySelector(
-                        "button"
                     );
 
 
@@ -964,6 +1010,16 @@
                     document.getElementById(
                         "portalLoginSenha"
                     ).value;
+
+
+                if (!email || !senha) {
+
+                    mensagem.textContent =
+                        "Preencha e-mail e senha.";
+
+                    return;
+
+                }
 
 
                 btn.disabled = true;
@@ -991,13 +1047,17 @@
                             resultado.data?.token;
 
 
-                        if (token) {
+                        if (!token) {
 
-                            salvarToken(
-                                token
-                            );
+                            mensagem.textContent =
+                                "Login realizado, mas o token não foi recebido.";
+
+                            return;
 
                         }
+
+
+                        salvarToken(token);
 
 
                         fecharModal();
@@ -1113,7 +1173,8 @@
 
                 <form
                     id="portalThermometerForm"
-                    class="portal-thermometer-form">
+                    class="portal-thermometer-form"
+                    onsubmit="return false;">
 
 
                     <div>
@@ -1263,6 +1324,7 @@
 
                         <select
                             name="energia"
+                            id="portalEnergia"
                             required>
 
                             <option value="">
@@ -1301,13 +1363,15 @@
 
                         <textarea
                             name="observacao"
+                            id="portalObservacao"
                             placeholder="Se quiser, conte um pouco mais sobre como você está hoje."></textarea>
 
                     </label>
 
 
                     <button
-                        type="submit">
+                        type="button"
+                        id="portalThermometerButton">
 
                         Enviar resposta
 
@@ -1334,181 +1398,250 @@
             "hidden";
 
 
-        const form =
+        /* =================================================
+           BOTÃO
+           IMPORTANTE:
+           type="button" + click
+           impede envio tradicional
+           ================================================= */
+
+        const btn =
             document.getElementById(
-                "portalThermometerForm"
+                "portalThermometerButton"
             );
 
 
-        form.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
-
-
-                const token =
-                    getToken();
-
-
-                const mensagem =
-                    document.getElementById(
-                        "portalThermometerMessage"
-                    );
-
-
-                const btn =
-                    form.querySelector(
-                        "button"
-                    );
-
-
-                const humor =
-                    form.querySelector(
-                        'input[name="humor"]:checked'
-                    );
-
-
-                const energia =
-                    form.querySelector(
-                        '[name="energia"]'
-                    );
-
-
-                const observacao =
-                    form.querySelector(
-                        '[name="observacao"]'
-                    );
-
-
-                if (!humor) {
-
-                    mensagem.textContent =
-                        "Selecione como você está hoje.";
-
-                    return;
-
-                }
-
-
-                if (!energia.value) {
-
-                    mensagem.textContent =
-                        "Selecione seu nível de energia.";
-
-                    return;
-
-                }
-
-
-                btn.disabled = true;
-
-                btn.textContent =
-                    "Enviando...";
-
-
-                try {
-
-                    const resultado =
-                        await API.salvarTermometro({
-
-                            token: token,
-
-                            humor:
-                                humor.value,
-
-                            energia:
-                                energia.value,
-
-                            observacao:
-                                observacao.value.trim()
-
-                        });
-
-
-                    if (
-                        resultado &&
-                        resultado.sucesso
-                    ) {
-
-                        mensagem.textContent =
-                            "Resposta registrada com sucesso!";
-
-
-                        atualizarStatusTermometro(
-                            false
-                        );
-
-
-                        setTimeout(
-                            function () {
-
-                                fecharModal();
-
-                            },
-                            700
-                        );
-
-
-                        return;
-
-                    }
-
-
-                    mensagem.textContent =
-                        resultado?.erro ||
-                        "Não foi possível registrar sua resposta.";
-
-                }
-
-                catch (erro) {
-
-                    console.error(
-                        "Erro no termômetro:",
-                        erro
-                    );
-
-
-                    mensagem.textContent =
-                        "Erro ao registrar sua resposta.";
-
-                }
-
-                finally {
-
-                    btn.disabled = false;
-
-                    btn.textContent =
-                        "Enviar resposta";
-
-                }
-
-            }
+        btn.addEventListener(
+            "click",
+            enviarTermometro
         );
 
     }
 
 
     /* =====================================================
-       FECHAR MODAL
+       ENVIAR TERMÔMETRO
        ===================================================== */
 
-    function fecharModal() {
+    async function enviarTermometro() {
 
-        const overlay =
+        const form =
             document.getElementById(
-                "portalOverlay"
+                "portalThermometerForm"
             );
 
 
-        if (!overlay) return;
+        if (!form) {
+
+            return;
+
+        }
 
 
-        overlay.hidden = true;
+        const token =
+            getToken();
 
-        overlay.innerHTML = "";
 
-        document.body.style.overflow = "";
+        const mensagem =
+            document.getElementById(
+                "portalThermometerMessage"
+            );
+
+
+        const btn =
+            document.getElementById(
+                "portalThermometerButton"
+            );
+
+
+        const humor =
+            form.querySelector(
+                'input[name="humor"]:checked'
+            );
+
+
+        const energia =
+            document.getElementById(
+                "portalEnergia"
+            );
+
+
+        const observacao =
+            document.getElementById(
+                "portalObservacao"
+            );
+
+
+        /* =================================================
+           VALIDAÇÕES
+           ================================================= */
+
+        if (!token) {
+
+            mensagem.textContent =
+                "Sua sessão expirou. Faça login novamente.";
+
+            setTimeout(
+                function () {
+
+                    fecharModal();
+
+                    abrirLoginModal();
+
+                },
+                1000
+            );
+
+            return;
+
+        }
+
+
+        if (!humor) {
+
+            mensagem.textContent =
+                "Selecione como você está hoje.";
+
+            return;
+
+        }
+
+
+        if (!energia.value) {
+
+            mensagem.textContent =
+                "Selecione seu nível de energia.";
+
+            return;
+
+        }
+
+
+        /* =================================================
+           BLOQUEAR BOTÃO
+           ================================================= */
+
+        btn.disabled = true;
+
+        btn.textContent =
+            "Enviando...";
+
+
+        mensagem.textContent =
+            "";
+
+
+        try {
+
+            const resultado =
+                await API.salvarTermometro({
+
+                    token: token,
+
+                    humor:
+                        humor.value,
+
+                    energia:
+                        energia.value,
+
+                    observacao:
+                        observacao.value.trim()
+
+                });
+
+
+            console.log(
+                "Resposta do termômetro:",
+                resultado
+            );
+
+
+            /* =================================================
+               SUCESSO
+               ================================================= */
+
+            if (
+                resultado &&
+                resultado.sucesso
+            ) {
+
+                atualizarStatusTermometro(
+                    false
+                );
+
+
+                mensagem.textContent =
+                    "✓ Resposta registrada com sucesso!";
+
+
+                btn.textContent =
+                    "Resposta enviada";
+
+
+                /*
+                 * NÃO redireciona.
+                 *
+                 * NÃO recarrega a página.
+                 *
+                 * Apenas fecha o modal.
+                 */
+
+                setTimeout(
+                    function () {
+
+                        fecharModal();
+
+                        /*
+                         * Garante que o Dashboard
+                         * continue na tela.
+                         */
+
+                        atualizarStatusComunicados();
+
+                    },
+                    700
+                );
+
+
+                return;
+
+            }
+
+
+            /* =================================================
+               ERRO DA API
+               ================================================= */
+
+            mensagem.textContent =
+                resultado?.erro ||
+                "Não foi possível registrar sua resposta.";
+
+
+            btn.disabled = false;
+
+            btn.textContent =
+                "Enviar resposta";
+
+        }
+
+        catch (erro) {
+
+            console.error(
+                "Erro ao enviar termômetro:",
+                erro
+            );
+
+
+            mensagem.textContent =
+                "Erro ao registrar sua resposta.";
+
+
+            btn.disabled = false;
+
+            btn.textContent =
+                "Enviar resposta";
+
+        }
 
     }
 
@@ -1527,7 +1660,11 @@
             );
 
 
-        if (!elemento) return;
+        if (!elemento) {
+
+            return;
+
+        }
 
 
         if (pendente) {
@@ -1559,7 +1696,11 @@
             );
 
 
-        if (!elemento) return;
+        if (!elemento) {
+
+            return;
+
+        }
 
 
         const token =
@@ -1656,7 +1797,11 @@
             getToken();
 
 
-        if (!token) return;
+        if (!token) {
+
+            return;
+
+        }
 
 
         try {
@@ -1665,6 +1810,12 @@
                 await API.verificarTermometroHoje(
                     token
                 );
+
+
+            console.log(
+                "Verificação do termômetro:",
+                resultado
+            );
 
 
             if (
@@ -1750,7 +1901,11 @@
             );
 
 
-        if (!btn) return;
+        if (!btn) {
+
+            return;
+
+        }
 
 
         btn.addEventListener(
@@ -1779,6 +1934,7 @@
                 catch (erro) {
 
                     console.error(
+                        "Erro no logout:",
                         erro
                     );
 
@@ -1800,7 +1956,7 @@
 
 
     /* =====================================================
-       INICIAR
+       INICIAR PORTAL
        ===================================================== */
 
     async function iniciar() {
@@ -1811,12 +1967,18 @@
 
         configurarLogout();
 
+
         await inicializarDashboard();
 
 
         const token =
             getToken();
 
+
+        /*
+         * Se não existe sessão:
+         * abre Login por cima do Dashboard.
+         */
 
         if (!token) {
 
@@ -1826,6 +1988,13 @@
 
         }
 
+
+        /*
+         * Se existe sessão:
+         * permanece no Dashboard.
+         *
+         * Depois verifica o Termômetro.
+         */
 
         await verificarTermometro();
 
@@ -1857,7 +2026,7 @@
 
 
     /* =====================================================
-       EXECUTAR
+       EXECUÇÃO
        ===================================================== */
 
     if (
