@@ -93,9 +93,7 @@
                 "portalModalStyles"
             )
         ) {
-
             return;
-
         }
 
 
@@ -823,12 +821,10 @@
                 role="dialog"
                 aria-modal="true">
 
-
                 <img
                     class="portal-modal-logo"
                     src="assets/cmivet-logo-oficial.png"
                     alt="CMIVET">
-
 
                 <span
                     class="portal-modal-pill">
@@ -839,24 +835,20 @@
 
 
                 <h2>
-
                     Entrar no Portal RH
-
                 </h2>
 
 
                 <p>
-
                     Entre com seus dados
                     para acessar o Portal RH.
-
                 </p>
 
 
                 <form
                     id="portalLoginForm"
-                    class="portal-login-form">
-
+                    class="portal-login-form"
+                    action="javascript:void(0);">
 
                     <label>
 
@@ -898,11 +890,10 @@
                     <div
                         id="portalLoginMessage"
                         class="portal-login-message">
+
                     </div>
 
-
                 </form>
-
 
             </div>
 
@@ -921,6 +912,13 @@
             );
 
 
+        if (!form) {
+
+            return;
+
+        }
+
+
         form.addEventListener(
             "submit",
             tratarLogin
@@ -934,6 +932,7 @@
                     document.getElementById(
                         "portalLoginEmail"
                     );
+
 
                 if (campo) {
 
@@ -988,7 +987,7 @@
             !senha
         ) {
 
-            return;
+            return false;
 
         }
 
@@ -1001,7 +1000,7 @@
             mensagem.textContent =
                 "Preencha e-mail e senha.";
 
-            return;
+            return false;
 
         }
 
@@ -1040,7 +1039,12 @@
                     resultado?.erro ||
                     "E-mail ou senha inválidos.";
 
-                return;
+                botao.disabled = false;
+
+                botao.textContent =
+                    "Entrar";
+
+                return false;
 
             }
 
@@ -1055,7 +1059,12 @@
                 mensagem.textContent =
                     "Login realizado, mas o token não foi recebido.";
 
-                return;
+                botao.disabled = false;
+
+                botao.textContent =
+                    "Entrar";
+
+                return false;
 
             }
 
@@ -1067,6 +1076,7 @@
              * Guarda os dados do usuário,
              * caso a API os devolva.
              */
+
             if (
                 resultado.usuario ||
                 resultado.data?.usuario
@@ -1083,6 +1093,7 @@
                     );
 
                 }
+
                 catch (erro) {
 
                     console.warn(
@@ -1099,6 +1110,7 @@
              * Fecha SOMENTE o modal.
              * Continua no Dashboard.
              */
+
             fecharModal();
 
 
@@ -1109,7 +1121,9 @@
              * Depois do login verifica
              * se precisa responder o Termômetro.
              */
+
             await verificarTermometro();
+
 
         }
 
@@ -1124,25 +1138,16 @@
             mensagem.textContent =
                 "Não foi possível realizar o login.";
 
-        }
 
-        finally {
+            botao.disabled = false;
 
-            if (botao) {
-
-                botao.disabled = false;
-
-                botao.textContent =
-                    "Entrar";
-
-            }
+            botao.textContent =
+                "Entrar";
 
         }
 
     }
-
-
-    /* =====================================================
+        /* =====================================================
        ABRIR TERMÔMETRO
        ===================================================== */
 
@@ -1159,7 +1164,6 @@
                 role="dialog"
                 aria-modal="true">
 
-
                 <img
                     class="portal-modal-logo"
                     src="assets/cmivet-logo-oficial.png"
@@ -1175,25 +1179,22 @@
 
 
                 <h2>
-
                     Como você está se
                     sentindo hoje?
-
                 </h2>
 
 
                 <p>
-
                     Sua resposta ajuda o RH
                     a acompanhar o clima
                     organizacional da CMIVET.
-
                 </p>
 
 
                 <form
                     id="portalThermometerForm"
-                    class="portal-thermometer-form">
+                    class="portal-thermometer-form"
+                    action="javascript:void(0);">
 
 
                     <div>
@@ -1343,27 +1344,19 @@
                             required>
 
                             <option value="">
-
                                 Selecione
-
                             </option>
 
                             <option value="Baixa">
-
                                 Baixa
-
                             </option>
 
                             <option value="Moderada">
-
                                 Moderada
-
                             </option>
 
                             <option value="Alta">
-
                                 Alta
-
                             </option>
 
                         </select>
@@ -1396,11 +1389,11 @@
                     <div
                         id="portalThermometerMessage"
                         class="portal-thermometer-message">
+
                     </div>
 
 
                 </form>
-
 
             </div>
 
@@ -1419,10 +1412,24 @@
             );
 
 
+        if (!form) {
+
+            console.error(
+                "Formulário do Termômetro não encontrado."
+            );
+
+            return;
+
+        }
+
+
         /*
-         * IMPORTANTE:
-         * O submit é interceptado aqui.
+         * Intercepta o envio.
+         *
+         * NÃO deixa o navegador
+         * alterar a URL.
          */
+
         form.addEventListener(
             "submit",
             enviarTermometro
@@ -1439,10 +1446,12 @@
 
         /*
          * ESSENCIAL:
+         *
          * impede o navegador de fazer:
          *
          * portal.html?humor=3&energia=...
          */
+
         event.preventDefault();
 
         event.stopPropagation();
@@ -1500,7 +1509,7 @@
 
 
         /* =================================================
-           VALIDAÇÕES
+           VALIDAÇÃO DA SESSÃO
            ================================================= */
 
         if (!token) {
@@ -1513,6 +1522,10 @@
         }
 
 
+        /* =================================================
+           VALIDAÇÃO DO HUMOR
+           ================================================= */
+
         if (!humor) {
 
             mensagem.textContent =
@@ -1522,6 +1535,10 @@
 
         }
 
+
+        /* =================================================
+           VALIDAÇÃO DA ENERGIA
+           ================================================= */
 
         if (
             !energia ||
@@ -1535,6 +1552,10 @@
 
         }
 
+
+        /*
+         * Evita duplo clique.
+         */
 
         if (
             botao &&
@@ -1565,7 +1586,7 @@
 
 
         /* =================================================
-           DADOS
+           DADOS ENVIADOS PARA A API
            ================================================= */
 
         const dados = {
@@ -1594,14 +1615,15 @@
 
 
         /* =================================================
-           ENVIO
+           ENVIO PARA A API
+           
+           IMPORTANTE:
+           Mantida a mesma chamada da versão
+           que você estava usando.
            ================================================= */
 
         try {
 
-            /*
-             * USA A MESMA API QUE JÁ EXISTIA.
-             */
             const resultado =
                 await API.salvarTermometro(
                     dados
@@ -1623,6 +1645,10 @@
                 resultado.sucesso === true
             ) {
 
+                /*
+                 * Atualiza o status na página.
+                 */
+
                 atualizarStatusTermometro(
                     false
                 );
@@ -1641,12 +1667,18 @@
 
 
                 /*
-                 * Fecha somente o modal.
+                 * MUITO IMPORTANTE:
                  *
-                 * NÃO redireciona.
-                 * NÃO recarrega.
-                 * NÃO abre login.
+                 * Não faz:
+                 *
+                 * window.location.href
+                 * location.reload()
+                 *
+                 * e não chama login.
+                 *
+                 * Apenas fecha o modal.
                  */
+
                 setTimeout(
                     function () {
 
@@ -1663,7 +1695,7 @@
 
 
             /* =================================================
-               ERRO DA API
+               API NÃO CONFIRMOU O SALVAMENTO
                ================================================= */
 
             console.error(
@@ -1689,6 +1721,7 @@
 
 
             return false;
+
 
         }
 
@@ -1806,21 +1839,30 @@
 
 
             /*
-             * Aceita os nomes usados
+             * Aceita os nomes utilizados
              * pelas diferentes versões
              * do backend.
              */
+
             const respondido =
                 Boolean(
 
                     resultado.respondido ??
+
                     resultado.respondeu ??
+
                     resultado.jaRespondeu ??
+
                     resultado.data?.respondido ??
+
                     resultado.data?.respondeu
 
                 );
 
+
+            /* =================================================
+               JÁ RESPONDEU
+               ================================================= */
 
             if (respondido) {
 
@@ -1833,15 +1875,20 @@
             }
 
 
+            /* =================================================
+               AINDA NÃO RESPONDEU
+               ================================================= */
+
             atualizarStatusTermometro(
                 true
             );
 
 
             /*
-             * ABRE AUTOMATICAMENTE
-             * SOBRE O DASHBOARD.
+             * Abre automaticamente
+             * por cima do Dashboard.
              */
+
             abrirTermometroModal();
 
         }
@@ -1856,9 +1903,7 @@
         }
 
     }
-
-
-    /* =====================================================
+        /* =====================================================
        COMUNICADOS
        ===================================================== */
 
@@ -2031,6 +2076,11 @@
                 limparSessao();
 
 
+                /*
+                 * Depois do logout volta
+                 * para a página inicial.
+                 */
+
                 window.location.href =
                     "index.html";
 
@@ -2041,7 +2091,120 @@
 
 
     /* =====================================================
-       INICIALIZAÇÃO
+       LINKS DO DASHBOARD
+       ===================================================== */
+
+    function configurarLinksDashboard() {
+
+        /*
+         * Termômetro:
+         *
+         * Em vez de abrir termometro.html,
+         * abre o card por cima do Dashboard.
+         */
+
+        document
+            .querySelectorAll(
+                'a[href="termometro.html"]'
+            )
+            .forEach(
+                function (link) {
+
+                    link.addEventListener(
+                        "click",
+                        function (event) {
+
+                            event.preventDefault();
+
+                            event.stopPropagation();
+
+                            abrirTermometroModal();
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /*
+         * Caso exista algum link para login.html
+         * dentro do Dashboard, também abre
+         * o Login por cima.
+         */
+
+        document
+            .querySelectorAll(
+                'a[href="login.html"]'
+            )
+            .forEach(
+                function (link) {
+
+                    link.addEventListener(
+                        "click",
+                        function (event) {
+
+                            event.preventDefault();
+
+                            event.stopPropagation();
+
+                            abrirLoginModal();
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       FECHAR MODAL AO CLICAR NO FUNDO
+       ===================================================== */
+
+    function configurarFechamentoOverlay() {
+
+        const overlay =
+            document.getElementById(
+                "portalOverlay"
+            );
+
+
+        if (!overlay) {
+
+            return;
+
+        }
+
+
+        /*
+         * NÃO permite fechar o Termômetro
+         * obrigatório clicando no fundo.
+         *
+         * O usuário precisa responder.
+         */
+
+        overlay.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === overlay
+                ) {
+
+                    return;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       INICIALIZAÇÃO DO PORTAL
        ===================================================== */
 
     async function iniciarPortal() {
@@ -2050,6 +2213,7 @@
          * Cria os estilos antes
          * de qualquer modal.
          */
+
         criarEstilosModal();
 
 
@@ -2059,9 +2223,16 @@
         configurarLogout();
 
 
+        configurarLinksDashboard();
+
+
+        configurarFechamentoOverlay();
+
+
         /*
          * Atualiza o Dashboard.
          */
+
         await inicializarDashboard();
 
 
@@ -2071,8 +2242,10 @@
 
         /*
          * SEM LOGIN:
-         * abre login por cima do Dashboard.
+         *
+         * Abre Login por cima do Dashboard.
          */
+
         if (!token) {
 
             abrirLoginModal();
@@ -2084,8 +2257,11 @@
 
         /*
          * COM LOGIN:
-         * verifica Termômetro.
+         *
+         * Verifica se o Termômetro
+         * precisa ser respondido.
          */
+
         await verificarTermometro();
 
     }
@@ -2136,5 +2312,6 @@
         iniciarPortal();
 
     }
+
 
 })();
