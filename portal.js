@@ -1016,12 +1016,11 @@
 
 
         try {
-
-            const resultado =
-                await API.login(
-                    email.value.trim(),
-                    senha.value
-                );
+const resultado =
+    await Auth.login(
+        email,
+        senha
+    );
 
 
             console.log(
@@ -1069,8 +1068,7 @@
             }
 
 
-            salvarToken(token);
-
+             salvarToken(token);
 
             /*
              * Guarda os dados do usuário,
@@ -1097,15 +1095,13 @@
                 catch (erro) {
 
                     console.warn(
-                        "Não foi possível salvar dados do usuário.",
+                        "Não foi possível salvar os dados do usuário:",
                         erro
                     );
 
                 }
 
             }
-
-
             /*
              * Fecha SOMENTE o modal.
              * Continua no Dashboard.
