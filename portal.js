@@ -1951,7 +1951,36 @@
         }
 
     }
+/* =====================================================
+   LINKS DO TERMÔMETRO
+   ===================================================== */
 
+function configurarLinksTermometro() {
+
+    /*
+     * O Termômetro deve abrir em modal,
+     * sem sair do Dashboard.
+     */
+
+    document
+        .querySelectorAll('a[href="termometro.html"]')
+        .forEach(function (link) {
+
+            link.addEventListener(
+                "click",
+                function (event) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    abrirTermometroModal();
+
+                }
+            );
+
+        });
+
+}
 
     /* =====================================================
        DASHBOARD
@@ -2034,17 +2063,18 @@
        INICIAR PORTAL
        ===================================================== */
 
-    async function iniciar() {
+   async function iniciar() {
 
-        inserirEstilosModais();
+    inserirEstilosModais();
 
-        criarOverlay();
+    criarOverlay();
 
-        configurarLogout();
+    configurarLogout();
+
+    configurarLinksTermometro();
 
 
-        await inicializarDashboard();
-
+    await inicializarDashboard();
 
         const token =
             getToken();
