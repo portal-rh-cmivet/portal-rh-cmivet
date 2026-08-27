@@ -1,29 +1,8 @@
 /*************************************************
  * PORTAL RH CMIVET
  * termometro.js
- * Versão 8.0 Enterprise
+ * Versão corrigida
  *************************************************/
-
-
-/*************************************************
- * AUTENTICAÇÃO
- *************************************************/
-
-const TOKEN = Auth.getToken();
-
-const USER = Auth.getUser() || {};
-
-
-/*************************************************
- * SEM LOGIN
- *************************************************/
-
-if (!TOKEN) {
-
-    window.location.href =
-        "login.html";
-
-}
 
 
 /*************************************************
@@ -36,11 +15,50 @@ document.addEventListener(
 );
 
 
+/*************************************************
+ * INICIAR
+ *************************************************/
+
 async function iniciarPagina() {
 
     try {
 
-        await Auth.protegerPagina();
+        if (
+            typeof Auth === "undefined"
+        ) {
+
+            console.error(
+                "Auth não foi carregado."
+            );
+
+            return;
+
+        }
+
+
+        const token =
+            Auth.getToken();
+
+
+        if (!token) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        if (
+            typeof Auth.protegerPagina ===
+            "function"
+        ) {
+
+            await Auth.protegerPagina();
+
+        }
+
 
         carregarUsuario();
 
@@ -56,9 +74,10 @@ async function iniciarPagina() {
 
     catch (erro) {
 
-        console.error(erro);
-
-        Auth.logout();
+        console.error(
+            "Erro ao iniciar Termômetro:",
+            erro
+        );
 
     }
 
@@ -66,22 +85,31 @@ async function iniciarPagina() {
 
 
 /*************************************************
- * DADOS DO USUÁRIO
+ * USUÁRIO
  *************************************************/
 
 function carregarUsuario() {
 
+    const usuario =
+        typeof Auth !== "undefined" &&
+        typeof Auth.getUser === "function"
+            ? Auth.getUser() || {}
+            : {};
+
+
     const primeiroNome =
-        (USER.nome || "")
+        (usuario.nome || "")
             .split(" ")[0];
 
 
     const iniciais =
-        (USER.nome || "")
+        (usuario.nome || "")
             .split(" ")
             .filter(Boolean)
-            .slice(0,2)
-            .map(nome => nome[0])
+            .slice(0, 2)
+            .map(
+                nome => nome[0]
+            )
             .join("")
             .toUpperCase();
 
@@ -121,7 +149,7 @@ function carregarUsuario() {
     if (userName) {
 
         userName.textContent =
-            USER.nome || "";
+            usuario.nome || "";
 
     }
 
@@ -129,8 +157,8 @@ function carregarUsuario() {
     if (userRole) {
 
         userRole.textContent =
-            USER.cargo ||
-            USER.perfil ||
+            usuario.cargo ||
+            usuario.perfil ||
             "";
 
     }
@@ -158,13 +186,24 @@ function configurarMenu() {
         );
 
 
-    if (!adminLink) return;
+    if (!adminLink) {
+
+        return;
+
+    }
+
+
+    const usuario =
+        typeof Auth !== "undefined" &&
+        typeof Auth.getUser === "function"
+            ? Auth.getUser() || {}
+            : {};
 
 
     adminLink.hidden =
-        String(USER.perfil)
-            .toLowerCase() !==
-        "admin";
+        String(
+            usuario.perfil || ""
+        ).toLowerCase() !== "admin";
 
 }
 
@@ -181,12 +220,27 @@ function configurarLogout() {
         );
 
 
-    if (!botao) return;
+    if (!botao) {
+
+        return;
+
+    }
 
 
     botao.addEventListener(
         "click",
-        () => Auth.logout()
+        function () {
+
+            if (
+                typeof Auth !== "undefined" &&
+                typeof Auth.logout === "function"
+            ) {
+
+                Auth.logout();
+
+            }
+
+        }
     );
 
 }
@@ -204,19 +258,78 @@ function configurarFormulario() {
         );
 
 
-    if (!formulario) return;
+    const botao =
+        document.getElementById(
+            "sendThermometer"
+        );
 
+
+    if (!formulario) {
+
+        console.error(
+            "thermometerForm não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    if (!botao) {
+
+        console.error(
+            "sendThermometer não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Submit do formulário
+     */
 
     formulario.addEventListener(
         "submit",
-        enviarTermometro
+        function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            enviarTermometro();
+
+        }
+    );
+
+
+    /*
+     * Clique direto no botão
+     *
+     * Isso garante que o botão funcione
+     * mesmo se houver algum conflito
+     * com o formulário.
+     */
+
+    botao.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            enviarTermometro();
+
+        }
     );
 
 }
 
 
 /*************************************************
- * VERIFICA RESPOSTA DO DIA
+ * VERIFICAR RESPOSTA DO DIA
  *************************************************/
 
 async function verificarTermometroHoje() {
@@ -233,47 +346,61 @@ async function verificarTermometroHoje() {
         );
 
 
-    if (!status) return;
+    if (!status) {
+
+        return;
+
+    }
 
 
     try {
 
+        const token =
+            Auth.getToken();
+
+
+        if (!token) {
+
+            return;
+
+        }
+
+
         const resposta =
             await API.verificarTermometroHoje(
-                TOKEN
+                token
             );
 
 
         console.log(
             "Resposta completa:",
-            JSON.stringify(resposta)
-        );
-
-
-        console.log(
-            "Resposta objeto:",
             resposta
         );
 
 
-        if (!resposta.sucesso) {
+        if (
+            !resposta ||
+            !resposta.sucesso
+        ) {
 
             throw new Error(
-                resposta.erro ||
+                resposta?.erro ||
                 "Erro ao verificar."
             );
 
         }
 
 
-        if (
-            resposta.respondeu === true
-        ) {
-
-            console.log(
-                "Usuário já respondeu hoje."
+        const respondeu =
+            Boolean(
+                resposta.respondeu === true ||
+                resposta.respondido === true ||
+                resposta.jaRespondeu === true ||
+                resposta.data?.respondido === true
             );
 
+
+        if (respondeu) {
 
             status.textContent =
                 "✅ Respondido hoje";
@@ -290,29 +417,24 @@ async function verificarTermometroHoje() {
 
             }
 
+
+            return;
+
         }
 
-        else {
 
-            console.log(
-                "Usuário ainda NÃO respondeu hoje."
-            );
+        status.textContent =
+            "🟡 Pendente";
 
 
-            status.textContent =
-                "🟡 Pendente";
+        status.className =
+            "badge warning";
 
 
-            status.className =
-                "badge warning";
+        if (formulario) {
 
-
-            if (formulario) {
-
-                formulario.style.display =
-                    "block";
-
-            }
+            formulario.style.display =
+                "block";
 
         }
 
@@ -339,12 +461,25 @@ async function verificarTermometroHoje() {
 
 
 /*************************************************
- * ENVIO DO TERMÔMETRO
+ * ENVIAR TERMÔMETRO
  *************************************************/
 
-async function enviarTermometro(event) {
+let enviandoTermometro = false;
 
-    event.preventDefault();
+
+async function enviarTermometro() {
+
+    if (enviandoTermometro) {
+
+        return;
+
+    }
+
+
+    const formulario =
+        document.getElementById(
+            "thermometerForm"
+        );
 
 
     const mensagem =
@@ -359,8 +494,65 @@ async function enviarTermometro(event) {
         );
 
 
+    if (!formulario) {
+
+        console.error(
+            "thermometerForm não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    if (!mensagem) {
+
+        console.error(
+            "thermometerMessage não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    if (!botao) {
+
+        console.error(
+            "sendThermometer não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * PEGA O TOKEN AGORA.
+     *
+     * Não usamos mais um TOKEN fixo
+     * criado no carregamento do arquivo.
+     */
+
+    const token =
+        Auth.getToken();
+
+
+    if (!token) {
+
+        mensagem.textContent =
+            "Sua sessão expirou. Faça login novamente.";
+
+        mensagem.className =
+            "error";
+
+        return;
+
+    }
+
+
     const humor =
-        obterValor(
+        formulario.querySelector(
             "input[name='humor']:checked"
         );
 
@@ -368,18 +560,58 @@ async function enviarTermometro(event) {
     const energia =
         document.getElementById(
             "energia"
-        ).value;
+        );
 
 
     const observacao =
         document.getElementById(
             "observacao"
-        ).value.trim();
+        );
 
 
-    mensagem.textContent = "";
+    /*
+     * VALIDA HUMOR
+     */
 
-    mensagem.className = "";
+    if (!humor) {
+
+        mensagem.textContent =
+            "Selecione como você está hoje.";
+
+        mensagem.className =
+            "error";
+
+        return;
+
+    }
+
+
+    /*
+     * VALIDA ENERGIA
+     */
+
+    if (
+        !energia ||
+        !energia.value
+    ) {
+
+        mensagem.textContent =
+            "Selecione seu nível de energia.";
+
+        mensagem.className =
+            "error";
+
+        return;
+
+    }
+
+
+    /*
+     * BLOQUEIA DUPLO CLIQUE
+     */
+
+    enviandoTermometro =
+        true;
 
 
     botao.disabled =
@@ -390,23 +622,36 @@ async function enviarTermometro(event) {
         "Enviando...";
 
 
+    mensagem.textContent =
+        "";
+
+
     try {
 
+        console.log(
+            "Enviando Termômetro:",
+            {
+                humor: humor.value,
+                energia: energia.value
+            }
+        );
 
-        /*
-         * MANTÉM A MESMA API
-         */
 
         const resposta =
             await API.salvarTermometro({
 
-                token: TOKEN,
+                token: token,
 
-                humor: humor,
+                humor:
+                    humor.value,
 
-                energia: energia,
+                energia:
+                    energia.value,
 
-                observacao: observacao
+                observacao:
+                    observacao
+                        ? observacao.value.trim()
+                        : ""
 
             });
 
@@ -417,47 +662,37 @@ async function enviarTermometro(event) {
         );
 
 
-        if (!resposta.sucesso) {
+        if (
+            !resposta ||
+            !resposta.sucesso
+        ) {
 
             throw new Error(
-
-                resposta.erro ||
-
-                "Não foi possível registrar."
-
+                resposta?.erro ||
+                "Não foi possível registrar a resposta."
             );
 
         }
 
 
-        /*
-         * RESPOSTA FOI CONFIRMADA PELA API
-         */
-
         mensagem.textContent =
             "✅ Resposta registrada com sucesso.";
 
 
-        mensagem.classList.add(
-            "success"
-        );
-
-
-        document.getElementById(
-            "thermometerForm"
-        ).reset();
+        mensagem.className =
+            "success";
 
 
         /*
-         * Confirma novamente com a API.
+         * Atualiza o status
          */
 
         await verificarTermometroHoje();
 
 
         /*
-         * Se estiver dentro do Portal,
-         * avisa o portal para fechar o modal.
+         * Se estiver dentro de um iframe/modal,
+         * avisa o Portal.
          */
 
         if (
@@ -466,38 +701,42 @@ async function enviarTermometro(event) {
         ) {
 
             window.parent.postMessage(
-
                 {
                     tipo:
                         "TERMOMETRO_RESPONDIDO"
                 },
-
                 window.location.origin
-
             );
 
         }
 
-    }
 
+    }
 
     catch (erro) {
 
-        console.error(erro);
+        console.error(
+            "Erro ao salvar Termômetro:",
+            erro
+        );
 
 
         mensagem.textContent =
-            erro.message;
+            erro.message ||
+            "Erro ao registrar resposta.";
 
 
-        mensagem.classList.add(
-            "error"
-        );
+        mensagem.className =
+            "error";
 
     }
 
 
     finally {
+
+        enviandoTermometro =
+            false;
+
 
         botao.disabled =
             false;
@@ -549,7 +788,11 @@ function mostrarMensagem(
         $(id);
 
 
-    if (!elemento) return;
+    if (!elemento) {
+
+        return;
+
+    }
 
 
     elemento.textContent =
@@ -571,7 +814,11 @@ function habilitarBotao(
         $(id);
 
 
-    if (!botao) return;
+    if (!botao) {
+
+        return;
+
+    }
 
 
     botao.disabled =
@@ -588,7 +835,11 @@ function limparFormulario() {
         );
 
 
-    if (!formulario) return;
+    if (!formulario) {
+
+        return;
+
+    }
 
 
     formulario.reset();
@@ -598,107 +849,26 @@ function limparFormulario() {
 
 function formatarData(data) {
 
-    if (!data) return "";
+    if (!data) {
+
+        return "";
+
+    }
 
 
     return new Intl.DateTimeFormat(
-
         "pt-BR",
-
         {
-
-            dateStyle:"short",
-
-            timeStyle:"short"
-
+            dateStyle: "short",
+            timeStyle: "short"
         }
-
     ).format(
-
         new Date(data)
-
     );
 
 }
 
 
-function escapeHtml(texto) {
-
-    if (!texto) return "";
-
-
-    return String(texto)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
 /*************************************************
- * ERROS GLOBAIS
- *************************************************/
-
-window.addEventListener(
-
-    "unhandledrejection",
-
-    function(event) {
-
-        console.error(
-
-            "Promise rejeitada:",
-
-            event.reason
-
-        );
-
-    }
-
-);
-
-
-window.addEventListener(
-
-    "error",
-
-    function(event) {
-
-        console.error(
-
-            "Erro JavaScript:",
-
-            event.error
-
-        );
-
-    }
-
-);
-
-
-/*************************************************
- * FIM DO ARQUIVO
+ * FIM
  *************************************************/
