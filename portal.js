@@ -101,34 +101,53 @@
            FUNDO
            ================================================= */
 
-        .portal-overlay{
+       .portal-overlay{
 
-            position:fixed;
+    position:fixed;
 
-            inset:0;
+    inset:0;
 
-            z-index:99999;
+    z-index:99999;
 
-            display:flex;
+    display:flex;
 
-            align-items:center;
+    align-items:center;
 
-            justify-content:center;
+    justify-content:center;
 
-            padding:12px;
+    padding:12px;
 
-            background:#083f39;
+    background:#083f39;
 
-            overflow:hidden;
+    overflow:hidden;
 
-        }
+    pointer-events:auto;
+
+}
 
 
-        .portal-overlay[hidden]{
+/* Garante que o conteúdo do modal
+   fique acima da camada do overlay */
 
-            display:none !important;
+.portal-thermometer-card{
 
-        }
+    position:relative;
+
+    z-index:100000;
+
+    pointer-events:auto;
+
+}
+
+.portal-login-card{
+
+    position:relative;
+
+    z-index:100000;
+
+    pointer-events:auto;
+
+}
 
 
         /* =================================================
